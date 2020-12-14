@@ -4,7 +4,7 @@ package com.cxy.oi.crash;
 import android.os.Process;
 import android.util.Log;
 
-public enum  OICrashReporter {
+public enum OICrashReporter {
     INSTANCE;
 
     private static final String TAG = "OICrashReporter";

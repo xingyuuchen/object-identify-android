@@ -1,45 +1,61 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/main_ui"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
 
-    <LinearLayout
-        android:id="@+id/bottom_tab"
-        android:layout_gravity="bottom"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:orientation="horizontal" >
+<!--    &lt;!&ndash;tabbar&ndash;&gt;-->
+<!--    <LinearLayout-->
+<!--        android:id="@+id/bottom_tab"-->
+<!--        android:layout_width="match_parent"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:layout_gravity="bottom"-->
+<!--        android:orientation="horizontal" >-->
 
-        <View
-            android:id="@+id/find_more"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/find_more"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_weight="1.0"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:color/holo_green_dark" />
-            <TextView
-                android:id="@+id/text1"
-                android:text="@string/find_more" />
-        </View>
+<!--            <ImageView-->
+<!--                android:id="@+id/find_more_image"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/tabbar_height"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:src="@drawable/icon_findmore_active" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/text1"-->
+<!--                android:layout_below="@+id/find_more_image"-->
+<!--                android:text="@string/find_more"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:layout_width="wrap_content" />-->
+<!--        </RelativeLayout>-->
 
-        <View
-            android:id="@+id/mine"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content">
+<!--        <RelativeLayout-->
+<!--            android:id="@+id/mine"-->
+<!--            android:layout_width="wrap_content"-->
+<!--            android:layout_weight="1.0"-->
+<!--            android:layout_height="wrap_content">-->
 
-            <ImageView
-                android:layout_width="40dp"
-                android:layout_height="40dp"
-                android:src="@android:color/darker_gray" />
-            <TextView
-                android:id="@+id/text2"
-                android:text="@string/mine" />
-        </View>
+<!--            <ImageView-->
+<!--                android:id="@+id/mine_image"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_height="@dimen/tabbar_height"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:src="@drawable/icon_mine" />-->
+<!--            <TextView-->
+<!--                android:id="@+id/text2"-->
+<!--                android:layout_below="@+id/mine_image"-->
+<!--                android:layout_height="wrap_content"-->
+<!--                android:layout_width="wrap_content"-->
+<!--                android:layout_centerHorizontal="true"-->
+<!--                android:text="@string/mine" />-->
+<!--        </RelativeLayout>-->
 
-    </LinearLayout>
-</LinearLayout>
+<!--    </LinearLayout>-->
+</FrameLayout>
