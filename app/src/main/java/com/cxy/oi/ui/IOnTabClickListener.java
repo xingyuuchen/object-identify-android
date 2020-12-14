@@ -1,6 +1,6 @@
 package com.cxy.oi.ui;
 
-public interface IOnTabClickedListener {
+public interface IOnTabClickListener {
 
     void onTabClick(int idxOfTab);
 

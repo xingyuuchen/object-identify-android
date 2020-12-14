@@ -2,11 +2,13 @@ package com.cxy.oi.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import androidx.annotation.Nullable;
@@ -16,18 +18,27 @@ import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 
 public class BottomTabUI extends LinearLayout {
 
-    private static final String TAG = "BottomTab";
+    private static final String TAG = "BottomTabUI";
     private Context mContext;
+    private int lastClickIdx;
+    private IOnTabClickListener onTabClickedListener;
 
-    private IOnTabClickedListener onTabClickedListener;
+    private TabItem findMoreTab;
+    private TabItem mineTab;
+
+    private int colorActive = getResources().getColor(R.color.green);
+    private int colorBlack = getResources().getColor(R.color.black);
+    private int tabbarHeight;
 
     private void init(Context context) {
         mContext = context;
         setOrientation(HORIZONTAL);
         setBackgroundColor(getResources().getColor(R.color.tabbarGrey));
+        tabbarHeight = getResources().getDimensionPixelSize(R.dimen.tabbar_height);
 
         insertFindMoreTab();
         insertMineTab();
+        switchToTab(ConstantsProtocol.LauncherUI.INDEX_FINDMORE);
     }
 
 
@@ -47,26 +58,21 @@ public class BottomTabUI extends LinearLayout {
     }
 
     private void insertFindMoreTab() {
-        TabItem findMoreTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_FINDMORE);
-        findMoreTab.iconIv.setImageResource(R.drawable.icon_findmore_active);
+        findMoreTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_FINDMORE);
         findMoreTab.tv.setText(R.string.find_more);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.weight = 1;
+                tabbarHeight, 1);
         addView(findMoreTab.thiz, params);
     }
 
     private void insertMineTab() {
-        TabItem mineTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_MINE);
-        mineTab.iconIv.setImageResource(R.drawable.icon_mine);
+        mineTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_MINE);
         mineTab.tv.setText(R.string.mine);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
-                ViewGroup.LayoutParams.WRAP_CONTENT);
-        params.weight = 1;
+                tabbarHeight, 1);
         addView(mineTab.thiz, params);
-
     }
 
 
@@ -76,18 +82,45 @@ public class BottomTabUI extends LinearLayout {
         item.iconIv = item.thiz.findViewById(R.id.tab_iv);
         item.tv = item.thiz.findViewById(R.id.tab_tv);
         item.thiz.setTag(idx);
-        item.thiz.setOnClickListener(new OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                int idx = (int) v.getTag();
-                if (onTabClickedListener != null) {
-                    onTabClickedListener.onTabClick(idx);
-                }
-            }
-        });
+        item.thiz.setOnClickListener(tabbarClickListener);
         return item;
     }
 
+    private OnClickListener tabbarClickListener = new OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            int idx = (int) v.getTag();
+            if (idx == lastClickIdx) {
+                return;
+            }
+            switchToTab(idx);
+            if (onTabClickedListener != null) {
+                onTabClickedListener.onTabClick(idx);
+            }
+        }
+    };
+
+    private void switchToTab(int idx) {
+        lastClickIdx = idx;
+        switch (idx) {
+            case ConstantsProtocol.LauncherUI.INDEX_FINDMORE: {
+                findMoreTab.iconIv.setImageResource(R.drawable.icon_findmore_active);
+                mineTab.iconIv.setImageResource(R.drawable.icon_mine);
+
+                findMoreTab.tv.setTextColor(colorActive);
+                mineTab.tv.setTextColor(colorBlack);
+                break;
+            }
+            case ConstantsProtocol.LauncherUI.INDEX_MINE: {
+                findMoreTab.iconIv.setImageResource(R.drawable.icon_findmore);
+                mineTab.iconIv.setImageResource(R.drawable.icon_mine_active);
+
+                mineTab.tv.setTextColor(colorActive);
+                findMoreTab.tv.setTextColor(colorBlack);
+                break;
+            }
+        }
+    }
 
     static class TabItem {
         View thiz;
@@ -96,7 +129,7 @@ public class BottomTabUI extends LinearLayout {
     }
 
 
-    public void setOnTabClickedListener(IOnTabClickedListener listener) {
+    public void setOnTabClickedListener(IOnTabClickListener listener) {
         onTabClickedListener = listener;
     }
 
