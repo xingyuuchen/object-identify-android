@@ -1,3 +1,7 @@
 <resources>
     <string name="app_name">拍照识植物</string>
+    <string name="mine">我的</string>
+    <string name="find_more">发现</string>
+
+
 </resources>
