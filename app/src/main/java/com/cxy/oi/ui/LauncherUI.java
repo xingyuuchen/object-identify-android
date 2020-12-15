@@ -13,7 +13,9 @@ import com.cxy.oi.R;
 import com.cxy.oi.app.AppForegroundDelegate;
 import com.cxy.oi.app.IAppForegroundListener;
 import com.cxy.oi.app.OIApplicationContext;
+import com.cxy.oi.app.TestEvent;
 import com.cxy.oi.crash.OICrashReporter;
+import com.cxy.oi.kernel.EventCenter;
 import com.cxy.oi.kernel.util.Log;
 
 public class LauncherUI extends AppCompatActivity {
@@ -50,6 +52,7 @@ public class LauncherUI extends AppCompatActivity {
         });
 
         AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
+        EventCenter.INSTANCE.publish(new TestEvent());
 
     }
 
