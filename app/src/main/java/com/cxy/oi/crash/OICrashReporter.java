@@ -2,7 +2,8 @@ package com.cxy.oi.crash;
 
 
 import android.os.Process;
-import android.util.Log;
+
+import com.cxy.oi.kernel.util.Log;
 
 public enum OICrashReporter {
     INSTANCE;
