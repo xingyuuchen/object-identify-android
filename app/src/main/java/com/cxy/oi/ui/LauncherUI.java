@@ -1,10 +1,13 @@
 package com.cxy.oi.ui;
 
 import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.Gravity;
+import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
+import android.widget.ImageView;
 
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
@@ -16,12 +19,15 @@ import com.cxy.oi.app.OIApplicationContext;
 import com.cxy.oi.app.TestEvent;
 import com.cxy.oi.crash.OICrashReporter;
 import com.cxy.oi.kernel.EventCenter;
+import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 
 public class LauncherUI extends AppCompatActivity {
 
     private static final String TAG = "LauncherUI";
     private FrameLayout ui;
+    private ImageView goToGalleryPreviewIv;
     private IAppForegroundListener appForegroundListener = new IAppForegroundListener() {
         @Override
         public void onAppForeground(String activity) {
@@ -38,7 +44,7 @@ public class LauncherUI extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
-        ui = findViewById(R.id.main_ui);
+        initView();
         BottomTabUI tabbar = new BottomTabUI(this);
         FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
@@ -54,6 +60,20 @@ public class LauncherUI extends AppCompatActivity {
         AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
         EventCenter.INSTANCE.publish(new TestEvent());
 
+    }
+
+
+    private void initView() {
+        ui = findViewById(R.id.main_ui);
+        goToGalleryPreviewIv = findViewById(R.id.btn_gallery);
+        goToGalleryPreviewIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent();
+                intent.setClass(getApplicationContext(), AlbumPreviewUI.class);
+                startActivityForResult(intent, ConstantsProtocol.AlbumPreviewUI.ACTIVITY_REQUEST_CODE);
+            }
+        });
     }
 
     @Override

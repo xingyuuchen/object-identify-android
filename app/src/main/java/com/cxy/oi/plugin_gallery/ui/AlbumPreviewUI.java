@@ -21,14 +21,16 @@ public class AlbumPreviewUI extends Activity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        Log.i(TAG, "[onCreate]");
         setContentView(R.layout.gallery_preview);
+        init();
 
     }
 
     private void init() {
         adapter = new AlbumAdapter(this);
         gallery = findViewById(R.id.album_recyclerView);
-        RecyclerView.LayoutManager layoutManager = new GridLayoutManager(this,
+        GridLayoutManager layoutManager = new GridLayoutManager(this,
                 ConstantsProtocol.AlbumPreviewUI.SPAN_COUNT);
         gallery.setLayoutManager(layoutManager);
         gallery.setAdapter(adapter);

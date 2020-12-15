@@ -17,6 +17,10 @@
             </intent-filter>
         </activity>
 
+        <activity android:name=".plugin_gallery.ui.AlbumPreviewUI">
+
+        </activity>
+
     </application>
 
 </manifest>

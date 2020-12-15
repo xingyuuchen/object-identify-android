@@ -12,12 +12,15 @@ import com.cxy.oi.R;
 import com.cxy.oi.kernel.SquareImageView;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.plugin_gallery.model.GalleryCore;
+import com.cxy.oi.plugin_gallery.model.IMediaQuery;
+import com.cxy.oi.plugin_gallery.model.IQueryMediaCallback;
 import com.cxy.oi.plugin_gallery.model.MediaItem;
 
 import java.util.ArrayList;
 
 
-public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
+public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> implements IQueryMediaCallback {
     private static final String TAG = "AlbumAdapter";
 
     private Context mContext;
@@ -32,6 +35,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             MediaItem mediaItem = new MediaItem();
             mediaItems.add(mediaItem);
         }
+        GalleryCore.getMediaQueryService().addQueryMediaListener(this);
+        GalleryCore.getMediaQueryService().queryMedia(IMediaQuery.QueryType.Image);
         notifyDataSetChanged();
     }
 
@@ -42,13 +47,13 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
             case ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE: {
-                View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, parent);
+                View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, null);
                 viewHolder = new ImageViewHolder(v);
                 break;
             }
             case ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_VIDEO:
             default: {
-                View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, parent);
+                View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, null);
                 viewHolder = new VideoViewHolder(v);
                 break;
             }
@@ -58,6 +63,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
+        Log.i(TAG, "[onBindViewHolder] position: %d", position);
         if (!(holder instanceof MediaViewHolder)) {
             Log.e(TAG, "[onBindViewHolder] holder NOT instanceof MediaViewHolder");
             return;
@@ -68,11 +74,14 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             Log.e(TAG, "[onBindViewHolder] getItem(%d) == null, do nothing", position);
             return;
         }
+
         if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE) {
             viewHolder.galleryIv.setImageResource(R.drawable.icon_mine);
         } else if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_VIDEO) {
             viewHolder.galleryIv.setImageResource(R.drawable.icon_mine_active);
         }
+        String imageFilePath = mediaItem.originalPath;
+        ThumbDrawable.attach(viewHolder.galleryIv, imageFilePath);
 
     }
 
@@ -82,11 +91,17 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
     public MediaItem getItem(int idx) {
-        if (idx <= 0 || idx >= mediaItems.size()) {
+        if (idx < 0 || idx >= mediaItems.size()) {
             Log.e(TAG, "[getItem] idx illegal");
-            throw new IllegalArgumentException("[getItem] idx illegal");
+            return null;
         }
         return mediaItems.get(idx);
+    }
+
+    @Override
+    public void onQueryMediaDone(ArrayList<MediaItem> mediaItems) {
+        this.mediaItems = mediaItems;
+        notifyDataSetChanged();
     }
 
 
