@@ -45,7 +45,8 @@ public class ImageMediaQuery extends BaseMediaQuery implements IMediaQuery {
 
     @Override
     public String getSortOrder() {
-        return BaseMediaQuery.DATE_TAKEN_COL + " desc limit 20";
+//        return BaseMediaQuery.DATE_TAKEN_COL + " desc limit 20";
+        return BaseMediaQuery.DATE_MODIFIED_COL + " desc";
     }
 
     @Override
