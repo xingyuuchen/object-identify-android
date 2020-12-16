@@ -41,7 +41,7 @@ public class MediaCacheService {
     public Bitmap getBitMapFromCache(long cacheKey) {
         Bitmap bitmap = getBitmapFromMemCache(cacheKey);
         if (bitmap != null) {
-            Log.i(TAG, "[getBitMap] just hit the galleryMemCache, key: %s", cacheKey);
+            Log.i(TAG, "[getBitMap] HIT the galleryMemCache, key: %s", cacheKey);
             return bitmap;
         }
         bitmap = getBitmapFromDiskCache(cacheKey);

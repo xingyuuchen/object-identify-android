@@ -7,6 +7,9 @@ import android.os.Looper;
 import com.cxy.oi.app.OIHandler;
 import com.cxy.oi.kernel.util.Log;
 
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 public class MediaHandlerThread {
     private static final String TAG = "MediaHandlerThread";
 
@@ -14,6 +17,7 @@ public class MediaHandlerThread {
 
     private HandlerThread queryHandlerThread;
     private OIHandler queryHandler;
+    private ExecutorService decoder;
 
     public MediaHandlerThread() {
         uiHandler = new OIHandler(Looper.getMainLooper());
@@ -21,6 +25,7 @@ public class MediaHandlerThread {
         queryHandlerThread.start();
         queryHandler = new OIHandler(queryHandlerThread.getLooper());
 
+        decoder = Executors.newFixedThreadPool(1);
     }
 
     public OIHandler getQueryHandler() {
@@ -37,6 +42,14 @@ public class MediaHandlerThread {
         }
     }
 
+    public void startDecode(Runnable runnable) {
+        if (runnable == null) {
+            Log.e(TAG, "[startDecode] runnable == null");
+        }
+        if (decoder != null) {
+            decoder.execute(runnable);
+        }
+    }
 
     public void postToUIThread(Runnable runnable) {
         if (runnable == null) {

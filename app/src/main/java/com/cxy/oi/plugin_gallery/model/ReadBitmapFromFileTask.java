@@ -12,28 +12,27 @@ public class ReadBitmapFromFileTask implements Runnable {
 
 
     public ReadBitmapFromFileTask(long origId, String path, IOnBitmapGet callback) {
+
         this.origId = origId;
         this.path = path;
         this.callback = callback;
     }
 
-    public void doQuery() {
-        bitmap = ThumbDecodeUtil.getThumb(origId, path);
-    }
-
     @Override
     public void run() {
         bitmap = ThumbDecodeUtil.getThumb(origId, path);
+        callback.doInBackground(bitmap);
         GalleryCore.getMediaWorkerThread().postToUIThread(new Runnable() {
             @Override
             public void run() {
-                callback.onBitmapGet(origId, bitmap);
+                callback.onBitmapGet(bitmap);
             }
         });
     }
 
     public interface IOnBitmapGet {
-        void onBitmapGet(long cacheKey, Bitmap bitmap);
+        void onBitmapGet(Bitmap bitmap);
+        void doInBackground(Bitmap bitmap);
     }
 
 

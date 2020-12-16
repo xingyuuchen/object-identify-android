@@ -24,4 +24,23 @@ public class Util {
         return s;
     }
 
+    public static String getStack() {
+        StackTraceElement[] elements = new Throwable().getStackTrace();
+        if ((elements == null) || (elements.length < 4)) {
+            return "...";
+        }
+        StringBuilder t = new StringBuilder();
+        for (int i = 3; i < elements.length; i++) {
+            if (!elements[i].getClassName().contains("com.cxy.oi")) {
+                continue;
+            }
+            t.append("[");
+            t.append(elements[i].getClassName().substring("com.cxy.oi.".length()));
+            t.append(":");
+            t.append(elements[i].getMethodName());
+            t.append("(").append(elements[i].getLineNumber()).append(")]");
+        }
+        return t.toString();
+    }
+
 }

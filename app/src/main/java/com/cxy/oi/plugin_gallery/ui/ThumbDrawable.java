@@ -13,8 +13,10 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
 import com.cxy.oi.plugin_gallery.model.ReadBitmapFromFileTask;
+import com.cxy.oi.plugin_gallery.model.ThumbDecodeUtil;
 
 public class ThumbDrawable extends Drawable {
     private static final String TAG = "ThumbDrawable";
@@ -24,34 +26,46 @@ public class ThumbDrawable extends Drawable {
         paint.setAntiAlias(true);
     }
 
+    private ImageView iv;
     private Bitmap bitmap;
     private Rect srcRect = new Rect();
     private long origId;
     private String path;
 
+    public ThumbDrawable(ImageView iv) {
+        this.iv = iv;
+    }
 
-    public static void attach(final ImageView iv, long origId, String path) {
+    public static void attach(final ImageView iv, final long origId, String path) {
         final Drawable obj = iv.getDrawable();
         final ThumbDrawable thumb;
         if (obj instanceof ThumbDrawable) {
             thumb = (ThumbDrawable) obj;
         } else {
-            thumb = new ThumbDrawable();
+            thumb = new ThumbDrawable(iv);
         }
 
         thumb.origId = origId;
         thumb.path = path;
         thumb.bitmap = GalleryCore.getMediaCacheService().getBitMapFromCache(origId);
         if (thumb.bitmap == null) {
-            GalleryCore.getMediaWorkerThread().postToWorker(new ReadBitmapFromFileTask(origId, path,
+            GalleryCore.getMediaWorkerThread().startDecode(new ReadBitmapFromFileTask(origId, path,
                     new ReadBitmapFromFileTask.IOnBitmapGet() {
                         @Override
-                        public void onBitmapGet(long cacheKey, Bitmap bitmap) {
+                        public void onBitmapGet(Bitmap bitmap) {
                             thumb.bitmap = bitmap;
                             iv.setImageDrawable(thumb);
                         }
-            }));
+
+                        @Override
+                        public void doInBackground(Bitmap bitmap) {
+                            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
+                        }
+                    }));
+//            thumb.bitmap = ThumbDecodeUtil.getThumb(origId, path);
+//            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, thumb.bitmap);
         }
+//        iv.setImageDrawable(thumb);
     }
 
 
@@ -82,7 +96,15 @@ public class ThumbDrawable extends Drawable {
             } else {
                 Log.i(TAG, "bitmap isRecycled() == true, origId: %s", origId);
             }
-//            bitmap = ThumbDecodeUtil.getThumb(mOrigId, path);
+//            GalleryCore.getMediaWorkerThread().postToWorker(new ReadBitmapFromFileTask(origId, path,
+//                    new ReadBitmapFromFileTask.IOnBitmapGet() {
+//                        @Override
+//                        public void onBitmapGet(Bitmap bitmap) {
+//                            ThumbDrawable.this.bitmap = bitmap;
+//                            ThumbDrawable.this.iv.setImageDrawable(ThumbDrawable.this);
+//                            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
+//                        }
+//                    }));
             return;
         }
         resizeSrcRect();
