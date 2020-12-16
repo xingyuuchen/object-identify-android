@@ -1,6 +1,10 @@
 package com.cxy.oi.plugin_gallery.model;
 
 
+import android.graphics.Bitmap;
+
+import com.cxy.oi.kernel.util.Log;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
@@ -23,7 +27,8 @@ public class MediaQueryService {
     }
 
 
-    public void queryMedia(IMediaQuery.QueryType queryType) {
+    public void queryMediaItemsInAlbum(IMediaQuery.QueryType queryType) {
+
         setQueryType(queryType);
         IMediaQuery query = getMediaQuery();
         if (query != null) {
@@ -33,6 +38,8 @@ public class MediaQueryService {
                     notifyMediaQueryDone(mediaItems);
                 }
             });
+        } else {
+            Log.i(TAG, "[queryMedia] getMediaQuery() returns null, do nothing");
         }
     }
 

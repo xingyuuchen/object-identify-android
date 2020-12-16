@@ -87,7 +87,10 @@ public class LauncherUI extends AppCompatActivity {
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
         OICrashReporter.INSTANCE.init();
-        OIApplicationContext.setContext(getApplication());
+        if (getApplicationContext() == null) {
+            Log.i(TAG, "wtf!?????????????     QQ");
+        }
+        OIApplicationContext.setContext(getApplicationContext());
 
     }
 

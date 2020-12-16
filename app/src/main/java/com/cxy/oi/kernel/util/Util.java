@@ -13,6 +13,10 @@ public class Util {
         return s == null || s.size() <= 0;
     }
 
+    public static boolean isNullOrNil(int[] objects) {
+        return objects == null || objects.length <= 0;
+    }
+
     public static String nullAs(String s, String as) {
         if (s == null) {
             return as;

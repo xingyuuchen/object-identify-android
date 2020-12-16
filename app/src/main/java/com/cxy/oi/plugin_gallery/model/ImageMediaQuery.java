@@ -6,6 +6,9 @@ import android.net.Uri;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
+import com.cxy.oi.app.OIApplicationContext;
+import com.cxy.oi.kernel.util.Log;
+
 import java.util.ArrayList;
 
 
@@ -42,7 +45,7 @@ public class ImageMediaQuery extends BaseMediaQuery implements IMediaQuery {
 
     @Override
     public String getSortOrder() {
-        return BaseMediaQuery.DATE_TAKEN_COL + "desc limit 20";
+        return BaseMediaQuery.DATE_TAKEN_COL + " desc limit 20";
     }
 
     @Override

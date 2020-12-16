@@ -4,20 +4,27 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
+import android.graphics.PixelFormat;
 import android.graphics.drawable.Drawable;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.plugin_gallery.model.GalleryCore;
+import com.cxy.oi.plugin_gallery.model.ThumbDecodeUtil;
+
 public class ThumbDrawable extends Drawable {
     private static final String TAG = "ThumbDrawable";
 
 
-    public static void attach(ImageView iv, String path) {
-        Bitmap bitmap = BitmapFactory.decodeFile(path);
+    public static void attach(ImageView iv, long origId, String path) {
+        Bitmap bitmap = GalleryCore.getMediaCacheService().getBitMapFromCache(0);
+        if (bitmap == null) {
+            bitmap = ThumbDecodeUtil.getThumb(origId, path);
+        }
         iv.setImageBitmap(bitmap);
-
     }
 
 
@@ -38,6 +45,7 @@ public class ThumbDrawable extends Drawable {
 
     @Override
     public int getOpacity() {
-        return 0;
+        return PixelFormat.UNKNOWN;
     }
+
 }

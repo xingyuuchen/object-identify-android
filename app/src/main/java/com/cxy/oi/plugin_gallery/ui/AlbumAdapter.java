@@ -9,6 +9,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
+import com.cxy.oi.app.OIApplicationContext;
 import com.cxy.oi.kernel.SquareImageView;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
@@ -31,12 +32,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
     public AlbumAdapter(Context context) {
         this.mContext = context;
-        for (int i = 0; i < PREVIEW_COUNT; i++) {
-            MediaItem mediaItem = new MediaItem();
-            mediaItems.add(mediaItem);
-        }
+//        for (int i = 0; i < PREVIEW_COUNT; i++) {
+//            MediaItem mediaItem = new MediaItem();
+//            mediaItems.add(mediaItem);
+//        }
         GalleryCore.getMediaQueryService().addQueryMediaListener(this);
-        GalleryCore.getMediaQueryService().queryMedia(IMediaQuery.QueryType.Image);
+        GalleryCore.getMediaQueryService().queryMediaItemsInAlbum(IMediaQuery.QueryType.Image);
         notifyDataSetChanged();
     }
 
@@ -81,7 +82,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             viewHolder.galleryIv.setImageResource(R.drawable.icon_mine_active);
         }
         String imageFilePath = mediaItem.originalPath;
-        ThumbDrawable.attach(viewHolder.galleryIv, imageFilePath);
+        long origId = mediaItem.mediaId;
+        ThumbDrawable.attach(viewHolder.galleryIv, origId, imageFilePath);
 
     }
 

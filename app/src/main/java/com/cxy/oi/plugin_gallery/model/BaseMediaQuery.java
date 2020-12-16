@@ -16,7 +16,6 @@ public abstract class BaseMediaQuery implements IMediaQuery {
 
     protected ContentResolver contentResolver = OIApplicationContext.getContext().getContentResolver();
 
-
     public static MediaItem convertFrom(Cursor cursor) {
         if (cursor == null || cursor.isAfterLast() || cursor.isClosed()) {
             Log.e(TAG, "[convertFrom] cursor == null || cursor.isAfterLast() || cursor.isClosed()");
@@ -25,7 +24,7 @@ public abstract class BaseMediaQuery implements IMediaQuery {
         MediaItem item = new MediaItem();
         int index = cursor.getColumnIndexOrThrow(BaseColumns._ID);
         if (index < 0) {
-            Log.e(TAG, "[convertFrom] index < 0");
+            Log.e(TAG, "[convertFrom] index(%d) < 0", index);
             return null;
         }
         item.mediaId = Long.parseLong((cursor.getString(cursor.getColumnIndexOrThrow(BaseColumns._ID))));
