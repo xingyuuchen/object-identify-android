@@ -4,13 +4,13 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
 import com.cxy.oi.app.OIApplicationContext;
-import com.cxy.oi.kernel.SquareImageView;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
@@ -78,11 +78,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE) {
             viewHolder.galleryIv.setImageResource(R.drawable.icon_mine);
-        } else if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_VIDEO) {
-            viewHolder.galleryIv.setImageResource(R.drawable.icon_mine_active);
         }
         String imageFilePath = mediaItem.originalPath;
         long origId = mediaItem.mediaId;
+
         ThumbDrawable.attach(viewHolder.galleryIv, origId, imageFilePath);
 
     }
@@ -108,7 +107,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     private abstract static class MediaViewHolder extends RecyclerView.ViewHolder {
-        SquareImageView galleryIv;
+        ImageView galleryIv;
 
         public MediaViewHolder(@NonNull View itemView) {
             super(itemView);
