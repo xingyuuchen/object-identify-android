@@ -10,7 +10,7 @@ import java.util.Set;
 public class MediaQueryService {
     private static final String TAG = "MediaQueryService";
 
-    private Set<IQueryMediaCallback> callbackListeners;
+    private final Set<IQueryMediaCallback> callbackListeners;
     private ImageMediaQuery imageMediaQuery;
     private VideoMediaQuery videoMediaQuery;
 
@@ -62,8 +62,10 @@ public class MediaQueryService {
         GalleryCore.getMediaWorkerThread().postToUIThread(new Runnable() {
             @Override
             public void run() {
-                for (IQueryMediaCallback listener : callbackListeners) {
-                    listener.onQueryMediaDone(mediaItems);
+                synchronized (callbackListeners) {
+                    for (IQueryMediaCallback listener : callbackListeners) {
+                        listener.onQueryMediaDone(mediaItems);
+                    }
                 }
             }
         });

@@ -63,6 +63,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return viewHolder;
     }
 
+
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.i(TAG, "[onBindViewHolder] position: %d", position);
@@ -77,9 +78,9 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
             return;
         }
 
-        if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE) {
-            viewHolder.galleryIv.setImageResource(R.drawable.icon_mine);
-        }
+//        if (viewHolder.getType() == ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE) {
+//            viewHolder.galleryIv.setImageResource(R.drawable.icon_mine);
+//        }
         String imageFilePath = mediaItem.originalPath;
         long origId = mediaItem.mediaId;
 

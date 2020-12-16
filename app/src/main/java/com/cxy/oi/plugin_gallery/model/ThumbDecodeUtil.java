@@ -21,7 +21,7 @@ public class ThumbDecodeUtil {
             if (bytes != null) {
                 bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
                 if (bitmap != null) {
-                    Log.i(TAG, "[getThumb] OK, from ExifInterface");
+                    Log.i(TAG, "[getThumb] from ExifInterface OK");
                     return bitmap;
                 }
             }

@@ -1,8 +1,6 @@
 package com.cxy.oi.plugin_gallery.ui;
 
-import android.content.Context;
 import android.graphics.Bitmap;
-import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.ColorFilter;
 import android.graphics.Paint;
@@ -16,7 +14,7 @@ import androidx.annotation.Nullable;
 
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
-import com.cxy.oi.plugin_gallery.model.ThumbDecodeUtil;
+import com.cxy.oi.plugin_gallery.model.ReadBitmapFromFileTask;
 
 public class ThumbDrawable extends Drawable {
     private static final String TAG = "ThumbDrawable";
@@ -28,26 +26,32 @@ public class ThumbDrawable extends Drawable {
 
     private Bitmap bitmap;
     private Rect srcRect = new Rect();
-    private long mOrigId;
+    private long origId;
     private String path;
 
 
-    public static void attach(ImageView iv, long origId, String path) {
+    public static void attach(final ImageView iv, long origId, String path) {
         final Drawable obj = iv.getDrawable();
-        ThumbDrawable thumb;
+        final ThumbDrawable thumb;
         if (obj instanceof ThumbDrawable) {
             thumb = (ThumbDrawable) obj;
         } else {
             thumb = new ThumbDrawable();
         }
 
-        thumb.mOrigId = origId;
+        thumb.origId = origId;
         thumb.path = path;
-        thumb.bitmap = GalleryCore.getMediaCacheService().getBitMapFromCache(0);
+        thumb.bitmap = GalleryCore.getMediaCacheService().getBitMapFromCache(origId);
         if (thumb.bitmap == null) {
-            thumb.bitmap = ThumbDecodeUtil.getThumb(origId, path);
+            GalleryCore.getMediaWorkerThread().postToWorker(new ReadBitmapFromFileTask(origId, path,
+                    new ReadBitmapFromFileTask.IOnBitmapGet() {
+                        @Override
+                        public void onBitmapGet(long cacheKey, Bitmap bitmap) {
+                            thumb.bitmap = bitmap;
+                            iv.setImageDrawable(thumb);
+                        }
+            }));
         }
-        iv.setImageDrawable(thumb);
     }
 
 
@@ -73,12 +77,15 @@ public class ThumbDrawable extends Drawable {
     @Override
     public void draw(@NonNull Canvas canvas) {
         if (bitmap == null || bitmap.isRecycled()) {
-            Log.i(TAG, " bitmap.isRecycled(): %s", bitmap == null);
+            if (bitmap == null) {
+                Log.i(TAG, "bitmap == null, origId: %s", origId);
+            } else {
+                Log.i(TAG, "bitmap isRecycled() == true, origId: %s", origId);
+            }
 //            bitmap = ThumbDecodeUtil.getThumb(mOrigId, path);
+            return;
         }
         resizeSrcRect();
-        Log.i(TAG, "%s %s %s %s %s %s %s", srcRect.top, srcRect.bottom, srcRect.right,
-                getBounds().top, getBounds().bottom, getBounds().left, getBounds().right);
         canvas.drawBitmap(bitmap, srcRect, getBounds(), paint);
     }
 

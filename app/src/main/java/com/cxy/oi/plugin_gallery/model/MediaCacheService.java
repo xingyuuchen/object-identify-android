@@ -8,45 +8,53 @@ import java.util.HashMap;
 import java.util.Map;
 
 
+/**
+ *  二级缓存模型：内存Map缓存 + 硬盘缓存
+ */
 public class MediaCacheService {
     private static final String TAG = "MediaCacheService";
 
-    private Map<Integer, Bitmap> galleryMemCache;
+    private Map<Long, Bitmap> galleryMemCache;
 
     public MediaCacheService() {
         galleryMemCache = new HashMap<>();
 
     }
 
-    public void saveBitmapToMemCache(int key, Bitmap bitmap) {
-        galleryMemCache.put(key, bitmap);
+    public void saveBitmapToMemCache(long cacheKey, Bitmap bitmap) {
+        galleryMemCache.put(cacheKey, bitmap);
     }
 
-    public Bitmap getMemCacheBitmap(int key) {
-        return galleryMemCache.get(key);
+    public Bitmap getBitmapFromMemCache(long cacheKey) {
+        return galleryMemCache.get(cacheKey);
     }
 
-    public Bitmap getDiskCacheBitmap(int key) {
-        return null;    // TODO: cache the thumbs to the fileSystem.
+    public Bitmap getBitmapFromDiskCache(long cacheKey) {
+        return null;    // TODO: cache the thumbs to the file system.
     }
 
-    public void saveBitmapToDiskCache(int key, Bitmap bitmap) {
+    public void saveBitmapToDiskCache(long cacheKey, Bitmap bitmap) {
 
     }
 
-    public Bitmap getBitMapFromCache(int key) {
-        Bitmap bitmap = getMemCacheBitmap(key);
+
+    public Bitmap getBitMapFromCache(long cacheKey) {
+        Bitmap bitmap = getBitmapFromMemCache(cacheKey);
         if (bitmap != null) {
-            Log.i(TAG, "[getBitMap] just hit the galleryMemCache, key: %s", key);
+            Log.i(TAG, "[getBitMap] just hit the galleryMemCache, key: %s", cacheKey);
             return bitmap;
         }
-        bitmap = getDiskCacheBitmap(key);
+        bitmap = getBitmapFromDiskCache(cacheKey);
         if (bitmap == null) {
-            Log.i(TAG, "[getBitMap] cannot get bitmap(key: %s) from cache!", key);
+            Log.i(TAG, "[getBitMap] cannot get bitmap(key: %s) from cache", cacheKey);
+        } else {
+            saveBitmapToMemCache(cacheKey, bitmap);
         }
-        return bitmap;
 
+        return bitmap;
     }
+
+
 
 
 }
