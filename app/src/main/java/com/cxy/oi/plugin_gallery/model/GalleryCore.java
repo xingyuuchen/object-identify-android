@@ -1,14 +1,13 @@
 package com.cxy.oi.plugin_gallery.model;
 
 
-import android.os.Handler;
 
 public final class GalleryCore {
     private static final String TAG = "GalleryCore";
 
     private static MediaQueryService mediaQueryService;
     private static MediaCacheService mediaCacheService;
-
+    private static MediaHandlerThread mediaHandlerThread;
 
     public static MediaQueryService getMediaQueryService() {
         if (mediaQueryService == null) {
@@ -24,8 +23,11 @@ public final class GalleryCore {
         return mediaCacheService;
     }
 
-//    public static Handler MediaWorkerThread() {
-//
-//    }
+    public static MediaHandlerThread getMediaWorkerThread() {
+        if (mediaHandlerThread == null) {
+            mediaHandlerThread = new MediaHandlerThread();
+        }
+        return mediaHandlerThread;
+    }
 
 }

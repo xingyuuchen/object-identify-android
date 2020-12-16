@@ -36,9 +36,10 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 //            MediaItem mediaItem = new MediaItem();
 //            mediaItems.add(mediaItem);
 //        }
-        GalleryCore.getMediaQueryService().addQueryMediaListener(this);
-        GalleryCore.getMediaQueryService().queryMediaItemsInAlbum(IMediaQuery.QueryType.Image);
         notifyDataSetChanged();
+        GalleryCore.getMediaQueryService().addQueryMediaListener(this);
+
+        GalleryCore.getMediaQueryService().queryMediaItemsInAlbum(IMediaQuery.QueryType.Image);
     }
 
 

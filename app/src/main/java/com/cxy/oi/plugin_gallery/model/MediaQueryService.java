@@ -1,8 +1,6 @@
 package com.cxy.oi.plugin_gallery.model;
 
 
-import android.graphics.Bitmap;
-
 import com.cxy.oi.kernel.util.Log;
 
 import java.util.ArrayList;
@@ -30,12 +28,17 @@ public class MediaQueryService {
     public void queryMediaItemsInAlbum(IMediaQuery.QueryType queryType) {
 
         setQueryType(queryType);
-        IMediaQuery query = getMediaQuery();
+        final IMediaQuery query = getMediaQuery();
         if (query != null) {
-            query.queryMediaInAlbum(new IQueryMediaCallback() {
+            GalleryCore.getMediaWorkerThread().postToWorker(new Runnable() {
                 @Override
-                public void onQueryMediaDone(ArrayList<MediaItem> mediaItems) {
-                    notifyMediaQueryDone(mediaItems);
+                public void run() {
+                    query.queryMediaInAlbum(new IQueryMediaCallback() {
+                        @Override
+                        public void onQueryMediaDone(ArrayList<MediaItem> mediaItems) {
+                            notifyMediaQueryDone(mediaItems);
+                        }
+                    });
                 }
             });
         } else {
@@ -55,10 +58,15 @@ public class MediaQueryService {
         callbackListeners.remove(callback);
     }
 
-    public void notifyMediaQueryDone(ArrayList<MediaItem> mediaItems) {
-        for (IQueryMediaCallback listener : callbackListeners) {
-            listener.onQueryMediaDone(mediaItems);
-        }
+    public void notifyMediaQueryDone(final ArrayList<MediaItem> mediaItems) {
+        GalleryCore.getMediaWorkerThread().postToUIThread(new Runnable() {
+            @Override
+            public void run() {
+                for (IQueryMediaCallback listener : callbackListeners) {
+                    listener.onQueryMediaDone(mediaItems);
+                }
+            }
+        });
     }
 
     public void setQueryType(IMediaQuery.QueryType queryType) {
