@@ -45,9 +45,8 @@ public class MediaCacheService {
             return bitmap;
         }
         bitmap = getBitmapFromDiskCache(cacheKey);
-        if (bitmap == null) {
-            Log.i(TAG, "[getBitMap] cannot get bitmap(key: %s) from cache", cacheKey);
-        } else {
+        if (bitmap != null) {
+            Log.i(TAG, "[getBitMap] HIT bitmap(key: %s) from disk cache", cacheKey);
             saveBitmapToMemCache(cacheKey, bitmap);
         }
 

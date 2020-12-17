@@ -2,6 +2,8 @@ package com.cxy.oi.plugin_gallery.model;
 
 import android.graphics.Bitmap;
 
+import com.cxy.oi.kernel.util.Log;
+
 public class ReadBitmapFromFileTask implements Runnable {
     private static final String TAG = "ReadBitmapFromFileTask";
 
@@ -12,7 +14,6 @@ public class ReadBitmapFromFileTask implements Runnable {
 
 
     public ReadBitmapFromFileTask(long origId, String path, IOnBitmapGet callback) {
-
         this.origId = origId;
         this.path = path;
         this.callback = callback;

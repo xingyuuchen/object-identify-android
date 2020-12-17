@@ -47,6 +47,7 @@ public class MediaHandlerThread {
             Log.e(TAG, "[startDecode] runnable == null");
         }
         if (decoder != null) {
+            Log.i(TAG, "");
             decoder.execute(runnable);
         }
     }

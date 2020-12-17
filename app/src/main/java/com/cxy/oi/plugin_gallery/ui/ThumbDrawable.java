@@ -13,10 +13,9 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cxy.oi.kernel.util.Log;
-import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
 import com.cxy.oi.plugin_gallery.model.ReadBitmapFromFileTask;
-import com.cxy.oi.plugin_gallery.model.ThumbDecodeUtil;
+
 
 public class ThumbDrawable extends Drawable {
     private static final String TAG = "ThumbDrawable";
@@ -37,13 +36,11 @@ public class ThumbDrawable extends Drawable {
     }
 
     public static void attach(final ImageView iv, final long origId, String path) {
-        final Drawable obj = iv.getDrawable();
-        final ThumbDrawable thumb;
-        if (obj instanceof ThumbDrawable) {
-            thumb = (ThumbDrawable) obj;
-        } else {
-            thumb = new ThumbDrawable(iv);
+        final Drawable drawable = iv.getDrawable();
+        if (drawable instanceof ThumbDrawable) {
+            iv.setImageDrawable(null);
         }
+        final ThumbDrawable thumb = new ThumbDrawable(iv);
 
         thumb.origId = origId;
         thumb.path = path;
@@ -62,12 +59,25 @@ public class ThumbDrawable extends Drawable {
                             GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
                         }
                     }));
-//            thumb.bitmap = ThumbDecodeUtil.getThumb(origId, path);
-//            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, thumb.bitmap);
+            return;
         }
-//        iv.setImageDrawable(thumb);
+        iv.setImageDrawable(thumb);
     }
 
+
+    @Override
+    public void draw(@NonNull Canvas canvas) {
+        if (bitmap == null || bitmap.isRecycled()) {
+            if (bitmap == null) {
+                Log.i(TAG, "bitmap == null, origId: %s", origId);
+            } else {
+                Log.i(TAG, "bitmap isRecycled() == true, origId: %s", origId);
+            }
+            return;
+        }
+        resizeSrcRect();
+        canvas.drawBitmap(bitmap, srcRect, getBounds(), paint);
+    }
 
     private void resizeSrcRect() {
         if (bitmap == null) {
@@ -86,29 +96,6 @@ public class ThumbDrawable extends Drawable {
             srcRect.top = (h - w) / 2;
             srcRect.bottom = h - srcRect.top;
         }
-    }
-
-    @Override
-    public void draw(@NonNull Canvas canvas) {
-        if (bitmap == null || bitmap.isRecycled()) {
-            if (bitmap == null) {
-                Log.i(TAG, "bitmap == null, origId: %s", origId);
-            } else {
-                Log.i(TAG, "bitmap isRecycled() == true, origId: %s", origId);
-            }
-//            GalleryCore.getMediaWorkerThread().postToWorker(new ReadBitmapFromFileTask(origId, path,
-//                    new ReadBitmapFromFileTask.IOnBitmapGet() {
-//                        @Override
-//                        public void onBitmapGet(Bitmap bitmap) {
-//                            ThumbDrawable.this.bitmap = bitmap;
-//                            ThumbDrawable.this.iv.setImageDrawable(ThumbDrawable.this);
-//                            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
-//                        }
-//                    }));
-            return;
-        }
-        resizeSrcRect();
-        canvas.drawBitmap(bitmap, srcRect, getBounds(), paint);
     }
 
     @Override
