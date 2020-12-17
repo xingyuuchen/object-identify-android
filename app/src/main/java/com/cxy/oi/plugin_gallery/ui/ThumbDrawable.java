@@ -37,10 +37,14 @@ public class ThumbDrawable extends Drawable {
 
     public static void attach(final ImageView iv, final long origId, String path) {
         final Drawable drawable = iv.getDrawable();
+        final ThumbDrawable thumb;
         if (drawable instanceof ThumbDrawable) {
-            iv.setImageDrawable(null);
+            thumb = (ThumbDrawable) drawable;
+            Log.i(TAG, "-----------------%s", thumb.bitmap);
+//            iv.setImageDrawable(null);
+        } else {
+            thumb = new ThumbDrawable(iv);
         }
-        final ThumbDrawable thumb = new ThumbDrawable(iv);
 
         thumb.origId = origId;
         thumb.path = path;
