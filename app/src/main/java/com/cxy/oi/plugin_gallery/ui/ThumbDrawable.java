@@ -38,24 +38,38 @@ public class ThumbDrawable extends Drawable {
     public static void attach(final ImageView iv, final long origId, String path) {
         final Drawable drawable = iv.getDrawable();
         final ThumbDrawable thumb;
+        final boolean isNew;
         if (drawable instanceof ThumbDrawable) {
             thumb = (ThumbDrawable) drawable;
-            Log.i(TAG, "-----------------%s", thumb.bitmap);
-//            iv.setImageDrawable(null);
+            thumb.bitmap = null;
+            isNew = false;
         } else {
             thumb = new ThumbDrawable(iv);
+            isNew = true;
         }
 
         thumb.origId = origId;
         thumb.path = path;
-        thumb.bitmap = GalleryCore.getMediaCacheService().getBitMapFromCache(origId);
+        Bitmap bm = GalleryCore.getMediaCacheService().getBitMapFromCache(origId);
+        if (bm != null) {
+            thumb.bitmap = bm;
+            if (isNew) {
+                iv.setImageDrawable(thumb);
+            }
+            return;
+        }
+
         if (thumb.bitmap == null) {
             GalleryCore.getMediaWorkerThread().startDecode(new ReadBitmapFromFileTask(origId, path,
                     new ReadBitmapFromFileTask.IOnBitmapGet() {
                         @Override
                         public void onBitmapGet(Bitmap bitmap) {
                             thumb.bitmap = bitmap;
-                            iv.setImageDrawable(thumb);
+                            if (isNew) {
+                                iv.setImageDrawable(thumb);
+                            } else {
+                                iv.invalidateDrawable(thumb);  // 异步，必须invalidate
+                            }
                         }
 
                         @Override
@@ -63,20 +77,14 @@ public class ThumbDrawable extends Drawable {
                             GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
                         }
                     }));
-            return;
         }
-        iv.setImageDrawable(thumb);
     }
 
 
     @Override
     public void draw(@NonNull Canvas canvas) {
         if (bitmap == null || bitmap.isRecycled()) {
-            if (bitmap == null) {
-                Log.i(TAG, "bitmap == null, origId: %s", origId);
-            } else {
-                Log.i(TAG, "bitmap isRecycled() == true, origId: %s", origId);
-            }
+            Log.i(TAG, "bitmap == null || bitmap.isRecycled()!  origId: %s", origId);
             return;
         }
         resizeSrcRect();
@@ -104,12 +112,10 @@ public class ThumbDrawable extends Drawable {
 
     @Override
     public void setAlpha(int alpha) {
-
     }
 
     @Override
     public void setColorFilter(@Nullable ColorFilter colorFilter) {
-
     }
 
     @Override
