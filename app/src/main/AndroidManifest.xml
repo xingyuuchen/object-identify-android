@@ -34,7 +34,7 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
-        <activity android:name=".ui.LauncherUI">
+        <activity android:name=".app.ui.LauncherUI">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

@@ -4,7 +4,6 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.os.Build;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -15,7 +14,6 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.app.OIApplicationContext;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;

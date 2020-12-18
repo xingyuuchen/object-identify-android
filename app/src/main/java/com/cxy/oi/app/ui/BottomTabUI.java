@@ -1,4 +1,4 @@
-package com.cxy.oi.ui;
+package com.cxy.oi.app.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;
@@ -15,8 +15,8 @@ import com.cxy.oi.R;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 
 public class BottomTabUI extends LinearLayout {
-
     private static final String TAG = "BottomTabUI";
+
     private Context mContext;
     private int lastClickIdx;
     private IOnTabClickListener onTabClickedListener;

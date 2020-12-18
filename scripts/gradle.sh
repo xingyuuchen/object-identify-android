@@ -37,5 +37,5 @@ fi
 
 cd "${curr_dir}"
 
-bash install.sh phone /Users/cxy/AndroidStudioProjects/oi/app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.ui.LauncherUI
+bash install.sh phone /Users/cxy/AndroidStudioProjects/oi/app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.app.ui.LauncherUI
 

@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="8dp"
+    >
+
+    <ImageView
+        android:id="@+id/search_iv"
+        android:layout_width="60dp"
+        android:layout_height="60dp"
+        android:src="@drawable/icon_album"
+        />
+
+    <LinearLayout
+        android:layout_toEndOf="@id/search_iv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            android:id="@+id/item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_name"
+            android:textSize="17sp"
+            />
+        <TextView
+            android:id="@+id/item_description"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="我用京东金条，京东不东，让我付上了团费"
+            />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/search_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/search_time"
+        android:layout_alignParentEnd="true"
+        android:layout_marginEnd="10dp"
+        />
+
+</RelativeLayout>

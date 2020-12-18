@@ -5,7 +5,7 @@ import android.graphics.BitmapFactory;
 import androidx.exifinterface.media.ExifInterface;
 import android.provider.MediaStore;
 
-import com.cxy.oi.app.OIApplicationContext;
+import com.cxy.oi.kernel.OIApplicationContext;
 import com.cxy.oi.kernel.util.Log;
 
 import java.io.IOException;

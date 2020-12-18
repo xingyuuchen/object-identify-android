@@ -1,10 +1,9 @@
 package com.cxy.oi.plugin_gallery.model;
 
-import android.os.Handler;
 import android.os.HandlerThread;
 import android.os.Looper;
 
-import com.cxy.oi.app.OIHandler;
+import com.cxy.oi.kernel.OIHandler;
 import com.cxy.oi.kernel.util.Log;
 
 import java.util.concurrent.ExecutorService;

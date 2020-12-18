@@ -1,6 +1,4 @@
-package com.cxy.oi.kernel;
-
-import com.cxy.oi.kernel.util.Log;
+package com.cxy.oi.kernel.event;
 
 import java.util.HashMap;
 import java.util.HashSet;

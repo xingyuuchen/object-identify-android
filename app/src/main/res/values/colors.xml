@@ -9,4 +9,16 @@
     <color name="green">#08D160</color>
     <color name="black">#A6000000</color>
 
+    <color name="link">#576B95</color>
+    <color name="pic_thum_bg_color">#505050</color>
+    <color name="image_gallery_mask">#505050</color>
+    <color name="bg_mask">#505050</color>
+
+    <color name="alpha_0_0_5">#0D000000</color>
+    <color name="alpha_0_1">#1A000000</color>
+    <color name="alpha_0_2">#33000000</color>
+    <color name="alpha_0_3">#4D000000</color>
+    <color name="alpha_0_5">#80000000</color>
+    <color name="alpha_0_9">#E6000000</color>
+
 </resources>

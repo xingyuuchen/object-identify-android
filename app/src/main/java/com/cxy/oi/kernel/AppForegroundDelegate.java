@@ -1,4 +1,4 @@
-package com.cxy.oi.app;
+package com.cxy.oi.kernel;
 
 import android.app.Activity;
 import android.app.Application;

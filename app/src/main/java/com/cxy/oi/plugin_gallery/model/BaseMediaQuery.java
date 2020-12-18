@@ -5,7 +5,7 @@ import android.database.Cursor;
 import android.provider.BaseColumns;
 import android.provider.MediaStore;
 
-import com.cxy.oi.app.OIApplicationContext;
+import com.cxy.oi.kernel.OIApplicationContext;
 import com.cxy.oi.kernel.util.Log;
 
 public abstract class BaseMediaQuery implements IMediaQuery {

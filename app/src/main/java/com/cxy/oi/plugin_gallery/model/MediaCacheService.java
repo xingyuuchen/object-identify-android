@@ -34,7 +34,7 @@ public class MediaCacheService {
     }
 
     public void saveBitmapToDiskCache(long cacheKey, Bitmap bitmap) {
-
+        // TODO: cache the thumbs to the file system.
     }
 
 

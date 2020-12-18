@@ -1,6 +1,8 @@
-package com.cxy.oi.kernel;
+package com.cxy.oi.kernel.event;
 
-public abstract class IListener<T extends IEvent> {
+public abstract class IEvent {
+
+    public abstract void callback();
 
     private int eventID;
 
@@ -10,7 +12,5 @@ public abstract class IListener<T extends IEvent> {
         }
         return eventID;
     }
-
-    public abstract void callback();
 
 }

@@ -1,6 +1,6 @@
 package com.cxy.oi.app;
 
-import com.cxy.oi.kernel.IEvent;
+import com.cxy.oi.kernel.event.IEvent;
 
 public class TestEvent extends IEvent {
 

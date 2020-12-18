@@ -10,7 +10,6 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.app.OIApplicationContext;
 import com.cxy.oi.kernel.protocol.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
@@ -108,8 +107,8 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     }
 
 
-    private abstract static class MediaViewHolder extends RecyclerView.ViewHolder {
-        ImageView galleryIv;
+    public abstract static class MediaViewHolder extends RecyclerView.ViewHolder {
+        public ImageView galleryIv;
 
         public MediaViewHolder(@NonNull View itemView) {
             super(itemView);
