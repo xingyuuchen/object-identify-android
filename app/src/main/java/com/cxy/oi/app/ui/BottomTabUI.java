@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 
 public class BottomTabUI extends LinearLayout {
     private static final String TAG = "BottomTabUI";
@@ -36,7 +36,7 @@ public class BottomTabUI extends LinearLayout {
 
         insertFindMoreTab();
         insertMineTab();
-        switchToTab(ConstantsProtocol.LauncherUI.INDEX_FINDMORE);
+        switchToTab(ConstantsUI.LauncherUI.INDEX_FINDMORE);
     }
 
 
@@ -56,7 +56,7 @@ public class BottomTabUI extends LinearLayout {
     }
 
     private void insertFindMoreTab() {
-        findMoreTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_FINDMORE);
+        findMoreTab = createTabItem(ConstantsUI.LauncherUI.INDEX_FINDMORE);
         findMoreTab.tv.setText(R.string.find_more);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -65,7 +65,7 @@ public class BottomTabUI extends LinearLayout {
     }
 
     private void insertMineTab() {
-        mineTab = createTabItem(ConstantsProtocol.LauncherUI.INDEX_MINE);
+        mineTab = createTabItem(ConstantsUI.LauncherUI.INDEX_MINE);
         mineTab.tv.setText(R.string.mine);
 
         LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(ViewGroup.LayoutParams.WRAP_CONTENT,
@@ -101,7 +101,7 @@ public class BottomTabUI extends LinearLayout {
     private void switchToTab(int idx) {
         lastClickIdx = idx;
         switch (idx) {
-            case ConstantsProtocol.LauncherUI.INDEX_FINDMORE: {
+            case ConstantsUI.LauncherUI.INDEX_FINDMORE: {
                 findMoreTab.iconIv.setImageResource(R.drawable.icon_findmore_active);
                 mineTab.iconIv.setImageResource(R.drawable.icon_mine);
 
@@ -109,7 +109,7 @@ public class BottomTabUI extends LinearLayout {
                 mineTab.tv.setTextColor(colorBlack);
                 break;
             }
-            case ConstantsProtocol.LauncherUI.INDEX_MINE: {
+            case ConstantsUI.LauncherUI.INDEX_MINE: {
                 findMoreTab.iconIv.setImageResource(R.drawable.icon_findmore);
                 mineTab.iconIv.setImageResource(R.drawable.icon_mine_active);
 

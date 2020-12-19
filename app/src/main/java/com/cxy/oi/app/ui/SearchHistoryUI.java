@@ -9,11 +9,16 @@ import android.widget.ListView;
 
 
 import com.cxy.oi.R;
-import com.cxy.oi.app.model.RecognitionInfo;
+import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.plugin_storage.IPluginStorage;
+import com.cxy.oi.plugin_storage.RecognitionInfo;
 import com.cxy.oi.app.model.SearchItem;
 import com.cxy.oi.app.model.SearchItemPlant;
+import com.cxy.oi.plugin_storage.RecognitionInfoStorage;
 
 import java.util.ArrayList;
+
 
 public class SearchHistoryUI {
     private static final String TAG = "SearchHistoryUI";
@@ -37,14 +42,30 @@ public class SearchHistoryUI {
     }
 
 
-    private class HistoryAdapter extends BaseAdapter {
+    private class HistoryAdapter extends BaseAdapter implements RecognitionInfoStorage.IOnxxxxxx {
         private final ArrayList<RecognitionInfo> historySearchItems;
 
         public HistoryAdapter() {
             historySearchItems = new ArrayList<>();
-            for (int i = 0; i < 3; i++) {
-                historySearchItems.add(new RecognitionInfo());
+            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().registerListener(this);
+
+            if (OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().getRecognitionInfoCount() <= 0) {
+                for (int i = 0; i < 4; i++) {
+                    RecognitionInfo info;
+                    RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
+                    builder.setContent("这是我查询的第" + i + "个植物，它被触碰到后会关闭")
+                            .setCreateTime(System.currentTimeMillis())
+                            .setItemType(ConstantsUI.ObjectItem.TYPE_PLANT)
+                            .setItemName("含羞草");
+                    info = builder.build();
+                    OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+                }
+            } else {
+                for (int i = 0; i < 4; i++) {
+                    historySearchItems.add(new RecognitionInfo());
+                }
             }
+
         }
 
         @Override
@@ -86,6 +107,12 @@ public class SearchHistoryUI {
             }
             return 0;
         }
+
+        @Override
+        public void onNewRecognitionInfoInserted() {
+
+        }
+
     }
 
 

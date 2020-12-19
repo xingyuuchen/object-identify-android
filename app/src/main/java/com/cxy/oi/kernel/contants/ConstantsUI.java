@@ -1,6 +1,9 @@
-package com.cxy.oi.kernel.protocol;
+package com.cxy.oi.kernel.contants;
 
-public final class ConstantsProtocol {
+public final class ConstantsUI {
+    private ConstantsUI() {
+    }
+
 
     public static final class LauncherUI {
         private LauncherUI() {

@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel;
+package com.cxy.oi.app.ui;
 
 import android.content.Context;
 import android.util.AttributeSet;

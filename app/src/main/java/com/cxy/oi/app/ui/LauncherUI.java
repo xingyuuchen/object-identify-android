@@ -13,13 +13,14 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.AppForegroundDelegate;
-import com.cxy.oi.kernel.IAppForegroundListener;
-import com.cxy.oi.kernel.OIApplicationContext;
+import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.app.AppForegroundDelegate;
+import com.cxy.oi.kernel.app.IAppForegroundListener;
+import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.app.TestEvent;
 import com.cxy.oi.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 
@@ -73,7 +74,7 @@ public class LauncherUI extends AppCompatActivity {
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), AlbumPreviewUI.class);
-                startActivityForResult(intent, ConstantsProtocol.AlbumPreviewUI.ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_CODE);
             }
         });
 
@@ -105,12 +106,20 @@ public class LauncherUI extends AppCompatActivity {
         return tabbar;
     }
 
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "[onActivityResult] requestCode: %s, resultCode: %s", requestCode, resultCode);
+
+    }
+
     @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
         OICrashReporter.INSTANCE.init();
         OIApplicationContext.setContext(getApplicationContext());
-
+        OIKernel.makeKernel();
     }
 
 

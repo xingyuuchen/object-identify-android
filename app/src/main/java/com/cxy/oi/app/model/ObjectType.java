@@ -1,6 +1,6 @@
 package com.cxy.oi.app.model;
 
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -12,7 +12,7 @@ import java.lang.annotation.Target;
 @Target({ElementType.FIELD, ElementType.PARAMETER})
 public @interface ObjectType {
 
-    int value() default ConstantsProtocol.ObjectItem.TYPE_PLANT;
+    int value() default ConstantsUI.ObjectItem.TYPE_PLANT;
 
 
 }

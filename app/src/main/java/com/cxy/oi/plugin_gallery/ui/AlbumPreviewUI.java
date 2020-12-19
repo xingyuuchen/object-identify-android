@@ -14,11 +14,11 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 
-import static com.cxy.oi.kernel.protocol.ConstantsProtocol.AlbumPreviewUI.REQUEST_PERMISSION;
+import static com.cxy.oi.kernel.contants.ConstantsUI.AlbumPreviewUI.REQUEST_PERMISSION;
 
 public class AlbumPreviewUI extends Activity {
     private static final String TAG = "AlbumPreviewUI";
@@ -39,7 +39,7 @@ public class AlbumPreviewUI extends Activity {
         Log.i(TAG, "[init]");
         gallery = findViewById(R.id.album_recyclerView);
         GridLayoutManager layoutManager = new GridLayoutManager(this,
-                ConstantsProtocol.AlbumPreviewUI.SPAN_COUNT);
+                ConstantsUI.AlbumPreviewUI.SPAN_COUNT);
         gallery.setLayoutManager(layoutManager);
         adapter = new AlbumAdapter(this);
         gallery.setAdapter(adapter);
@@ -50,7 +50,7 @@ public class AlbumPreviewUI extends Activity {
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "[onActivityResult], requestCode: %d", requestCode);
-        if (requestCode == ConstantsProtocol.AlbumPreviewUI.ACTIVITY_REQUEST_CODE) {
+        if (requestCode == ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_CODE) {
             Intent intent = getIntent();
 
         }

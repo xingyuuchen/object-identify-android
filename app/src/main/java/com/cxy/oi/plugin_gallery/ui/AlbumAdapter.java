@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
 import com.cxy.oi.plugin_gallery.model.IMediaQuery;
@@ -47,12 +47,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
         switch (viewType) {
-            case ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE: {
+            case ConstantsUI.AlbumPreviewUI.VIEW_TYPE_IMAGE: {
                 View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, null);
                 viewHolder = new ImageViewHolder(v);
                 break;
             }
-            case ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_VIDEO:
+            case ConstantsUI.AlbumPreviewUI.VIEW_TYPE_VIDEO:
             default: {
                 View v = LayoutInflater.from(mContext).inflate(R.layout.gallery_preview_item, null);
                 viewHolder = new VideoViewHolder(v);
@@ -126,7 +126,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         @Override
         public int getType() {
-            return ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_IMAGE;
+            return ConstantsUI.AlbumPreviewUI.VIEW_TYPE_IMAGE;
         }
     }
 
@@ -136,7 +136,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
         @Override
         public int getType() {
-            return ConstantsProtocol.AlbumPreviewUI.VIEW_TYPE_VIDEO;
+            return ConstantsUI.AlbumPreviewUI.VIEW_TYPE_VIDEO;
         }
     }
 

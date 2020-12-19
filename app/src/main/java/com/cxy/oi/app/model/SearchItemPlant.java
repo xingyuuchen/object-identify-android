@@ -1,6 +1,6 @@
 package com.cxy.oi.app.model;
 
-import com.cxy.oi.kernel.protocol.ConstantsProtocol;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 
 public class SearchItemPlant extends SearchItem {
@@ -9,7 +9,7 @@ public class SearchItemPlant extends SearchItem {
 
     @Override
     public int getType() {
-        return ConstantsProtocol.ObjectItem.TYPE_PLANT;
+        return ConstantsUI.ObjectItem.TYPE_PLANT;
     }
 
 
