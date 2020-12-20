@@ -100,7 +100,7 @@ public class SearchHistoryUI {
             if (recognitionInfo.getImgPath() != null) {
                 ThumbDrawable.attach(viewHolder.searchIv, 0, recognitionInfo.getImgPath());
             } else {
-                viewHolder.searchIv.setImageResource(R.drawable.icon_camera);
+                viewHolder.searchIv.setImageResource(R.drawable.icon_default);
             }
 
             convertView.setTag(viewHolder);
