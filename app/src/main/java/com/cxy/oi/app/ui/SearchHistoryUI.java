@@ -92,9 +92,8 @@ public class SearchHistoryUI {
                 viewHolder = (SearchItem.BaseViewHolder) convertView.getTag();
             }
 
-            CharSequence cs = TimeUtil.formatTimeInList(recognitionInfo.getCreateTime());
-
-            viewHolder.searchTime.setText(OIApplicationContext.getContext().getString(R.string.search_time, cs));
+            CharSequence time = TimeUtil.formatTimeInList(recognitionInfo.getCreateTime());
+            viewHolder.searchTime.setText(OIApplicationContext.getContext().getString(R.string.search_time, time));
             viewHolder.itemName.setText(recognitionInfo.getItemName());
             viewHolder.itemDesc.setText(recognitionInfo.getContent());
             if (recognitionInfo.getImgPath() != null) {
