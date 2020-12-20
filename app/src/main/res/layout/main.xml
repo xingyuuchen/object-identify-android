@@ -59,6 +59,7 @@
             android:layout_marginTop="10dp"
             >
             <ImageView
+                android:id="@+id/btn_take_photo"
                 android:layout_width="100dp"
                 android:layout_height="100dp"
                 android:layout_weight="1"

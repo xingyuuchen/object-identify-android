@@ -23,7 +23,8 @@ import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
-
+import com.cxy.oi.plugin_storage.IPluginStorage;
+import com.cxy.oi.plugin_storage.RecognitionInfo;
 
 
 public class LauncherUI extends AppCompatActivity {
@@ -32,6 +33,7 @@ public class LauncherUI extends AppCompatActivity {
     private RelativeLayout ui;
     private ImageView bgImage;
     private ImageView goToGalleryPreviewIv;
+    private ImageView gotoTakePhotoIv;
 
     private BottomTabUI tabbar;
     private SearchHistoryUI searchHistoryUI;
@@ -78,6 +80,20 @@ public class LauncherUI extends AppCompatActivity {
             }
         });
 
+        gotoTakePhotoIv = findViewById(R.id.btn_take_photo);
+        gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                RecognitionInfo info;
+                RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
+                builder.setContent("这是我查询的植物，它被触碰到后会关闭")
+                        .setCreateTime(System.currentTimeMillis())
+                        .setItemType(ConstantsUI.ObjectItem.TYPE_PLANT)
+                        .setItemName("含羞草");
+                info = builder.build();
+                OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+            }
+        });
     }
 
     private void initTabbar() {
@@ -126,6 +142,7 @@ public class LauncherUI extends AppCompatActivity {
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        OIKernel.storage().closeDB();
         AppForegroundDelegate.INSTANCE.unregisterListener(appForegroundListener);
     }
 }

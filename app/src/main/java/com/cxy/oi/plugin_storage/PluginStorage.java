@@ -5,6 +5,7 @@ import android.database.sqlite.SQLiteDatabase;
 
 import com.cxy.oi.kernel.OIKernel;
 
+
 public class PluginStorage implements IPluginStorage {
 
     private RecognitionInfoStorage recognitionInfoStorage;
@@ -14,11 +15,11 @@ public class PluginStorage implements IPluginStorage {
     public void doWhenBoot() {
         SQLiteDatabase database = OIKernel.storage().getDB();
 
-        for (String s : RecognitionInfoStorage.SQL_CREATE) {
-            database.execSQL(s);
+        for (String sqlCreate : RecognitionInfoStorage.SQL_CREATE) {
+            database.execSQL(sqlCreate);
         }
-        for (String s : ConfigStorage.SQL_CREATE) {
-            database.execSQL(s);
+        for (String sqlCreate : ConfigStorage.SQL_CREATE) {
+            database.execSQL(sqlCreate);
         }
         recognitionInfoStorage = new RecognitionInfoStorage(database);
         configStorage = new ConfigStorage(database);

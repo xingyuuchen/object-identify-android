@@ -1,6 +1,6 @@
 package com.cxy.oi.kernel;
 
-import com.cxy.oi.plugin_storage.IPluginStorage;
+import com.cxy.oi.plugin_storage.PluginStorage;
 
 import static com.cxy.oi.kernel.OIKernel.installPlugin;
 
@@ -16,7 +16,7 @@ public class DefaultBootStep {
      */
     public static void installPlugins() {
 
-        installPlugin(IPluginStorage.class);
+        installPlugin(PluginStorage.class);
 
 
     }

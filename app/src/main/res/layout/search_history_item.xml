@@ -29,7 +29,6 @@
         <TextView
             style="@style/SmallTextTheme"
             android:id="@+id/item_description"
-            android:text="我用京东金条，京东不东，让我付上了团费"
             />
 
     </LinearLayout>

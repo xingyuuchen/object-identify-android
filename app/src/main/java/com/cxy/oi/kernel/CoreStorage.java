@@ -40,11 +40,19 @@ public final class CoreStorage {
         try {
             final File f = new File(dbPath);
             if (!f.exists()) {
-                boolean res = f.mkdirs();
+                boolean res = f.getParentFile().mkdirs();
+            } else {
+//                f.delete();
             }
             db = SQLiteDatabase.openDatabase(dbPath, null, flags);
-        } catch (Throwable ignored) {
-            // ignored
+        } catch (Throwable e) {
+            Log.i(TAG, "[initDB] %s", e.getMessage());
+        }
+    }
+
+    public void closeDB() {
+        if (db != null) {
+            db.close();
         }
     }
 

@@ -10,7 +10,7 @@ public class ConfigStorage {
 //            "create table if not exists " + RecognitionInfo.RECOGNITION_INFO_TABLE + " ( " +
 //                    RecognitionInfo.COL_ID + " integer primary key, " +
 //                    RecognitionInfo.COL_SVR_ID + " integer, " +
-//                    RecognitionInfo.COL_TYPE + " int, " +
+//                    RecognitionInfo.COL_ITEM_TYPE + " int, " +
 //                    RecognitionInfo.COL_STATUS + " int, " +
 //                    RecognitionInfo.COL_CREATE_TIME + " integer, " +
 //                    RecognitionInfo.COL_CONTENT + " text, " +

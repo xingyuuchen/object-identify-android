@@ -4,6 +4,8 @@ import android.content.ContentValues;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 
+import com.cxy.oi.kernel.util.Log;
+
 import java.util.HashSet;
 import java.util.Set;
 
@@ -15,8 +17,9 @@ public class RecognitionInfoStorage {
             "create table if not exists " + RecognitionInfo.RECOGNITION_INFO_TABLE + " ( " +
                     RecognitionInfo.COL_ID + " integer primary key, " +
                     RecognitionInfo.COL_SVR_ID + " integer, " +
-                    RecognitionInfo.COL_TYPE + " int, " +
                     RecognitionInfo.COL_STATUS + " int, " +
+                    RecognitionInfo.COL_ITEM_NAME + " text, " +
+                    RecognitionInfo.COL_ITEM_TYPE + " int, " +
                     RecognitionInfo.COL_CREATE_TIME + " integer, " +
                     RecognitionInfo.COL_CONTENT + " text, " +
                     RecognitionInfo.COL_IMG_PATH + " text, " +
@@ -33,13 +36,25 @@ public class RecognitionInfoStorage {
 
     public long insert(RecognitionInfo info) {
         ContentValues contentValues = info.convertTo();
-
         long res = db.insert(RecognitionInfo.RECOGNITION_INFO_TABLE, RecognitionInfo.COL_ID, contentValues);
         if (res < 0) {
+            Log.i(TAG, "[insert] failed, res: %s", res);
             return res;
         }
         doNotify();
         return res;
+    }
+
+
+    public Cursor query(long lastCreateTime) {
+        return query(Integer.MAX_VALUE, lastCreateTime);
+    }
+
+    public Cursor query(int limitCnt, long lastCreateTime) {
+        final String sql = "select * from " + RecognitionInfo.RECOGNITION_INFO_TABLE + " where " +
+                RecognitionInfo.COL_CREATE_TIME + ">" + lastCreateTime +
+                " order by " + RecognitionInfo.COL_CREATE_TIME + " desc limit " + limitCnt;
+        return db.rawQuery(sql, null);
     }
 
     public int getRecognitionInfoCount() {
