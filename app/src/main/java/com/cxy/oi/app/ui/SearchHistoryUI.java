@@ -16,6 +16,7 @@ import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.TimeUtil;
+import com.cxy.oi.plugin_gallery.ui.ThumbDrawable;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
 import com.cxy.oi.app.model.SearchItem;
@@ -97,7 +98,7 @@ public class SearchHistoryUI {
             viewHolder.itemName.setText(recognitionInfo.getItemName());
             viewHolder.itemDesc.setText(recognitionInfo.getContent());
             if (recognitionInfo.getImgPath() != null) {
-
+                ThumbDrawable.attach(viewHolder.searchIv, 0, recognitionInfo.getImgPath());
             } else {
                 viewHolder.searchIv.setImageResource(R.drawable.icon_camera);
             }

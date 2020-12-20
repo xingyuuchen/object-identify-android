@@ -26,16 +26,16 @@ fi
 
 if ${isClean}; then
   echo isClean
-  /Users/cxy/AndroidStudioProjects/oi/gradlew clean
+  ./gradlew clean
 fi
+
 
 if ${isBuild}; then
   echo "${params}"
-  /Users/cxy/AndroidStudioProjects/oi/gradlew assembleDebug ${params}
+  ./gradlew assembleDebug ${params}
 
+  cd "${curr_dir}"
+
+  bash install.sh phone ../app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.app.ui.LauncherUI
 fi
-
-cd "${curr_dir}"
-
-bash install.sh phone /Users/cxy/AndroidStudioProjects/oi/app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.app.ui.LauncherUI
 
