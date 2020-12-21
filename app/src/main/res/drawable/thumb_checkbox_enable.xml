@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--<layer-list xmlns:android="http://schemas.android.com/apk/res/android">-->
+
+<!--    <item >-->
+<!--        <shape-->
+<!--            android:shape="rectangle">-->
+<!--            <solid android:color="@color/cyan" />-->
+<!--            <corners android:radius="3dp"/>-->
+<!--        </shape>-->
+<!--    </item>-->
+
+<!--&lt;!&ndash;    <item&ndash;&gt;-->
+<!--&lt;!&ndash;        android:top="@dimen/shadow_width"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:right="@dimen/shadow_width"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:left="@dimen/shadow_width"&ndash;&gt;-->
+<!--&lt;!&ndash;        android:bottom="@dimen/shadow_width">&ndash;&gt;-->
+<!--&lt;!&ndash;        <shape&ndash;&gt;-->
+<!--&lt;!&ndash;            android:shape="rectangle">&ndash;&gt;-->
+<!--&lt;!&ndash;            <solid android:color="@color/transparent"/>&ndash;&gt;-->
+<!--&lt;!&ndash;            <corners android:radius="5dp"/>&ndash;&gt;-->
+<!--&lt;!&ndash;        </shape>&ndash;&gt;-->
+<!--&lt;!&ndash;    </item>&ndash;&gt;-->
+
+<!--</layer-list>-->
+
+<shape android:shape="ring"
+    xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <solid android:color="@color/cyan"/>
+
+    <size
+        android:width="20dp"
+        android:height="20dp"
+        />
+
+</shape>

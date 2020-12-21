@@ -18,8 +18,9 @@ public class ThumbDecodeUtil {
         try {
             ExifInterface exifInterface = new ExifInterface(path);
             byte[] bytes = exifInterface.getThumbnail();
+//            byte[] bytes1 = exifInterface.getThumbnailBytes();
             if (bytes != null) {
-                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length);
+                bitmap = BitmapFactory.decodeByteArray(bytes, 0, bytes.length); // TODO compress
                 if (bitmap != null) {
                     Log.i(TAG, "[getThumb] from ExifInterface OK");
                     return bitmap;

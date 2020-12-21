@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
 
@@ -9,4 +9,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
-</LinearLayout>
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentBottom="true"
+        android:background="@color/alpha_0_5">
+
+        <TextView
+            style="@style/ColorSelectorText"
+            android:id="@+id/btn_preview"
+            android:layout_centerVertical="true"
+            android:layout_marginStart="15dp"
+            android:text="@string/preview"
+            />
+
+        <TextView
+            style="@style/ColorSelectorText"
+            android:id="@+id/btn_confirm"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="15dp"
+            android:background="@drawable/btn_solid_green"
+            android:layout_centerVertical="true"
+            android:text="@string/confirm" />
+    </RelativeLayout>
+
+</RelativeLayout>

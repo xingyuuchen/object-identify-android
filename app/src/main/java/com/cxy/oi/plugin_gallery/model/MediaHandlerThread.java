@@ -35,6 +35,7 @@ public class MediaHandlerThread {
     public void postToWorker(Runnable runnable) {
         if (runnable == null) {
             Log.e(TAG, "[postToWorker] runnable == null");
+            return;
         }
         if (queryHandler != null) {
             queryHandler.post(runnable);
@@ -44,6 +45,7 @@ public class MediaHandlerThread {
     public void startDecode(Runnable runnable) {
         if (runnable == null) {
             Log.e(TAG, "[startDecode] runnable == null");
+            return;
         }
         if (decoder != null) {
             Log.i(TAG, "");
@@ -54,6 +56,7 @@ public class MediaHandlerThread {
     public void postToUIThread(Runnable runnable) {
         if (runnable == null) {
             Log.e(TAG, "[postToUIThread] runnable == null");
+            return;
         }
         if (uiHandler != null) {
             uiHandler.post(runnable);

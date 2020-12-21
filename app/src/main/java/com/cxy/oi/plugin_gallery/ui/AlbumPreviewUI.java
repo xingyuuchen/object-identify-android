@@ -5,6 +5,8 @@ import android.app.Activity;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -24,7 +26,10 @@ public class AlbumPreviewUI extends Activity {
     private static final String TAG = "AlbumPreviewUI";
 
     private RecyclerView gallery;
-    private RecyclerView.Adapter<RecyclerView.ViewHolder> adapter;
+    private AlbumAdapter adapter;
+    private TextView btnConfirm;
+    private TextView btnPreview;
+
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -43,7 +48,31 @@ public class AlbumPreviewUI extends Activity {
         gallery.setLayoutManager(layoutManager);
         adapter = new AlbumAdapter(this);
         gallery.setAdapter(adapter);
+        btnPreview = findViewById(R.id.btn_preview);
 
+        btnConfirm = findViewById(R.id.btn_confirm);
+        btnConfirm.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                doQueryImage();
+            }
+        });
+
+        btnConfirm.setEnabled(false);
+
+        adapter.setOnItemClickListener(new AlbumAdapter.IOnItemClickListener() {
+            @Override
+            public void onItemClick(int position) {
+                btnConfirm.setEnabled(adapter.getSelectImgIdx() != -1);
+            }
+        });
+    }
+
+    /**
+     * TODO: 变为公用接口
+     */
+    public void doQueryImage() {
+        finish();
     }
 
     @Override

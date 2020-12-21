@@ -2,5 +2,7 @@
 <resources>
 
     <dimen name="tabbar_height">55dp</dimen>
+    <dimen name="btn_corner">5dp</dimen>
+    <dimen name="shadow_width">10dp</dimen>
 
 </resources>

@@ -1,16 +1,19 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#6200EE</color>
-    <color name="colorPrimaryDark">#3700B3</color>
     <color name="colorAccent">#03DAC5</color>
+    <color name="transparent">#00000000</color>
 
     <color name="tabbarGrey">#EDEDED</color>
+    <color name="white">#FFFFFF</color>
+
 
     <color name="green">#08D160</color>
+    <color name="dark_green">#059A4D</color>
     <color name="black">#A6000000</color>
+    <color name="cyan">#00FFFF</color>
 
     <color name="link">#576B95</color>
-    <color name="pic_thum_bg_color">#505050</color>
+    <color name="pic_thumb_bg_color">#505050</color>
     <color name="image_gallery_mask">#505050</color>
     <color name="bg_mask">#505050</color>
 
@@ -20,5 +23,14 @@
     <color name="alpha_0_3">#4D000000</color>
     <color name="alpha_0_5">#80000000</color>
     <color name="alpha_0_9">#E6000000</color>
+
+    <color name="white_alpha_0_0_5">#0DFFFFFF</color>
+    <color name="white_alpha_0_1">#1AFFFFFF</color>
+    <color name="white_alpha_0_2">#33FFFFFF</color>
+    <color name="white_alpha_0_3">#4DFFFFFF</color>
+    <color name="white_alpha_0_5">#80FFFFFF</color>
+    <color name="white_alpha_0_6">#99FFFFFF</color>
+    <color name="white_alpha_0_8">#CCFFFFFF</color>
+    <color name="white_alpha_0_9">#E6FFFFFF</color>
 
 </resources>

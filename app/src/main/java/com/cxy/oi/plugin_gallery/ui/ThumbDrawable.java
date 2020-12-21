@@ -35,6 +35,10 @@ public class ThumbDrawable extends Drawable {
         this.iv = iv;
     }
 
+    public static void attach(ImageView iv, String path) {
+        attach(iv, -1, path);
+    }
+
     public static void attach(final ImageView iv, final long origId, String path) {
         final Drawable drawable = iv.getDrawable();
         final ThumbDrawable thumb;

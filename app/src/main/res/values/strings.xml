@@ -9,6 +9,7 @@
 
     <string name="item_name">搜索物品</string>
     <string name="search_time">时间: %s</string>
-
+    <string name="preview">预览</string>
+    <string name="confirm">确定</string>
 
 </resources>
