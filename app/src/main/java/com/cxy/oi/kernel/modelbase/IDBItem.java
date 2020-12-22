@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.app;
+package com.cxy.oi.kernel.modelbase;
 
 import android.content.ContentValues;
 import android.database.Cursor;

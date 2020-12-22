@@ -10,7 +10,6 @@ import android.widget.CheckBox;
 import android.widget.ImageView;
 
 import androidx.annotation.NonNull;
-//import androidx.appcompat.widget.AppCompatCheckBox;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
@@ -92,12 +91,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
         ThumbDrawable.attach(viewHolder.galleryIv, origId, imageFilePath);
 
-        if (View.VISIBLE == viewHolder.galleryCheckBox.getVisibility()) {
-            viewHolder.expandTouch(viewHolder.galleryCheckBox);
-        } else {
-            viewHolder.collapseTouch(viewHolder.galleryCheckBox);
-        }
-
         viewHolder.itemView.setTag(position);
     }
 
@@ -119,7 +112,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
                 notifyItemChanged(position);
 
                 if (mOnItemClickListener != null) {
-                    mOnItemClickListener.onItemClick(position);
+                    mOnItemClickListener.onItemClick(position, getItem(position));
                 }
             }
         }
@@ -159,30 +152,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         }
 
         public abstract int getType();
-
-        private void expandTouch(final View delegate) {
-            final View parent = (View) delegate.getParent();
-            parent.post(new Runnable() {
-                public void run() {
-                    final Rect r = new Rect();
-                    delegate.getHitRect(r);
-//                    r.left -= ResourceHelper.fromDPToPix(delegate.getContext(), 20);
-                    r.left -= 20;
-//                    r.top -= ResourceHelper.fromDPToPix(delegate.getContext(), 20);
-                    r.top -= 20;
-//                    r.right += ResourceHelper.fromDPToPix(delegate.getContext(), 20);
-                    r.right += 20;
-//                    r.bottom += ResourceHelper.fromDPToPix(delegate.getContext(), 20);
-                    r.bottom += 20;
-                    parent.setTouchDelegate(new TouchDelegate(r, delegate));
-                }
-            });
-        }
-
-        private void collapseTouch(final View delegate) {
-            final View parent = (View) delegate.getParent();
-            parent.setTouchDelegate(null);
-        }
     }
 
 
@@ -209,7 +178,7 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
 
 
     public interface IOnItemClickListener {
-        void onItemClick(int position);
+        void onItemClick(int position, MediaItem mediaItem);
     }
 
     public void setOnItemClickListener(IOnItemClickListener listener) {

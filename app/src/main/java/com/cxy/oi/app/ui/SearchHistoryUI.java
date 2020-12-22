@@ -16,6 +16,7 @@ import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.TimeUtil;
+import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.ui.ThumbDrawable;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
@@ -93,10 +94,14 @@ public class SearchHistoryUI {
             }
 
             CharSequence time = TimeUtil.formatTimeInList(recognitionInfo.getCreateTime());
-            viewHolder.searchTime.setText(OIApplicationContext.getContext().getString(R.string.search_time, time));
+            if (time.length() > 5) {
+                viewHolder.searchTime.setText(time);
+            } else {
+                viewHolder.searchTime.setText(OIApplicationContext.getContext().getString(R.string.search_time, time));
+            }
             viewHolder.itemName.setText(recognitionInfo.getItemName());
             viewHolder.itemDesc.setText(recognitionInfo.getContent());
-            if (recognitionInfo.getImgPath() != null) {
+            if (!Util.isNullOrNil(recognitionInfo.getImgPath())) {
                 ThumbDrawable.attach(viewHolder.searchIv, 0, recognitionInfo.getImgPath());
             } else {
                 viewHolder.searchIv.setImageResource(R.drawable.icon_default);

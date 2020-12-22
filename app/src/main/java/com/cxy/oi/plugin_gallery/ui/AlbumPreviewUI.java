@@ -16,9 +16,13 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
+import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.modelbase.NetSceneQueue;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
+import com.cxy.oi.plugin_gallery.model.MediaItem;
+import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
 
 import static com.cxy.oi.kernel.contants.ConstantsUI.AlbumPreviewUI.REQUEST_PERMISSION;
 
@@ -62,16 +66,19 @@ public class AlbumPreviewUI extends Activity {
 
         adapter.setOnItemClickListener(new AlbumAdapter.IOnItemClickListener() {
             @Override
-            public void onItemClick(int position) {
-                btnConfirm.setEnabled(adapter.getSelectImgIdx() != -1);
+            public void onItemClick(int position, MediaItem mediaItem) {
+                int selectImgIdx = adapter.getSelectImgIdx();
+                boolean isSelect = selectImgIdx != -1;
+                btnConfirm.setEnabled(isSelect);
+
             }
         });
     }
 
-    /**
-     * TODO: 变为公用接口
-     */
+
     public void doQueryImage() {
+        NetSceneQueryImg netScene = new NetSceneQueryImg();
+        OIKernel.getNetSceneQueue().doScene(netScene);
         finish();
     }
 

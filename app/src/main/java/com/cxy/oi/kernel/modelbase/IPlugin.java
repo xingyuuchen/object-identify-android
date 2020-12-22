@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel;
+package com.cxy.oi.kernel.modelbase;
 
 
 /**
