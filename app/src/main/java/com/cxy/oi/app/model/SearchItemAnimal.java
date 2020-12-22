@@ -1,43 +1,38 @@
 package com.cxy.oi.app.model;
 
+import android.content.Context;
 import android.view.View;
-import android.widget.PopupMenu;
 
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 
-public class SearchItemPlant extends SearchItem {
-    private static final String TAG = "SearchItemPlant";
+
+public class SearchItemAnimal extends SearchItem {
+    private static final String TAG = "SearchItemAnimal";
 
 
     @Override
     public int getType() {
-        return ConstantsUI.ObjectItem.TYPE_PLANT;
+        return ConstantsUI.ObjectItem.TYPE_ANIMAL;
     }
-
 
     @Override
     public void onItemClick(View view) {
-        Log.i(TAG, "植物被点击辣");
-
+        Log.i(TAG, "动物被点击辣");
     }
 
     @Override
     public boolean onLongClick(View view) {
-//        PopupMenu menu = new PopupMenu();
-        Log.i(TAG, "植物被长按辣");
+        Log.i(TAG, "动物被长按辣");
         return false;
     }
-
 
     @Override
     public void customView(View convertView) {
         if (context != null && convertView != null) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.green_alpha));
+            convertView.setBackgroundColor(context.getResources().getColor(R.color.red_alpha));
         }
-
     }
-
 
 }

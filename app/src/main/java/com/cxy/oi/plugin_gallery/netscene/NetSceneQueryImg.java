@@ -8,9 +8,11 @@ import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
 
+import java.util.Random;
+
 
 public class NetSceneQueryImg extends NetSceneBase {
-
+    private static final Random r = new Random();
 
     public NetSceneQueryImg() {
 
@@ -22,7 +24,11 @@ public class NetSceneQueryImg extends NetSceneBase {
 
             RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
             builder.setItemName("皮老爷");
-            builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
+            if (r.nextBoolean()) {  // FIXME: hardcode
+                builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
+            } else {
+                builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
+            }
             builder.setCreateTime(System.currentTimeMillis());
             builder.setContent("皮老爷，一名国男，最近成为了一个做题家。");
             builder.setImgPath("");

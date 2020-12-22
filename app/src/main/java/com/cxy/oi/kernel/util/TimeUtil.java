@@ -141,7 +141,7 @@ public class TimeUtil {
             return s.toString();
     }
 
-    public static CharSequence formatTimeInList(final long time) {
+    public static CharSequence formatTime(final long time) {
         Time destTime = new Time();
         Time currentTime = new Time();
         destTime.set(time);

@@ -8,6 +8,15 @@
 
 
     <color name="green">#08D160</color>
+    <color name="green_alpha">#1B08D160</color>
+
+    <color name="red">#FA5151</color>
+    <color name="red_alpha">#1BFA5151</color>
+
+
+    <color name="yellow">#F7941D</color>
+    <color name="yellow_alpha">#1BF7941D</color>
+
     <color name="dark_green">#059A4D</color>
     <color name="black">#A6000000</color>
     <color name="cyan">#00FFFF</color>
