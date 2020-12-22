@@ -1,4 +1,4 @@
-package com.cxy.oi.crash;
+package com.cxy.oi.kernel.crash;
 
 
 import android.os.Process;

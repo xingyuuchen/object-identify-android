@@ -1,5 +1,13 @@
 package com.cxy.oi.kernel.util;
 
+import android.Manifest;
+import android.app.Activity;
+import android.content.Context;
+import android.content.pm.PackageManager;
+
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
+
 import java.util.Collection;
 
 public class Util {
@@ -41,6 +49,21 @@ public class Util {
             t.append("(").append(elements[i].getLineNumber()).append(")]");
         }
         return t.toString();
+    }
+
+
+    public static boolean checkPermissions(Context context, Activity activity,
+                                           String[] permissions, int requestCode) {
+        boolean ret = true;
+        for (String permission : permissions) {
+            if (ContextCompat.checkSelfPermission(context, permission)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions(activity, new String[]{permission},
+                        requestCode);
+                ret = false;
+            }
+        }
+        return ret;
     }
 
 }

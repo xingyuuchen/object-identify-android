@@ -12,6 +12,9 @@ public final class ConstantsUI {
         public static final int INDEX_FINDMORE = 0;
         public static final int INDEX_MINE = 1;
 
+        public static final int REQUEST_PERMISSION_DEFAULT = 0;
+        public static final int REQUEST_PERMISSION_CAMERA = 1;
+        public static final int REQUEST_PERMISSION_CAMERA_FORCE = 2;
 
     }
 
@@ -20,7 +23,7 @@ public final class ConstantsUI {
         private AlbumPreviewUI() {
         }
         public static final int ACTIVITY_REQUEST_CODE = 123;
-        public static final int REQUEST_PERMISSION = 12345;
+        public static final int REQUEST_PERMISSION = 0;
         public static final int SPAN_COUNT = 4;
         public static final int VIEW_TYPE_IMAGE = 0;
         public static final int VIEW_TYPE_VIDEO = 1;

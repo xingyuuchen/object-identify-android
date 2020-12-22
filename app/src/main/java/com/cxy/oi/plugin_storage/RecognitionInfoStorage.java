@@ -92,7 +92,7 @@ public class RecognitionInfoStorage {
         listeners.remove(listener);
     }
 
-    private final Set<IOnRecognitionInfoChangeListener> listeners;     // TODO: 取名字
+    private final Set<IOnRecognitionInfoChangeListener> listeners;
     public interface IOnRecognitionInfoChangeListener {
         void onNewRecognitionInfoInserted();
     }

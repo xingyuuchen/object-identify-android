@@ -1,14 +1,18 @@
 package com.cxy.oi.app.ui;
 
+import android.Manifest;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -18,20 +22,22 @@ import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.app.TestEvent;
-import com.cxy.oi.crash.OICrashReporter;
+import com.cxy.oi.kernel.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
-import com.cxy.oi.plugin_storage.IPluginStorage;
-import com.cxy.oi.plugin_storage.RecognitionInfo;
+import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
+
+import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
+import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
 
 
 public class LauncherUI extends AppCompatActivity {
 
     private static final String TAG = "LauncherUI";
     private RelativeLayout ui;
-    private ImageView bgImage;
     private ImageView goToGalleryPreviewIv;
     private ImageView gotoTakePhotoIv;
 
@@ -59,6 +65,7 @@ public class LauncherUI extends AppCompatActivity {
 
         AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
         EventCenter.INSTANCE.publish(new TestEvent());
+        Util.checkPermissions(this, this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_DEFAULT);
 
     }
 
@@ -66,7 +73,7 @@ public class LauncherUI extends AppCompatActivity {
     private void initView() {
         ui = findViewById(R.id.main_ui);
         initTabbar();
-        bgImage = findViewById(R.id.bg_image);
+        ImageView bgImage = findViewById(R.id.bg_image);
         ListView historyItemListView = findViewById(R.id.history_items);
         searchHistoryUI = new SearchHistoryUI(historyItemListView, OIApplicationContext.getContext());
 
@@ -84,14 +91,10 @@ public class LauncherUI extends AppCompatActivity {
         gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                RecognitionInfo info;
-                RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-                builder.setContent("这是我查询的植物，它被触碰到后会关闭")
-                        .setCreateTime(System.currentTimeMillis())
-                        .setItemType(ConstantsUI.ObjectItem.TYPE_PLANT)
-                        .setItemName("含羞草");
-                info = builder.build();
-                OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+                if (Util.checkPermissions(LauncherUI.this, LauncherUI.this,
+                        new String[] {Manifest.permission.CAMERA}, REQUEST_PERMISSION_CAMERA_FORCE)) {
+                    TakePhotoUtil.takePhoto(getApplicationContext());
+                }
             }
         });
     }
@@ -100,7 +103,6 @@ public class LauncherUI extends AppCompatActivity {
         tabbar = new BottomTabUI(this);
         RelativeLayout.LayoutParams params = new RelativeLayout.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT,
                 ViewGroup.LayoutParams.WRAP_CONTENT);
-//        params.gravity = Gravity.BOTTOM;
         params.addRule(RelativeLayout.ALIGN_PARENT_BOTTOM, RelativeLayout.TRUE);
         ui.addView(tabbar, params);
         tabbar.setOnTabClickedListener(new IOnTabClickListener() {
@@ -144,5 +146,24 @@ public class LauncherUI extends AppCompatActivity {
         super.onDestroy();
         OIKernel.storage().closeDB();
         AppForegroundDelegate.INSTANCE.unregisterListener(appForegroundListener);
+    }
+
+
+
+
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == REQUEST_PERMISSION_CAMERA_FORCE) {
+            if (Util.isNullOrNil(grantResults)
+                    || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                Log.i(TAG, "user refuse to grant");
+                Toast.makeText(this, "无法权限启动相机", Toast.LENGTH_LONG).show();
+                return;
+            }
+            Log.i(TAG, "user grant");
+            TakePhotoUtil.takePhoto(getApplicationContext());
+        }
     }
 }
