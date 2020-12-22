@@ -45,6 +45,15 @@ public class RecognitionInfoStorage {
         return res;
     }
 
+    public int delete(RecognitionInfo info) {
+        if (info.getId() < 0) {
+            return -1;
+        }
+        String where = RecognitionInfo.COL_ID + "=?";
+        int res = db.delete(RecognitionInfo.RECOGNITION_INFO_TABLE, where, new String[] {info.getId() + ""});
+        doNotify();
+        return res;
+    }
 
     public Cursor query(long lastCreateTime) {
         return query(Integer.MAX_VALUE, lastCreateTime);
@@ -69,22 +78,22 @@ public class RecognitionInfoStorage {
     }
 
     private void doNotify() {
-        Set<IOnxxxxxx> set = new HashSet<>(listeners);
-        for (IOnxxxxxx listener : set) {
+        Set<IOnRecognitionInfoChangeListener> set = new HashSet<>(listeners);
+        for (IOnRecognitionInfoChangeListener listener : set) {
             listener.onNewRecognitionInfoInserted();
         }
     }
 
-    public void registerListener(IOnxxxxxx listener) {
+    public void registerListener(IOnRecognitionInfoChangeListener listener) {
         listeners.add(listener);
     }
 
-    public void unregisterListener(IOnxxxxxx listener) {
+    public void unregisterListener(IOnRecognitionInfoChangeListener listener) {
         listeners.remove(listener);
     }
 
-    private final Set<IOnxxxxxx> listeners;     // TODO: 取名字
-    public interface IOnxxxxxx {
+    private final Set<IOnRecognitionInfoChangeListener> listeners;     // TODO: 取名字
+    public interface IOnRecognitionInfoChangeListener {
         void onNewRecognitionInfoInserted();
     }
 }

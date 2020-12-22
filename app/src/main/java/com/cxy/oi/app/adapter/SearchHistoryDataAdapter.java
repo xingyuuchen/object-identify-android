@@ -24,26 +24,26 @@ import java.util.ArrayList;
 
 
 
-public class SearchHistoryDataAdapter extends BaseAdapter implements RecognitionInfoStorage.IOnxxxxxx {
-    private static final String TAG = "SearchHistoryDataAdapte";
+public class SearchHistoryDataAdapter extends BaseAdapter implements RecognitionInfoStorage.IOnRecognitionInfoChangeListener {
+    private static final String TAG = "SearchHistoryDataAdapter";
     private final ArrayList<RecognitionInfo> historySearchItems;
     private final LayoutInflater inflater;
     private final Context context;
-
+    private final SearchHistoryDataLoader dataLoader;
 
     public SearchHistoryDataAdapter(LayoutInflater inflater, Context context) {
         this.context = context;
         this.inflater = inflater;
-        historySearchItems = new ArrayList<>();
+        this.historySearchItems = new ArrayList<>();
+        this.dataLoader = new SearchHistoryDataLoader();
         OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().registerListener(this);
 
-        Cursor cursor = OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().query(3, 0);
-        while (cursor.moveToNext()) {
-            RecognitionInfo info = new RecognitionInfo();
-            info.convertFrom(cursor);
-            historySearchItems.add(info);
-        }
-        cursor.close();
+        dataLoader.load(3, 0, new SearchHistoryDataLoader.IDataLoadCallBack() {
+            @Override
+            public void onDataLoaded(ArrayList<RecognitionInfo> loadResult) {
+                historySearchItems.addAll(loadResult);
+            }
+        });
         Log.i(TAG, "init query %s infos", historySearchItems.size());
         notifyDataSetChanged();
     }
@@ -108,14 +108,13 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
 
     @Override
     public void onNewRecognitionInfoInserted() {
-        Cursor cursor = OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().query(3, 0);
         historySearchItems.clear();
-        while (cursor.moveToNext()) {
-            RecognitionInfo info = new RecognitionInfo();
-            info.convertFrom(cursor);
-            historySearchItems.add(info);
-        }
-        cursor.close();
+        dataLoader.load(3, 0, new SearchHistoryDataLoader.IDataLoadCallBack() {
+            @Override
+            public void onDataLoaded(ArrayList<RecognitionInfo> loadResult) {
+                historySearchItems.addAll(loadResult);
+            }
+        });
         Log.i(TAG, "query %s infos", historySearchItems.size());
         notifyDataSetChanged();
     }
