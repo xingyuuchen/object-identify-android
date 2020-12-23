@@ -28,6 +28,7 @@ public class SearchHistoryDataLoader {
         this(count, 0);
     }
 
+    // TODO: 改为异步加载
     public void load(IDataLoadCallBack callBack) {
         ArrayList<RecognitionInfo> infos = new ArrayList<>();
         Cursor cursor;

@@ -65,6 +65,8 @@ public class ThumbDrawable extends Drawable {
             thumb.bitmap = bm;
             if (isNew) {
                 iv.setImageDrawable(thumb);
+            } else {
+                iv.invalidateDrawable(thumb);
             }
             return;
         }

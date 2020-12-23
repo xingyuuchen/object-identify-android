@@ -64,7 +64,7 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         SearchItem.BaseViewHolder viewHolder;
         RecognitionInfo recognitionInfo = getItem(position);
 
-        Log.i(TAG, "[getView] position: %s, convertView == null: %s, %s",
+        Log.i(TAG, "[getView] position: %s, convertView null?: %s, type: %s",
                 position, convertView == null, recognitionInfo.getItemType());
 
         // FIXME: 此处不知如何复用, 暂时每次新建。
@@ -76,6 +76,7 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
             viewHolder = (SearchItem.BaseViewHolder) convertView.getTag();
             viewHolder.searchItem = item;
         }
+        convertView.setTag(viewHolder);
 
         CharSequence time = TimeUtil.formatTime(recognitionInfo.getCreateTime());
         if (time.length() > 5) {
@@ -90,7 +91,6 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         }
         viewHolder.searchItem.customView(convertView);
 
-        convertView.setTag(viewHolder);
         return convertView;
     }
 

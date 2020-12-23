@@ -68,10 +68,6 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
     @Override
     public void onBindViewHolder(@NonNull RecyclerView.ViewHolder holder, int position) {
         Log.i(TAG, "[onBindViewHolder] position: %d", position);
-        if (!(holder instanceof MediaViewHolder)) {
-            Log.e(TAG, "[onBindViewHolder] holder NOT instanceof MediaViewHolder");
-            return;
-        }
         MediaViewHolder viewHolder = (MediaViewHolder) holder;
         MediaItem mediaItem = getItem(position);
         if (mediaItem == null) {
