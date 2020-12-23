@@ -12,7 +12,7 @@ import java.util.Set;
 public enum AppForegroundDelegate {
     INSTANCE;
     private static final String TAG = "AppForegroundDelegate";
-    private Set<IAppForegroundListener> listeners = new HashSet<>();
+    private final Set<IAppForegroundListener> listeners = new HashSet<>();
     private boolean lastState;
 
 
@@ -24,11 +24,11 @@ public enum AppForegroundDelegate {
         listeners.remove(listener);
     }
 
-    private static final Application.ActivityLifecycleCallbacks callbacks = new Application.ActivityLifecycleCallbacks() {
+    private final Application.ActivityLifecycleCallbacks callbacks = new Application.ActivityLifecycleCallbacks() {
         @Override
         public void onActivityCreated(Activity activity, Bundle savedInstanceState) {
             Log.i(TAG, "[onActivityCreated], activity: %s", activity.toString());
-
+            notifyForeground(true, activity.toString());
         }
 
         @Override
@@ -44,11 +44,13 @@ public enum AppForegroundDelegate {
         @Override
         public void onActivityPaused(Activity activity) {
             Log.i(TAG, "[onActivityPaused], activity: %s", activity.toString());
+            notifyForeground(false, activity.toString());
         }
 
         @Override
         public void onActivityStopped(Activity activity) {
             Log.i(TAG, "[onActivityStopped], activity: %s", activity.toString());
+            notifyForeground(false, activity.toString());
         }
 
         @Override
@@ -59,6 +61,7 @@ public enum AppForegroundDelegate {
         @Override
         public void onActivityDestroyed(Activity activity) {
             Log.i(TAG, "[onActivityDestroyed], activity: %s", activity.toString());
+            notifyForeground(false, activity.toString());
         }
     };
 
@@ -74,7 +77,8 @@ public enum AppForegroundDelegate {
         }
     }
 
-    static {
+
+    AppForegroundDelegate() {
         if (OIApplicationContext.getContext() instanceof Application) {
             ((Application) OIApplicationContext.getContext()).registerActivityLifecycleCallbacks(callbacks);
         }

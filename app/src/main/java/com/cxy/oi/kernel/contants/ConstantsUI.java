@@ -16,6 +16,8 @@ public final class ConstantsUI {
         public static final int REQUEST_PERMISSION_CAMERA = 1;
         public static final int REQUEST_PERMISSION_CAMERA_FORCE = 2;
 
+        public static final int REQUEST_CODE_TAKE_PHOTO = 0;
+
     }
 
 

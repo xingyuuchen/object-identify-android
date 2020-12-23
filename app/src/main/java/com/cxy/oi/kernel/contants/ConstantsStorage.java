@@ -1,6 +1,7 @@
 package com.cxy.oi.kernel.contants;
 
 import android.content.Context;
+import android.os.Environment;
 
 import com.cxy.oi.kernel.app.OIApplicationContext;
 
@@ -47,11 +48,28 @@ public class ConstantsStorage {
 
 
     public static String getDatabaseDirName() {
+        File f = new File(getOIDataRootPath() + DATABASE_DIR_NAME);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
         return getOIDataRootPath() + DATABASE_DIR_NAME;
     }
 
-    public static String getCameraDirPath() {
+    public String getPictureDirName() {
+        File f = new File(getOIDataRootPath() + PICTURE_DIR_NAME);
+        if (!f.exists()) {
+            f.mkdirs();
+        }
         return getOIDataRootPath() + PICTURE_DIR_NAME;
+    }
+
+
+    public static String getCameraDirPathForSysCamera() {
+        File f = new File(Environment.getExternalStorageDirectory().getAbsolutePath() + "/oi/pictures/");
+        if (!f.exists()) {
+            f.mkdirs();
+        }
+        return f.getAbsolutePath();
     }
 
 }

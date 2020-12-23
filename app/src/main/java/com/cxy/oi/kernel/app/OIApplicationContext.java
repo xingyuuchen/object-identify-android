@@ -14,5 +14,8 @@ public final class OIApplicationContext {
         return mContext;
     }
 
+    public static String getPackageName() {
+        return "com.cxy.oi";
+    }
 
 }

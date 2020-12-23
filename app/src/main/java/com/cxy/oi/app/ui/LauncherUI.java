@@ -1,10 +1,16 @@
 package com.cxy.oi.app.ui;
 
 import android.Manifest;
+import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -22,6 +28,7 @@ import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.app.TestEvent;
+import com.cxy.oi.kernel.contants.ConstantsStorage;
 import com.cxy.oi.kernel.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.contants.ConstantsUI;
@@ -30,12 +37,14 @@ import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
+import java.io.File;
+
+import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
 
 
 public class LauncherUI extends AppCompatActivity {
-
     private static final String TAG = "LauncherUI";
     private RelativeLayout ui;
     private ImageView goToGalleryPreviewIv;
@@ -93,7 +102,28 @@ public class LauncherUI extends AppCompatActivity {
             public void onClick(View v) {
                 if (Util.checkPermissions(LauncherUI.this, LauncherUI.this,
                         new String[] {Manifest.permission.CAMERA}, REQUEST_PERMISSION_CAMERA_FORCE)) {
-                    TakePhotoUtil.takePhoto(getApplicationContext());
+//                    TakePhotoUtil.takePhoto(LauncherUI.this);
+
+                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+
+                    String cameraDir = ConstantsStorage.getCameraDirPathForSysCamera();
+                    String fileName = TakePhotoUtil.genPhotoFileName();
+                    String filePath = cameraDir + fileName;
+                    f = filePath;
+
+                    File cameraDirFile = new File(cameraDir);
+                    if (!cameraDirFile.exists()) {
+                        if (!cameraDirFile.mkdirs()) {
+                            return;
+                        }
+                    }
+
+                    Uri uri = Uri.fromFile(new File(filePath));
+                    Log.i(TAG, "uri: %s, filePath: %s", uri, filePath);
+                    intent.putExtra(EXTRA_OUTPUT, uri);
+
+//                    intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);   // 注释了之后：拍照返回了才onActivityResult，拍了返回-1
+                    startActivityForResult(intent, ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO);
                 }
             }
         });
@@ -125,11 +155,22 @@ public class LauncherUI extends AppCompatActivity {
     }
 
 
+    private String f;
     @Override
     protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "[onActivityResult] requestCode: %s, resultCode: %s", requestCode, resultCode);
-
+        switch (requestCode) {
+            case ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO:
+                if (resultCode == Activity.RESULT_OK) {
+                    if (new File(f).exists()) {
+                        gotoTakePhotoIv.setImageBitmap(BitmapFactory.decodeFile(f));
+                    } else {
+                        Log.e(TAG, "there is NO picture file");
+                    }
+                }
+                break;
+        }
     }
 
     @Override
@@ -163,7 +204,7 @@ public class LauncherUI extends AppCompatActivity {
                 return;
             }
             Log.i(TAG, "user grant");
-            TakePhotoUtil.takePhoto(getApplicationContext());
+            TakePhotoUtil.takePhoto(this);
         }
     }
 }
