@@ -19,7 +19,7 @@ public final class CoreStorage {
 
     CoreStorage() {
         try {
-            String path = ConstantsStorage.DATA_ROOT_PATH + ConstantsStorage.DB_NAME;
+            String path = ConstantsStorage.getDatabaseDirName() + ConstantsStorage.DB_NAME;
             int flags = SQLiteDatabase.CREATE_IF_NECESSARY;
             initDB(path, flags);
         } catch (Exception e) {
@@ -42,7 +42,7 @@ public final class CoreStorage {
             if (!f.exists()) {
                 boolean res = f.getParentFile().mkdirs();
             } else {
-//                f.delete();
+//                Log.i("AlbumAdapter", "delete res: %s", f.delete());
             }
             db = SQLiteDatabase.openDatabase(dbPath, null, flags);
         } catch (Throwable e) {

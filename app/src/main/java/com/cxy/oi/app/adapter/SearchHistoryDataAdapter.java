@@ -90,8 +90,6 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         viewHolder.searchItem.customView(convertView);
         if (!Util.isNullOrNil(recognitionInfo.getImgPath())) {
             ThumbDrawable.attach(viewHolder.searchIv, 0, recognitionInfo.getImgPath());
-        } else {
-            viewHolder.searchIv.setImageResource(R.drawable.icon_default);
         }
 
         convertView.setTag(viewHolder);
