@@ -28,14 +28,14 @@ public class NetSceneQueryImg extends NetSceneBase {
         if (errCode == ConstantsProtocol.ERR_OK) {
 
             RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-            builder.setItemName("皮老爷");
+            builder.setItemName("陈老爷");
             if (r.nextBoolean()) {  // FIXME: hardcode
                 builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
             } else {
                 builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
             }
             builder.setCreateTime(System.currentTimeMillis());
-            builder.setContent("皮老爷，一名国男，最近成为了一个做题家。");
+            builder.setContent("陈老爷，牛的 🐂");
             builder.setImgPath(Util.nullAs(imgPath, ""));
             RecognitionInfo info = builder.build();
 

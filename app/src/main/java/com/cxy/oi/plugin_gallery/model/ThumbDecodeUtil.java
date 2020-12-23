@@ -62,30 +62,38 @@ public class ThumbDecodeUtil {
 
 
     public static Bitmap decodeFileIfTooLarge(String path, int targetSize) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeFile(path, options);
-        int scale = 1;
-        while (options.outWidth / scale / 2 >= targetSize && options.outHeight / scale / 2 >= targetSize) {
-            scale *= 2;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeFile(path, options);
+            int scale = 1;
+            while (options.outWidth / scale / 2 >= targetSize && options.outHeight / scale / 2 >= targetSize) {
+                scale *= 2;
+            }
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scale;
+            return BitmapFactory.decodeFile(path, options);
+        } catch (Exception e) {
+            return null;
         }
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = scale;
-        return BitmapFactory.decodeFile(path, options);
     }
 
 
     public static Bitmap decodeFileIfTooLarge(byte[] data, int targetSize) {
-        BitmapFactory.Options options = new BitmapFactory.Options();
-        options.inJustDecodeBounds = true;
-        BitmapFactory.decodeByteArray(data, 0, data.length, options);
-        int scale = 1;
-        while (options.outWidth / scale / 2 >= targetSize && options.outHeight / scale / 2 >= targetSize) {
-            scale *= 2;
+        try {
+            BitmapFactory.Options options = new BitmapFactory.Options();
+            options.inJustDecodeBounds = true;
+            BitmapFactory.decodeByteArray(data, 0, data.length, options);
+            int scale = 1;
+            while (options.outWidth / scale / 2 >= targetSize && options.outHeight / scale / 2 >= targetSize) {
+                scale *= 2;
+            }
+            options.inJustDecodeBounds = false;
+            options.inSampleSize = scale;
+            return BitmapFactory.decodeByteArray(data, 0, data.length, options);
+        } catch (Exception e) {
+            return null;
         }
-        options.inJustDecodeBounds = false;
-        options.inSampleSize = scale;
-        return BitmapFactory.decodeByteArray(data, 0, data.length, options);
     }
 
 }
