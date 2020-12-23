@@ -4,6 +4,7 @@ import android.graphics.Bitmap;
 
 import com.cxy.oi.kernel.util.Log;
 
+
 public class ReadBitmapFromFileTask implements Runnable {
     private static final String TAG = "ReadBitmapFromFileTask";
 
@@ -21,14 +22,17 @@ public class ReadBitmapFromFileTask implements Runnable {
 
     @Override
     public void run() {
+        Log.i(TAG, "[ReadBitmapFromFileTask] id: %s, path: %s", origId, path);
         bitmap = ThumbDecodeUtil.getThumb(origId, path);
-        callback.doInBackground(bitmap);
-        GalleryCore.getMediaWorkerThread().postToUIThread(new Runnable() {
-            @Override
-            public void run() {
-                callback.onBitmapGet(bitmap);
-            }
-        });
+        if (callback != null) {
+            callback.doInBackground(bitmap);
+            GalleryCore.getMediaWorkerThread().postToUIThread(new Runnable() {
+                @Override
+                public void run() {
+                    callback.onBitmapGet(bitmap);
+                }
+            });
+        }
     }
 
     public interface IOnBitmapGet {

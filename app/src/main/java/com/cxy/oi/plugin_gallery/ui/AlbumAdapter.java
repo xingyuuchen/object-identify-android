@@ -193,5 +193,12 @@ public class AlbumAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> 
         return selectImgIdx;
     }
 
+    public MediaItem getSelectedItem() {
+        if (selectImgIdx == -1) {
+            Log.i(TAG, "[getSelectedItem] NO item is selected");
+            return null;
+        }
+        return getItem(selectImgIdx);
+    }
 }
 

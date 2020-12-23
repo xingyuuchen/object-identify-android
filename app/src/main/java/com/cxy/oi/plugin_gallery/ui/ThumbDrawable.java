@@ -13,6 +13,8 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.kernel.util.Util;
+import com.cxy.oi.plugin_gallery.Utils;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
 import com.cxy.oi.plugin_gallery.model.ReadBitmapFromFileTask;
 
@@ -40,6 +42,9 @@ public class ThumbDrawable extends Drawable {
     }
 
     public static void attach(final ImageView iv, final long origId, String path) {
+        if (origId <= 0 && Util.isNullOrNil(path)) {
+            return;
+        }
         final Drawable drawable = iv.getDrawable();
         final ThumbDrawable thumb;
         final boolean isNew;
@@ -52,9 +57,10 @@ public class ThumbDrawable extends Drawable {
             isNew = true;
         }
 
+        final String cacheKey = Utils.getCacheKey(origId, path);
         thumb.origId = origId;
         thumb.path = path;
-        Bitmap bm = GalleryCore.getMediaCacheService().getBitMapFromCache(origId);
+        Bitmap bm = GalleryCore.getMediaCacheService().getBitMapFromCache(cacheKey);
         if (bm != null) {
             thumb.bitmap = bm;
             if (isNew) {
@@ -68,17 +74,21 @@ public class ThumbDrawable extends Drawable {
                     new ReadBitmapFromFileTask.IOnBitmapGet() {
                         @Override
                         public void onBitmapGet(Bitmap bitmap) {
-                            thumb.bitmap = bitmap;
-                            if (isNew) {
-                                iv.setImageDrawable(thumb);
-                            } else {
-                                iv.invalidateDrawable(thumb);  // 异步，必须invalidate
+                            if (bitmap != null) {
+                                thumb.bitmap = bitmap;
+                                if (isNew) {
+                                    iv.setImageDrawable(thumb);
+                                } else {
+                                    iv.invalidateDrawable(thumb);  // 异步，必须invalidate
+                                }
                             }
                         }
 
                         @Override
                         public void doInBackground(Bitmap bitmap) {
-                            GalleryCore.getMediaCacheService().saveBitmapToMemCache(origId, bitmap);
+                            if (bitmap != null && !Util.isNullOrNil(cacheKey)) {
+                                GalleryCore.getMediaCacheService().saveBitmapToMemCache(cacheKey, bitmap);
+                            }
                         }
                     }));
         }

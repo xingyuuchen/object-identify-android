@@ -25,29 +25,11 @@
     </RelativeLayout>
 
 
-    <RelativeLayout
-        android:id="@+id/search_history"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        >
-        <TextView
-            style="@style/MainTextTheme"
-            android:id="@+id/search_history_tv"
-            android:text="@string/search_history"
-            />
-        <ListView
-            android:id="@+id/history_items"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_below="@+id/search_history_tv"
-            android:layout_marginTop="10dp"
-            />
-    </RelativeLayout>
-
     <LinearLayout
+        android:id="@+id/fast_search"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/search_history"
+        android:layout_marginTop="10dp"
         android:orientation="vertical"
         >
         <TextView
@@ -74,5 +56,25 @@
                 />
         </LinearLayout>
     </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fast_search">
+
+        <TextView
+            style="@style/MainTextTheme"
+            android:id="@+id/search_history_tv"
+            android:text="@string/search_history"
+            />
+        <ListView
+            android:id="@+id/history_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_history_tv"
+            android:layout_marginTop="10dp"
+            />
+    </RelativeLayout>
 
 </RelativeLayout>

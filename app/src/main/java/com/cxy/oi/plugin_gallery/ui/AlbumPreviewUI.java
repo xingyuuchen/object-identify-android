@@ -58,7 +58,10 @@ public class AlbumPreviewUI extends Activity {
         btnConfirm.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                doQueryImage();
+                MediaItem selectedItem = adapter.getSelectedItem();
+                if (selectedItem != null) {
+                    doQueryImage(selectedItem.originalPath);
+                }
             }
         });
 
@@ -76,8 +79,8 @@ public class AlbumPreviewUI extends Activity {
     }
 
 
-    public void doQueryImage() {
-        NetSceneQueryImg netScene = new NetSceneQueryImg();
+    public void doQueryImage(String imgPath) {
+        NetSceneQueryImg netScene = new NetSceneQueryImg(imgPath);
         OIKernel.getNetSceneQueue().doScene(netScene);
         finish();
     }

@@ -2,10 +2,8 @@ package com.cxy.oi.plugin_gallery.model;
 
 import android.graphics.Bitmap;
 
+import com.cxy.oi.kernel.util.LRUCache;
 import com.cxy.oi.kernel.util.Log;
-
-import java.util.HashMap;
-import java.util.Map;
 
 
 /**
@@ -14,31 +12,31 @@ import java.util.Map;
 public class MediaCacheService {
     private static final String TAG = "MediaCacheService";
 
-    private Map<Long, Bitmap> galleryMemCache;
+    private final LRUCache<String, Bitmap> galleryMemCache;
 
     public MediaCacheService() {
-        galleryMemCache = new HashMap<>();
+        galleryMemCache = new LRUCache<>(100);
 
     }
 
-    public void saveBitmapToMemCache(long cacheKey, Bitmap bitmap) {
+    public void saveBitmapToMemCache(String cacheKey, Bitmap bitmap) {
         galleryMemCache.put(cacheKey, bitmap);
     }
 
-    public Bitmap getBitmapFromMemCache(long cacheKey) {
+    public Bitmap getBitmapFromMemCache(String cacheKey) {
         return galleryMemCache.get(cacheKey);
     }
 
-    public Bitmap getBitmapFromDiskCache(long cacheKey) {
+    public Bitmap getBitmapFromDiskCache(String cacheKey) {
         return null;    // TODO: cache the thumbs to the file system.
     }
 
-    public void saveBitmapToDiskCache(long cacheKey, Bitmap bitmap) {
+    public void saveBitmapToDiskCache(String cacheKey, Bitmap bitmap) {
         // TODO: cache the thumbs to the file system.
     }
 
 
-    public Bitmap getBitMapFromCache(long cacheKey) {
+    public Bitmap getBitMapFromCache(String cacheKey) {
         Bitmap bitmap = getBitmapFromMemCache(cacheKey);
         if (bitmap != null) {
             Log.i(TAG, "[getBitMap] HIT the galleryMemCache, key: %s", cacheKey);

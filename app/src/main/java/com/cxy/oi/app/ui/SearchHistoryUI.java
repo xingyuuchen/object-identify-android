@@ -28,4 +28,12 @@ public class SearchHistoryUI {
         return mContext;
     }
 
+    public SearchHistoryDataAdapter getAdapter() {
+        return adapter;
+    }
+
+    public ListView getHistoryListView() {
+        return historyListView;
+    }
+
 }

@@ -1,7 +1,6 @@
 package com.cxy.oi.app.adapter;
 
 import android.content.Context;
-import android.database.Cursor;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -38,14 +37,13 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         this.dataLoader = new SearchHistoryDataLoader();
         OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().registerListener(this);
 
-        dataLoader.load(3, 0, new SearchHistoryDataLoader.IDataLoadCallBack() {
+        dataLoader.load(new SearchHistoryDataLoader.IDataLoadCallBack() {
             @Override
             public void onDataLoaded(ArrayList<RecognitionInfo> loadResult) {
                 historySearchItems.addAll(loadResult);
             }
         });
         Log.i(TAG, "init query %s infos", historySearchItems.size());
-        notifyDataSetChanged();
     }
 
     @Override
@@ -87,10 +85,10 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         }
         viewHolder.itemNameTv.setText(recognitionInfo.getItemName());
         viewHolder.itemDescTv.setText(recognitionInfo.getContent());
-        viewHolder.searchItem.customView(convertView);
         if (!Util.isNullOrNil(recognitionInfo.getImgPath())) {
-            ThumbDrawable.attach(viewHolder.searchIv, 0, recognitionInfo.getImgPath());
+            ThumbDrawable.attach(viewHolder.searchIv, recognitionInfo.getImgPath());
         }
+        viewHolder.searchItem.customView(convertView);
 
         convertView.setTag(viewHolder);
         return convertView;
@@ -107,7 +105,7 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
     @Override
     public void onNewRecognitionInfoInserted() {
         historySearchItems.clear();
-        dataLoader.load(3, 0, new SearchHistoryDataLoader.IDataLoadCallBack() {
+        dataLoader.load(new SearchHistoryDataLoader.IDataLoadCallBack() {
             @Override
             public void onDataLoaded(ArrayList<RecognitionInfo> loadResult) {
                 historySearchItems.addAll(loadResult);
