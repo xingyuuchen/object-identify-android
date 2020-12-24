@@ -12,10 +12,11 @@ import com.cxy.oi.kernel.util.Log;
 public class MediaCacheService {
     private static final String TAG = "MediaCacheService";
 
+    private static final int MAX_MEM_CACHE_SIZE = 300;
     private final LRUCache<String, Bitmap> galleryMemCache;
 
     public MediaCacheService() {
-        galleryMemCache = new LRUCache<>(100);
+        galleryMemCache = new LRUCache<>(MAX_MEM_CACHE_SIZE);
 
     }
 
@@ -24,6 +25,7 @@ public class MediaCacheService {
     }
 
     public Bitmap getBitmapFromMemCache(String cacheKey) {
+        Log.i(TAG, "[getBitmapFromMemCache] curr size: %s", galleryMemCache.size());
         return galleryMemCache.get(cacheKey);
     }
 

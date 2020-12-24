@@ -96,9 +96,6 @@ public class LauncherUI extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 TakePhotoUtil.takePhoto(LauncherUI.this);
-
-//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                startActivityForResult(intent, ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO);
             }
         });
     }
