@@ -52,8 +52,8 @@ public class Util {
     }
 
 
-    public static boolean checkPermissions(Context context, Activity activity,
-                                           String[] permissions, int requestCode) {
+    public static boolean checkPermissionsAndRequest(Context context, Activity activity,
+                                 String[] permissions, int requestCode) {
         boolean ret = true;
         for (String permission : permissions) {
             if (ContextCompat.checkSelfPermission(context, permission)

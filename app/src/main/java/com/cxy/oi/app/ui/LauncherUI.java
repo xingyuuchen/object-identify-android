@@ -5,9 +5,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
-import android.net.Uri;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -36,7 +34,6 @@ import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
 import java.io.File;
 
-import static android.provider.MediaStore.EXTRA_OUTPUT;
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
 
@@ -71,7 +68,8 @@ public class LauncherUI extends AppCompatActivity {
 
         AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
         EventCenter.INSTANCE.publish(new TestEvent());
-        Util.checkPermissions(this, this, new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_DEFAULT);
+        Util.checkPermissionsAndRequest(this, this,
+                new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_DEFAULT);
 
     }
 
@@ -97,13 +95,10 @@ public class LauncherUI extends AppCompatActivity {
         gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (Util.checkPermissions(LauncherUI.this, LauncherUI.this,
-                        new String[] {Manifest.permission.CAMERA}, REQUEST_PERMISSION_CAMERA_FORCE)) {
-                    TakePhotoUtil.takePhoto(LauncherUI.this);
+                TakePhotoUtil.takePhoto(LauncherUI.this);
 
-//                    Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-//                    startActivityForResult(intent, ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO);
-                }
+//                Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+//                startActivityForResult(intent, ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO);
             }
         });
     }
@@ -177,11 +172,11 @@ public class LauncherUI extends AppCompatActivity {
         if (requestCode == REQUEST_PERMISSION_CAMERA_FORCE) {
             if (Util.isNullOrNil(grantResults)
                     || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
-                Log.i(TAG, "user refuse to grant");
-                Toast.makeText(this, "无法权限启动相机", Toast.LENGTH_LONG).show();
+                Log.i(TAG, "user refuse to grant camera permission");
+                Toast.makeText(this, "无权限启动相机", Toast.LENGTH_LONG).show();
                 return;
             }
-            Log.i(TAG, "user grant");
+            Log.i(TAG, "user grant camera permission, retry open camera");
             TakePhotoUtil.takePhoto(this);
         }
     }
