@@ -2,12 +2,14 @@ package com.cxy.oi.plugin_gallery.model;
 
 import android.os.HandlerThread;
 import android.os.Looper;
+import android.os.Process;
 
 import com.cxy.oi.kernel.app.OIHandler;
 import com.cxy.oi.kernel.util.Log;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+
 
 public class MediaHandlerThread {
     private static final String TAG = "MediaHandlerThread";
@@ -20,7 +22,9 @@ public class MediaHandlerThread {
 
     public MediaHandlerThread() {
         uiHandler = new OIHandler(Looper.getMainLooper());
-        queryHandlerThread = new HandlerThread("MediaHandlerThread.queryHandler");
+        // make it background priority so CPU-intensive work doesn't disrupt UI
+        queryHandlerThread = new HandlerThread("MediaHandlerThread.queryHandler",
+                Process.THREAD_PRIORITY_BACKGROUND);
         queryHandlerThread.start();
         queryHandler = new OIHandler(queryHandlerThread.getLooper());
 

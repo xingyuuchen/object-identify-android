@@ -2,10 +2,13 @@ package com.cxy.oi.app.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -26,6 +29,7 @@ import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
+import com.cxy.oi.kernel.network.CoreService;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
@@ -64,12 +68,18 @@ public class LauncherUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initView();
-
-
         AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
+
         EventCenter.INSTANCE.publish(new TestEvent());
         Util.checkPermissionsAndRequest(this, this,
                 new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_DEFAULT);
+
+    }
+
+    private void startService() {
+        Intent intent = new Intent(this, CoreService.class);
+        intent.putExtra("a", "haha");
+        startService(intent);
 
     }
 
@@ -95,7 +105,8 @@ public class LauncherUI extends AppCompatActivity {
         gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                TakePhotoUtil.takePhoto(LauncherUI.this);
+//                TakePhotoUtil.takePhoto(LauncherUI.this);
+                startService();
             }
         });
     }
@@ -154,9 +165,10 @@ public class LauncherUI extends AppCompatActivity {
 
     @Override
     protected void onDestroy() {
-        super.onDestroy();
+        stopService(new Intent(this, CoreService.class));
         OIKernel.storage().closeDB();
         AppForegroundDelegate.INSTANCE.unregisterListener(appForegroundListener);
+        super.onDestroy();
     }
 
 

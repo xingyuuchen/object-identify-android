@@ -2,9 +2,13 @@ package com.cxy.oi.plugin_gallery.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Service;
+import android.content.ComponentName;
 import android.content.Intent;
+import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.os.IBinder;
 import android.view.View;
 import android.widget.TextView;
 
@@ -19,6 +23,8 @@ import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.modelbase.NetSceneQueue;
+import com.cxy.oi.kernel.network.CoreService;
+import com.cxy.oi.kernel.network.OIBinder;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.model.MediaItem;
@@ -53,6 +59,12 @@ public class AlbumPreviewUI extends Activity {
         adapter = new AlbumAdapter(this);
         gallery.setAdapter(adapter);
         btnPreview = findViewById(R.id.btn_preview);
+        btnPreview.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                bind();
+            }
+        });
 
         btnConfirm = findViewById(R.id.btn_confirm);
         btnConfirm.setOnClickListener(new View.OnClickListener() {
@@ -60,7 +72,10 @@ public class AlbumPreviewUI extends Activity {
             public void onClick(View v) {
                 MediaItem selectedItem = adapter.getSelectedItem();
                 if (selectedItem != null) {
-                    doQueryImage(selectedItem.originalPath);
+//                    doQueryImage(selectedItem.originalPath);
+                    if (binder != null) {
+//                        Log.i(TAG, "binder.test(): %s", binder.test());
+                    }
                 }
             }
         });
@@ -78,6 +93,23 @@ public class AlbumPreviewUI extends Activity {
         });
     }
 
+    private OIBinder binder;
+    public void bind() {
+        Log.i(TAG, "[bind]");
+        bindService(new Intent(this, CoreService.class), new ServiceConnection() {
+            @Override
+            public void onServiceConnected(ComponentName name, IBinder service) {
+                binder = (OIBinder) service;
+                Log.i(TAG, "[onServiceConnected] ComponentName: %s", name.getShortClassName());
+            }
+
+            @Override
+            public void onServiceDisconnected(ComponentName name) {
+                binder = null;
+                Log.i(TAG, "[onServiceDisconnected] ComponentName: %s", name);
+            }
+        }, Service.BIND_AUTO_CREATE);
+    }
 
     public void doQueryImage(String imgPath) {
         NetSceneQueryImg netScene = new NetSceneQueryImg(imgPath);
