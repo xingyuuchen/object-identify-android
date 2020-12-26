@@ -45,6 +45,9 @@
         <activity android:name=".plugin_gallery.ui.AlbumPreviewUI">
         </activity>
 
+<!--        <service android:name=".kernel.network.CoreService" android:process=":push" />-->
+        <service android:name=".kernel.network.CoreService" />
+
     </application>
 
 </manifest>

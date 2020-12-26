@@ -4,7 +4,9 @@ package com.cxy.oi.plugin_gallery.netscene;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.modelbase.IOnSceneEnd;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
+import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
@@ -22,6 +24,18 @@ public class NetSceneQueryImg extends NetSceneBase {
     public NetSceneQueryImg(String imgPath) {
         this.imgPath = imgPath;
     }
+
+    @Override
+    public int getType() {
+        return 0;
+    }
+
+    @Override
+    public int doScene(IDispatcher dispatcher, IOnSceneEnd callback) {
+
+        return 0;
+    }
+
 
     @Override
     public void onSceneEnd(int errCode) {

@@ -12,11 +12,12 @@ import com.cxy.oi.kernel.util.Log;
 public class MediaCacheService {
     private static final String TAG = "MediaCacheService";
 
+    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  // in KBytes
     private static final int MAX_MEM_CACHE_SIZE = 300;
     private final LRUCache<String, Bitmap> galleryMemCache;
 
     public MediaCacheService() {
-        galleryMemCache = new LRUCache<>(MAX_MEM_CACHE_SIZE);
+        galleryMemCache = new LRUCache<>(MAX_MEM_CACHE_SIZE);   // TODO 改为使用 maxMemory/8 做LRU的maxSize
 
     }
 
