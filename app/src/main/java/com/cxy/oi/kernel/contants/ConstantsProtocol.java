@@ -5,5 +5,6 @@ public final class ConstantsProtocol {
     }
 
     public static final int ERR_OK = 0;
+    public static final int ERR_FAIL = -1;
 
 }

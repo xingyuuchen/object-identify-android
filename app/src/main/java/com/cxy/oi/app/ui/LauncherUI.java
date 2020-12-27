@@ -2,6 +2,7 @@ package com.cxy.oi.app.ui;
 
 import android.Manifest;
 import android.app.Activity;
+import android.app.Service;
 import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
@@ -30,6 +31,7 @@ import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.network.CoreService;
+import com.cxy.oi.kernel.network.CoreServiceConnection;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
@@ -42,7 +44,7 @@ import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSI
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
 
 
-public class LauncherUI extends AppCompatActivity {
+public class LauncherUI extends AppCompatActivity implements IAppForegroundListener {
     private static final String TAG = "LauncherUI";
     private RelativeLayout ui;
     private ImageView goToGalleryPreviewIv;
@@ -50,17 +52,7 @@ public class LauncherUI extends AppCompatActivity {
 
     private BottomTabUI tabbar;
     private SearchHistoryUI searchHistoryUI;
-
-    private IAppForegroundListener appForegroundListener = new IAppForegroundListener() {
-        @Override
-        public void onAppForeground(String activity) {
-            Log.i(TAG, "receive foreground, activity: %s", activity);
-        }
-        @Override
-        public void onAppBackground(String activity) {
-            Log.i(TAG, "receive background, activity: %s", activity);
-        }
-    };
+    private final CoreServiceConnection coreServiceConnection = new CoreServiceConnection();
 
 
     @Override
@@ -68,7 +60,7 @@ public class LauncherUI extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
         initView();
-        AppForegroundDelegate.INSTANCE.registerListener(appForegroundListener);
+        AppForegroundDelegate.INSTANCE.registerListener(this);
 
         EventCenter.INSTANCE.publish(new TestEvent());
         Util.checkPermissionsAndRequest(this, this,
@@ -105,8 +97,7 @@ public class LauncherUI extends AppCompatActivity {
         gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                TakePhotoUtil.takePhoto(LauncherUI.this);
-                startService();
+                TakePhotoUtil.takePhoto(LauncherUI.this);
             }
         });
     }
@@ -160,6 +151,7 @@ public class LauncherUI extends AppCompatActivity {
         OICrashReporter.INSTANCE.init();
         OIApplicationContext.setContext(getApplicationContext());
         OIKernel.makeKernel();
+        bindService(new Intent(this, CoreService.class), coreServiceConnection, Service.BIND_AUTO_CREATE);
     }
 
 
@@ -167,7 +159,8 @@ public class LauncherUI extends AppCompatActivity {
     protected void onDestroy() {
         stopService(new Intent(this, CoreService.class));
         OIKernel.storage().closeDB();
-        AppForegroundDelegate.INSTANCE.unregisterListener(appForegroundListener);
+        AppForegroundDelegate.INSTANCE.unregisterListener(this);
+        unbindService(coreServiceConnection);
         super.onDestroy();
     }
 
@@ -188,6 +181,17 @@ public class LauncherUI extends AppCompatActivity {
             Log.i(TAG, "user grant camera permission, retry open camera");
             TakePhotoUtil.takePhoto(this);
         }
+    }
+
+
+
+    @Override
+    public void onAppForeground(String activity) {
+        Log.i(TAG, "receive foreground, activity: %s", activity);
+    }
+    @Override
+    public void onAppBackground(String activity) {
+        Log.i(TAG, "receive background, activity: %s", activity);
     }
 
 }

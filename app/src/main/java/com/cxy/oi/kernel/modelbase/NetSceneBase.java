@@ -13,7 +13,7 @@ public abstract class NetSceneBase {
      */
     public abstract int getType();
 
-    public abstract int doScene(IDispatcher dispatcher, IOnSceneEnd callback);
+    public abstract int doScene(IDispatcher dispatcher);
 
     public abstract void onSceneEnd(int errCode);
 

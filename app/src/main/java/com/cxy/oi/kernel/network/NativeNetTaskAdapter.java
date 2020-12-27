@@ -5,14 +5,15 @@ import com.cxy.oi.kernel.util.Log;
 import java.util.HashMap;
 import java.util.Map;
 
+
 public class NativeNetTaskAdapter {
     private static final String TAG = "NativeNetTaskAdapter";
 
 
     static {
         try {
-            System.loadLibrary("");
-        } catch (Exception e) {
+            System.loadLibrary("oi_native");
+        } catch (UnsatisfiedLinkError e) {
             Log.i(TAG, "[loadLibrary] %s", e.getMessage());
         }
     }
@@ -32,7 +33,6 @@ public class NativeNetTaskAdapter {
     }
 
 
-    public static native void startTask(Task task);
-
+    public static native int startTask(Task task);
 
 }

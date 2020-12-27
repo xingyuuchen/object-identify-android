@@ -7,6 +7,7 @@ import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.modelbase.IOnSceneEnd;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
+import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
@@ -31,9 +32,8 @@ public class NetSceneQueryImg extends NetSceneBase {
     }
 
     @Override
-    public int doScene(IDispatcher dispatcher, IOnSceneEnd callback) {
-
-        return 0;
+    public int doScene(IDispatcher dispatcher) {
+        return dispatcher.startTask();
     }
 
 
@@ -54,6 +54,8 @@ public class NetSceneQueryImg extends NetSceneBase {
             RecognitionInfo info = builder.build();
 
             OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+        } else {
+            Log.e(TAG, "[onSceneEnd] errCode: %s", errCode);
         }
     }
 

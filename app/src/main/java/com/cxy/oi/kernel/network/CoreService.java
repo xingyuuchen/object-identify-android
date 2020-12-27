@@ -11,7 +11,7 @@ import com.cxy.oi.kernel.util.Log;
 public class CoreService extends Service {
     private static final String TAG = "OI.CoreService";
 
-    private OIBinder binder;
+    private RDispatcher dispatcher;
 
 
     @Override
@@ -19,7 +19,7 @@ public class CoreService extends Service {
         super.onCreate();
         Log.i(TAG, "[onCreate] threadID: %s", Thread.currentThread().getId());
 
-        binder = new OIBinder();
+        dispatcher = new RDispatcher();
     }
 
     @Override
@@ -34,7 +34,7 @@ public class CoreService extends Service {
     @Override
     public IBinder onBind(Intent intent) {
         Log.i(TAG, "[onBind] threadID: %s", Thread.currentThread().getId());
-        return binder;
+        return dispatcher;
     }
 
     @Override
