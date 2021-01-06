@@ -37,6 +37,8 @@ import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
+import com.tencent.mars.app.AppLogic;
+import com.tencent.mars.stn.StnLogic;
 
 import java.io.File;
 
@@ -152,6 +154,9 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
         OIApplicationContext.setContext(getApplicationContext());
         OIKernel.makeKernel();
         bindService(new Intent(this, CoreService.class), coreServiceConnection, Service.BIND_AUTO_CREATE);
+
+//        AppLogic.setCallBack(stub);
+//        StnLogic.setCallBack(stub);
     }
 
 

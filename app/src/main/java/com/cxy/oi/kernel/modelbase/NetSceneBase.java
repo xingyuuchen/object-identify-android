@@ -8,8 +8,6 @@ public abstract class NetSceneBase {
 
     /**
      * unique scene type id, defined in ConstantsProtocol
-     *
-     * @return scene type
      */
     public abstract int getType();
 

@@ -13,6 +13,7 @@ public class NativeNetTaskAdapter {
     static {
         try {
             System.loadLibrary("oi_native");
+            System.loadLibrary("c++_shared");
         } catch (UnsatisfiedLinkError e) {
             Log.i(TAG, "[loadLibrary] %s", e.getMessage());
         }
