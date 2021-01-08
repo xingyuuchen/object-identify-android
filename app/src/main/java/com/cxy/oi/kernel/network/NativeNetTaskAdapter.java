@@ -23,8 +23,9 @@ public class NativeNetTaskAdapter {
     public static class Task {
         public int taskID;  //unique task identify
 
-        public int retryCount = -1;
+        public int retryCount = 3;
         public Map<String, String> headers;
+        public String cgi;
 
 
         public Task() {

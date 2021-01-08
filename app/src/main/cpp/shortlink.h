@@ -9,15 +9,15 @@
 
 class ShortLink {
   public:
-    explicit ShortLink();
+    explicit ShortLink(Task &_task, bool _use_proxy = false);
 
     int Connect();
 
     int SendRequest();
 
-    void ReadWrite();
 
   private:
+    int __ReadWrite();
     void __Run();
 
   private:

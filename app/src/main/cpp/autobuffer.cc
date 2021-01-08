@@ -1,3 +1,4 @@
+#include <stdlib.h>
 #include "autobuffer.h"
 
 AutoBuffer::AutoBuffer()
@@ -12,20 +13,28 @@ AutoBuffer::AutoBuffer(const AutoBuffer &_auto_buffer) {
 
 }
 
-AutoBuffer::AutoBuffer(const unsigned char *_byte_array, unsigned long _length) {
+AutoBuffer::AutoBuffer(const unsigned char *_byte_array, size_t _len) {
 
 }
 
-void AutoBuffer::Write(const unsigned char *_byte_array, unsigned long _length) {
-
+void AutoBuffer::Write(const unsigned char *_byte_array, size_t _len) {
+    if (_len <= 0 || _byte_array == NULL) {
+        return;
+    }
+    memcpy(Ptr(), _byte_array, _len);
+    length_ += _len;
 }
 
-long AutoBuffer::Pos() const {
+off_t AutoBuffer::Pos() const {
     return pos_;
 }
 
-long AutoBuffer::Length() const {
+size_t AutoBuffer::Length() const {
     return length_;
+}
+
+unsigned char *AutoBuffer::Ptr() const {
+    return byte_array_;
 }
 
 

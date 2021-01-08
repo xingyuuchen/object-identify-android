@@ -7,6 +7,7 @@ import android.os.IBinder;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.util.Log;
 
+
 public class CoreServiceConnection implements ServiceConnection {
     private static final String TAG = "CoreServiceConnection";
 

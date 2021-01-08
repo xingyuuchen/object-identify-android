@@ -32,10 +32,8 @@ fi
 
 if ${isBuild}; then
   echo "${params}"
-  ./gradlew assembleDebug ${params}
+  ./gradlew assembleDebug ${params} && cd "${curr_dir}" \
+      && bash install.sh phone ../app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.app.ui.LauncherUI
 
-  cd "${curr_dir}"
-
-  bash install.sh phone ../app/build/outputs/apk/debug/app-debug.apk com.cxy.oi/.app.ui.LauncherUI
 fi
 

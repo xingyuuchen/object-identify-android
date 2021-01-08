@@ -9,6 +9,8 @@ cmake_minimum_required(VERSION 3.4.1)
 
 aux_source_directory(src/main/cpp src_files)
 
+find_library(log-lib log)
+
 message(${src_files})
 
 
@@ -17,8 +19,8 @@ message(${src_files})
 # define multiple libraries by adding multiple add_library() commands,
 # and CMake builds them for you. When you build your app, Gradle
 # automatically packages shared libraries with your APK.
-add_library(oi_native SHARED ${src_files})
-
+add_library(${PROJECT_NAME} SHARED ${src_files})
+target_link_libraries(${PROJECT_NAME} ${log-lib})
 
 # Specifies a path to native header files.
 include_directories(src/main/cpp/include)

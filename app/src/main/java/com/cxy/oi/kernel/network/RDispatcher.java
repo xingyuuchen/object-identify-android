@@ -2,6 +2,8 @@ package com.cxy.oi.kernel.network;
 
 import android.os.Binder;
 
+import com.cxy.oi.kernel.modelbase.CommonReqResp;
+
 
 /**
  *  定义与服务进行通信的接口
@@ -17,11 +19,13 @@ public class RDispatcher extends Binder implements IDispatcher {
 
 
     @Override
-    public int startTask() {
+    public int startTask(CommonReqResp reqResp) {
         NativeNetTaskAdapter.Task task = new NativeNetTaskAdapter.Task();
+        task.cgi = reqResp.uri;
+        task.retryCount = 3;
+        task.taskID = reqResp.type;
 
-        int res = NativeNetTaskAdapter.startTask(task);
-        return res;
+        return NativeNetTaskAdapter.startTask(task);
     }
 
 }

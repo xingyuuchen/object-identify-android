@@ -4,7 +4,7 @@ package com.cxy.oi.plugin_gallery.netscene;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.contants.ConstantsUI;
-import com.cxy.oi.kernel.modelbase.IOnSceneEnd;
+import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.util.Log;
@@ -24,6 +24,11 @@ public class NetSceneQueryImg extends NetSceneBase {
 
     public NetSceneQueryImg(String imgPath) {
         this.imgPath = imgPath;
+        reqResp = new CommonReqResp.Builder()
+                .setUri("/oi/queryimg")
+                .setType(getType())
+                .build();
+
     }
 
     @Override
@@ -33,7 +38,7 @@ public class NetSceneQueryImg extends NetSceneBase {
 
     @Override
     public int doScene(IDispatcher dispatcher) {
-        return dispatcher.startTask();
+        return dispatcher.startTask(reqResp);
     }
 
 
@@ -42,14 +47,14 @@ public class NetSceneQueryImg extends NetSceneBase {
         if (errCode == ConstantsProtocol.ERR_OK) {
 
             RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-            builder.setItemName("陈老爷");
+            builder.setItemName("薰衣草");
             if (r.nextBoolean()) {  // FIXME: hardcode
                 builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
             } else {
                 builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
             }
             builder.setCreateTime(System.currentTimeMillis());
-            builder.setContent("陈老爷，牛的 🐂");
+            builder.setContent("薰衣草，香的很啊");
             builder.setImgPath(Util.nullAs(imgPath, ""));
             RecognitionInfo info = builder.build();
 

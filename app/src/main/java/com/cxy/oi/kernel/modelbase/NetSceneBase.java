@@ -6,6 +6,8 @@ public abstract class NetSceneBase {
     private static final String TAG = "NetSceneBase";
 
 
+    protected CommonReqResp reqResp;
+
     /**
      * unique scene type id, defined in ConstantsProtocol
      */
