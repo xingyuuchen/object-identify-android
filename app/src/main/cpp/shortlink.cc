@@ -19,7 +19,7 @@ ShortLink::ShortLink(Task &_task, bool _use_proxy)
 
 
 void ShortLink::__Run() {
-//    Log("[ShortLink::__Run()]");
+    LogI("[ShortLink::__Run()]");
     int ret = Connect();
     if (ret < 0) {
         return;
@@ -61,15 +61,12 @@ int ShortLink::SendRequest() {
 
 
 int ShortLink::__ReadWrite() {
-    LogI("__ReadWrite");
-//    Log(strcat("[__ReadWrite] length: ", task_.cgi_.c_str()));
 //    send_body_.Write((unsigned char *) task_.cgi_.c_str(), task_.cgi_.length());
 //    int ret = send(socket_, send_body_.Ptr(), send_body_.Length(), 0);
-//    char *s = "hahahah";
+    LogI("[__ReadWrite] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
     int ret = send(socket_, task_.cgi_.c_str(), task_.cgi_.length(), 0);
     if (ret < 0) {
-        int e = errno;
-        char *string = strerror(errno);
+        LogE("[__ReadWrite] errno: %d, \"%s\"", errno, strerror(errno));
         return -1;
     }
 

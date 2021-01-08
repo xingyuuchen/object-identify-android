@@ -13,7 +13,7 @@ extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 JNIEnv *glob_env = NULL;
 
 
-int StartTask(Task &_task, JNIEnv *env) {
+int StartTask(Task &_task) {
     LogI("StartTask");
     ShortLink shortLink(_task, false);
 
@@ -46,7 +46,7 @@ int Java_com_cxy_oi_kernel_network_NativeNetTaskAdapter_startTask(JNIEnv *env, j
         task.cgi_ = env->GetStringUTFChars(cgi, NULL);
     }
 
-    return StartTask(task, env);
+    return StartTask(task);
 }
 
 
