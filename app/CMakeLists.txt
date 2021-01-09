@@ -1,4 +1,4 @@
-project(oi-native)
+project(oi_native)
 
 # custom your boost location here
 set(boost_location /Users/cxy/Downloads/boost_1_66_0)
