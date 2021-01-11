@@ -15,6 +15,7 @@ class ShortLink {
 
     int SendRequest();
 
+    pthread_t GetTid() const;
 
   private:
     int __ReadWrite();

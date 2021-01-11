@@ -3,6 +3,8 @@
 
 #include <pthread.h>
 #include <string>
+#include <unistd.h>
+#include "util.h"
 
 
 class Runnable {
@@ -50,7 +52,9 @@ class Thread {
 
     void Start();
 
-    static void *StartRoutine(void *_arg)  {
+    pthread_t GetTid() const;
+
+    static void *StartRoutine(void *_arg) {
         Runnable *runnable = static_cast<Runnable *>(_arg);
         runnable->Run();
         return 0;

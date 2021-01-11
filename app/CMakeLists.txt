@@ -7,7 +7,7 @@ set(boost_location /Users/cxy/Downloads/boost_1_66_0)
 cmake_minimum_required(VERSION 3.4.1)
 
 
-aux_source_directory(src/main/cpp src_files)
+aux_source_directory(src/main/cpp/network src_files)
 
 find_library(log-lib log)
 

@@ -10,13 +10,10 @@ typedef pthread_t thread_tid;
 
 extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 
-JNIEnv *glob_env = NULL;
-
 
 int StartTask(Task &_task) {
     LogI("StartTask");
     ShortLink shortLink(_task, false);
-
     shortLink.SendRequest();
     return 0;
 }
@@ -28,8 +25,6 @@ extern "C" {
 int Java_com_cxy_oi_kernel_network_NativeNetTaskAdapter_startTask(JNIEnv *env, jclass clazz,
                           jobject jtask) {
     // clazz: NativeNetTaskAdapter
-    glob_env = env;
-
     jclass clzz = env->GetObjectClass(jtask);
     jfieldID field_id_task_id = env->GetFieldID(clzz, "taskID", "I");
     jfieldID field_id_cgi = env->GetFieldID(clzz, "cgi", "Ljava/lang/String;");

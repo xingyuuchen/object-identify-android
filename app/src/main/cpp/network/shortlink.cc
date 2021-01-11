@@ -12,18 +12,29 @@ ShortLink::ShortLink(Task &_task, bool _use_proxy)
         , thread_(boost::bind(&ShortLink::__Run, this))
         , socket_(INVALID_SOCKET) {
     LogI("new ShortLink");
+//    sleep(1);
     task_.cgi_ = _task.cgi_;
     task_.retry_cnt_ = _task.retry_cnt_;
     task_.type_ = _task.type_;
+    LogI("[ShortLink] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
+}
+
+
+int ShortLink::SendRequest() {
+    thread_.Start();
+    int ret = pthread_join(GetTid(), NULL);
+    LogI("[Thread::Start] pthread_join ret = %d", ret);
+    return 0;
 }
 
 
 void ShortLink::__Run() {
-    LogI("[ShortLink::__Run()]");
+    LogI("[__Run] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
     int ret = Connect();
     if (ret < 0) {
         return;
     }
+    LogI("[__Run] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
 
     ret = __ReadWrite();
     close(socket_);
@@ -47,15 +58,10 @@ int ShortLink::Connect() {
     if (connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
         LogE("connect failed");
         close(socket_);
-        return INVALID_SOCKET;
+        return CONNECT_FAILED;
     }
     LogI("connect succeed!");
 
-    return 0;
-}
-
-int ShortLink::SendRequest() {
-    thread_.Start();
     return 0;
 }
 
@@ -66,11 +72,17 @@ int ShortLink::__ReadWrite() {
     LogI("[__ReadWrite] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
     int ret = send(socket_, task_.cgi_.c_str(), task_.cgi_.length(), 0);
     if (ret < 0) {
-        LogE("[__ReadWrite] errno: %d, \"%s\"", errno, strerror(errno));
+        LogE("[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
         return -1;
     }
 
-    // receive
+    unsigned char recv_ba[100] = {};
+    size_t len = recv(socket_, recv_ba, 100, 0);
+    LogI("[__ReadWrite] recv Len: %d: \"%s\"", len, recv_ba);
     return 0;
+}
+
+pthread_t ShortLink::GetTid() const {
+    return thread_.GetTid();
 }
 

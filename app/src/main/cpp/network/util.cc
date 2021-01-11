@@ -2,8 +2,6 @@
 #include <android/log.h>
 
 
-extern JNIEnv *glob_env;
-
 //void Log(const char *_msg) {
 //    if (glob_env == NULL) {
 //        return;
