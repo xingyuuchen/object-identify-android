@@ -48,7 +48,7 @@ public class OIHandler {
 
 
     public void handleMassage(Message msg) {
-
+        // override if needed
     }
 
 }

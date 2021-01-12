@@ -6,6 +6,7 @@
 #include "c2java.h"
 #include "util.h"
 
+#define DEBUG
 
 typedef pthread_t thread_tid;
 
@@ -14,11 +15,16 @@ extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 
 int StartTask(Task &_task, JNIEnv* env) {
     LogI("StartTask");
-    ShortLink shortLink(_task, false);
-    shortLink.SendRequest();
+
+#ifdef DEBUG
+    ShortLink shortLink(_task);
+#else
+    ShortLink shortLink(_task, "49.235.29.121");
+#endif
+    int ret = shortLink.SendRequest();
 
     // callback
-    C2Java_OnTaskEnd(env, shortLink.GetNetId(), 0);
+    C2Java_OnTaskEnd(env, shortLink.GetNetId(), ret);
     return 0;
 }
 

@@ -12,7 +12,7 @@ import com.cxy.oi.kernel.util.Log;
  */
 public class RDispatcher extends Binder implements IDispatcher {
     private static final String TAG = "RDispatcher";
-    private static final int callbackPoolSize = 20;
+    private static final int callbackPoolSize = 20; // concurrency
 
     private static final IOnNetEnd[] callbackPool = new IOnNetEnd[callbackPoolSize];
 
