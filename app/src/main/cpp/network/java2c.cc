@@ -3,6 +3,7 @@
 #include <thread>
 #include "shortlink.h"
 #include <pthread.h>
+#include "c2java.h"
 #include "util.h"
 
 
@@ -11,10 +12,13 @@ typedef pthread_t thread_tid;
 extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 
 
-int StartTask(Task &_task) {
+int StartTask(Task &_task, JNIEnv* env) {
     LogI("StartTask");
     ShortLink shortLink(_task, false);
     shortLink.SendRequest();
+
+    // callback
+    C2Java_OnTaskEnd(env, shortLink.GetNetId(), 0);
     return 0;
 }
 
@@ -26,22 +30,22 @@ int Java_com_cxy_oi_kernel_network_NativeNetTaskAdapter_startTask(JNIEnv *env, j
                           jobject jtask) {
     // clazz: NativeNetTaskAdapter
     jclass clzz = env->GetObjectClass(jtask);
-    jfieldID field_id_task_id = env->GetFieldID(clzz, "taskID", "I");
+    jfieldID field_id_net_id = env->GetFieldID(clzz, "netID", "I");
     jfieldID field_id_cgi = env->GetFieldID(clzz, "cgi", "Ljava/lang/String;");
     jfieldID field_id_retry_cnt = env->GetFieldID(clzz, "retryCount", "I");
 
-    jint task_id = env->GetIntField(jtask, field_id_task_id);
+    jint netid = env->GetIntField(jtask, field_id_net_id);
     jstring cgi = (jstring) env->GetObjectField(jtask, field_id_cgi);
     jint retry_cnt = env->GetIntField(jtask, field_id_retry_cnt);
 
     Task task;
-    task.type_ = task_id;
+    task.netid_ = netid;
     task.retry_cnt_ = retry_cnt;
     if (cgi != NULL) {
         task.cgi_ = env->GetStringUTFChars(cgi, NULL);
     }
 
-    return StartTask(task);
+    return StartTask(task, env);
 }
 
 

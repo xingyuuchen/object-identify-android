@@ -12,6 +12,7 @@ import com.cxy.oi.kernel.network.IDispatcher;
 
 import java.util.ArrayList;
 
+
 public final class NetSceneQueue implements IAppForegroundListener {
     private static final String TAG = "NetSceneQueue";
 
@@ -68,16 +69,16 @@ public final class NetSceneQueue implements IAppForegroundListener {
                 final int ret;
                 if (dispatcher == null || netScene.doScene(dispatcher) < 0) {
                     ret = ConstantsProtocol.ERR_FAIL;
+                    uiHandler.post(new Runnable() {
+                        @Override
+                        public void run() {
+//                            netScene.(ret);
+                        }
+                    });
                 } else {
                     ret = ConstantsProtocol.ERR_OK;
                 }
 
-                uiHandler.post(new Runnable() {
-                    @Override
-                    public void run() {
-                        netScene.onSceneEnd(ret);
-                    }
-                });
             }
         });
 
@@ -88,7 +89,9 @@ public final class NetSceneQueue implements IAppForegroundListener {
         this.dispatcher = dispatcher;
     }
 
-
+    public OIHandler getUiHandler() {
+        return this.uiHandler;
+    }
 
 
     @Override

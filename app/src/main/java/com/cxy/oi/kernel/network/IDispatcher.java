@@ -7,6 +7,6 @@ public interface IDispatcher {
 
     int testBinder(int val);
 
-    int startTask(CommonReqResp reqResp);
+    int startTask(CommonReqResp reqResp, IOnNetEnd onNetEnd);
 
 }

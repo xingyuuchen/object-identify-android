@@ -12,10 +12,9 @@ ShortLink::ShortLink(Task &_task, bool _use_proxy)
         , thread_(boost::bind(&ShortLink::__Run, this))
         , socket_(INVALID_SOCKET) {
     LogI("new ShortLink");
-//    sleep(1);
     task_.cgi_ = _task.cgi_;
     task_.retry_cnt_ = _task.retry_cnt_;
-    task_.type_ = _task.type_;
+    task_.netid_ = _task.netid_;
     LogI("[ShortLink] task_.cgi_.c_str: %s, len: %d", task_.cgi_.c_str(), task_.cgi_.length());
 }
 
@@ -84,5 +83,9 @@ int ShortLink::__ReadWrite() {
 
 pthread_t ShortLink::GetTid() const {
     return thread_.GetTid();
+}
+
+int ShortLink::GetNetId() const {
+    return task_.netid_;
 }
 

@@ -9,6 +9,7 @@ import java.util.Map;
 public class NativeNetTaskAdapter {
     private static final String TAG = "NativeNetTaskAdapter";
 
+    private static ICallBack callBack;
 
     static {
         try {
@@ -20,8 +21,13 @@ public class NativeNetTaskAdapter {
     }
 
 
+    public static void setCallBack(ICallBack _callBack) {
+        callBack = _callBack;
+    }
+
+
     public static class Task {
-        public int taskID;  //unique task identify
+        public int netID;
 
         public int retryCount = 3;
         public Map<String, String> headers;
@@ -37,4 +43,20 @@ public class NativeNetTaskAdapter {
 
     public static native int startTask(Task task);
 
+    /**
+     * native callback
+     */
+    public static int onTaskEnd(int netId, int errCode) {
+        if (callBack != null) {
+            return callBack.onTaskEnd(netId, errCode);
+        }
+        return -1;
+    }
+
+
+    public interface ICallBack {
+
+        int onTaskEnd(int netId, int errCode);
+
+    }
 }

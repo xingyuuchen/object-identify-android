@@ -1,5 +1,4 @@
-#include <jni.h>
-
+#include "c2java.h"
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
@@ -16,4 +15,10 @@ jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
     return 0;
 }
 
+jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
+    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jmethodID onTaskEnd_id = env->GetStaticMethodID(clz, "onTaskEnd", "(II)I");
+    jint ret = env->CallStaticIntMethod(clz, onTaskEnd_id, _netid, _err_code);
+    return ret;
+}
 

@@ -12,7 +12,7 @@ class Task {
   private:
 
   public:
-    int type_;
+    int netid_;
     int retry_cnt_;
     std::string cgi_;
     Task() {}

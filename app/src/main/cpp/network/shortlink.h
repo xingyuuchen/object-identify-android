@@ -15,6 +15,8 @@ class ShortLink {
 
     int SendRequest();
 
+    int GetNetId() const;
+
     pthread_t GetTid() const;
 
   private:

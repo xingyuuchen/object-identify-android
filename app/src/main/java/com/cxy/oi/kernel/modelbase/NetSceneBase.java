@@ -15,6 +15,4 @@ public abstract class NetSceneBase {
 
     public abstract int doScene(IDispatcher dispatcher);
 
-    public abstract void onSceneEnd(int errCode);
-
 }
