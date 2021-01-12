@@ -75,6 +75,7 @@ void AutoBuffer::Reset() {
     pos_ = 0;
     if (byte_array_ != NULL) {
         free(byte_array_);
+        byte_array_ = NULL;
     }
 }
 
