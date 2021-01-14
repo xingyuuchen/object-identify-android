@@ -1,0 +1,29 @@
+syntax = "proto2";
+
+package netscenequeryimg;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "NetSceneQueryImgProto";
+
+option java_multiple_files = true;
+
+
+message NetSceneQueryImgReq {
+  optional bytes img_bytes = 1;
+
+}
+
+
+message NetSceneQueryImgResp {
+  enum ItemType {
+    PLANT     = 0;
+    ANIMAL    = 1;
+    LANDMARK  = 2;
+  }
+  optional ItemType item_type = 1 [default = PLANT];
+  optional string item_name = 2;
+  optional string item_desc = 3;
+
+}
+
