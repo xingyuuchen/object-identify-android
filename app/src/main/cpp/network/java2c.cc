@@ -13,7 +13,7 @@ typedef pthread_t thread_tid;
 extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 
 
-int StartTask(Task &_task, JNIEnv* env) {
+int StartTaskImpl(Task &_task, JNIEnv* env) {
     LogI("StartTask");
 
 #ifdef DEBUG
@@ -21,10 +21,14 @@ int StartTask(Task &_task, JNIEnv* env) {
 #else
     ShortLink shortLink(_task, "49.235.29.121");
 #endif
-    int ret = shortLink.SendRequest();
+    int ret = C2Java_ReqToBuffer(env, shortLink.GetSendBody(), shortLink.GetNetId());
+    LogI("[StartTask] C2Java_ReqToBuffer ret = %d", ret);
+    if (ret > 0) {
+//        ret = shortLink.SendRequest();
+    }
 
     // callback
-    C2Java_OnTaskEnd(env, shortLink.GetNetId(), ret);
+//    C2Java_OnTaskEnd(env, shortLink.GetNetId(), ret);
     return 0;
 }
 
@@ -51,7 +55,7 @@ int Java_com_cxy_oi_kernel_network_NativeNetTaskAdapter_startTask(JNIEnv *env, j
         task.cgi_ = env->GetStringUTFChars(cgi, NULL);
     }
 
-    return StartTask(task, env);
+    return StartTaskImpl(task, env);
 }
 
 

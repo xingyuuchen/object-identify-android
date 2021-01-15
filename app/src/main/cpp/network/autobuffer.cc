@@ -30,11 +30,11 @@ void AutoBuffer::Write(const unsigned char *_byte_array, size_t _len) {
         }
         AddCapacity(enlarge_size);
     }
-    memcpy(Ptr(), _byte_array, _len);
+    memcpy(Ptr(length_), _byte_array, _len);
     length_ += _len;
 }
 
-off_t AutoBuffer::Pos() const {
+size_t AutoBuffer::Pos() const {
     return pos_;
 }
 
@@ -42,7 +42,7 @@ size_t AutoBuffer::Length() const {
     return length_;
 }
 
-unsigned char *AutoBuffer::Ptr(const off_t _offset) const {
+unsigned char *AutoBuffer::Ptr(const size_t _offset) const {
     return byte_array_ + _offset;
 }
 

@@ -1,13 +1,20 @@
 package com.cxy.oi.kernel.modelbase;
 
+import com.google.protobuf.GeneratedMessageV3;
+
 public class CommonReqResp {
+    private static final String TAG = "OI.CommonReqResp";
 
     public String uri;
     public int type;
+    public GeneratedMessageV3 req;
+    public GeneratedMessageV3 resp;
+    public long reqLen;
+    public long respLen;
 
 
     public static class Builder {
-        private CommonReqResp reqResp;
+        private final CommonReqResp reqResp;
 
         public Builder() {
             this.reqResp = new CommonReqResp();
@@ -20,6 +27,16 @@ public class CommonReqResp {
 
         public Builder setType(int type) {
             reqResp.type = type;
+            return this;
+        }
+
+        public Builder setReq(GeneratedMessageV3 req) {
+            reqResp.req = req;
+            return this;
+        }
+
+        public Builder setResp(GeneratedMessageV3 resp) {
+            reqResp.resp = resp;
             return this;
         }
 

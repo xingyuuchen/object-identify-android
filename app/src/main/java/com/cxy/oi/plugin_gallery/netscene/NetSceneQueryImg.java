@@ -1,6 +1,8 @@
 package com.cxy.oi.plugin_gallery.netscene;
 
 
+import com.cxy.oi.autogen.NetSceneQueryImgReq;
+import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.contants.ConstantsUI;
@@ -12,6 +14,8 @@ import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_storage.IPluginStorage;
 import com.cxy.oi.plugin_storage.RecognitionInfo;
+import com.google.protobuf.ByteString;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.Random;
 
@@ -21,11 +25,18 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
 
     private static final Random r = new Random();
     private final String imgPath;
+    private NetSceneQueryImgReq req;
+    private NetSceneQueryImgResp resp;
 
 
     public NetSceneQueryImg(String imgPath) {
         this.imgPath = imgPath;
+
+        req = NetSceneQueryImgReq.newBuilder().
+                setImgBytes(ByteString.copyFrom(new byte[100])).build();
         reqResp = new CommonReqResp.Builder()
+                .setReq(req)
+                .setResp(resp)
                 .setUri("/oi/queryimg")
                 .setType(getType())
                 .build();
@@ -44,22 +55,27 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
 
 
     @Override
-    public void onNetEnd(int errCode) {
+    public void onNetEnd(int errCode, CommonReqResp rr) {
         if (errCode == ConstantsProtocol.ERR_OK) {
 
-            RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-            if (r.nextBoolean()) {  // FIXME: hardcode
-                builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
-            } else {
-                builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
-            }
-            builder.setItemName("薰衣草")
-                    .setCreateTime(System.currentTimeMillis())
-                    .setContent("薰衣草，香的很啊")
-                    .setImgPath(Util.nullAs(imgPath, ""));
-            RecognitionInfo info = builder.build();
+            if (rr.resp instanceof NetSceneQueryImgResp) {
 
-            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+//            RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
+//            if (r.nextBoolean()) {  // FIXME: hardcode
+//                builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
+//            } else {
+//                builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
+//            }
+//            builder.setItemName("薰衣草")
+//                    .setCreateTime(System.currentTimeMillis())
+//                    .setContent("薰衣草，香的很啊")
+//                    .setImgPath(Util.nullAs(imgPath, ""));
+//            RecognitionInfo info = builder.build();
+//
+//            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
+            } else {
+                Log.e(TAG, "[onNetEnd] rr.resp instanceof NetSceneQueryImgResp");
+            }
         } else {
             Log.e(TAG, "[onNetEnd] errCode: %s", errCode);
         }

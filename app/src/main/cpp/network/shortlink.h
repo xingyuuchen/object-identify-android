@@ -14,6 +14,8 @@ class ShortLink {
 
     int Connect();
 
+    AutoBuffer& GetSendBody() ;
+
     int SendRequest();
 
     int GetNetId() const;

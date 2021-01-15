@@ -28,14 +28,12 @@ public class NativeNetTaskAdapter {
 
     public static class Task {
         public int netID;
-
         public int retryCount = 3;
-        public Map<String, String> headers;
         public String cgi;
+        public byte[] req;
 
 
         public Task() {
-            this.headers = new HashMap<>();
         }
 
     }
@@ -53,10 +51,26 @@ public class NativeNetTaskAdapter {
         return -1;
     }
 
+    public static byte[] reqToBuffer(int netId) {
+        if (callBack != null) {
+            return callBack.reqToBuffer(netId);
+        }
+        return null;
+    }
+
+    public static long getReqBufferSize(int netId) {
+        if (callBack != null) {
+            return callBack.getReqBufferSize(netId);
+        }
+        return -1;
+    }
+
 
     public interface ICallBack {
-
         int onTaskEnd(int netId, int errCode);
 
+        byte[] reqToBuffer(int netId);
+
+        long getReqBufferSize(int netId);
     }
 }

@@ -90,3 +90,7 @@ u_short ShortLink::GetPort() const {
     return port_;
 }
 
+AutoBuffer &ShortLink::GetSendBody() {
+    return send_body_;
+}
+

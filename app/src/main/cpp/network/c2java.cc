@@ -1,4 +1,5 @@
 #include "c2java.h"
+#include "util.h"
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
@@ -22,3 +23,24 @@ jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
     return ret;
 }
 
+int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id) {
+    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jmethodID reqToBuffer_id = env->GetStaticMethodID(clz, "reqToBuffer", "(I)[B");
+    jbyteArray ret = (jbyteArray) env->CallStaticObjectMethod(clz, reqToBuffer_id, _net_id);
+    if (ret == NULL) {
+        LogE("[C2Java_ReqToBuffer] ret == null");
+    }
+    jbyte *jba = env->GetByteArrayElements(ret, NULL);
+    jsize len_ = env->GetArrayLength(ret);
+
+
+    jmethodID onTaskEnd_id = env->GetStaticMethodID(clz, "getReqBufferSize", "(I)J");
+    jlong len = env->CallStaticLongMethod(clz, onTaskEnd_id, _net_id);
+    LogI("[C2Java_ReqToBuffer] len = %d, len = %ld", len_, len);
+    if (len == len_) {
+        _send_buffer.Write((unsigned char *) jba, len_);
+        LogI("_send_buffer.Length = %d", _send_buffer.Length());
+        return _send_buffer.Length();
+    }
+    return -1;
+}
