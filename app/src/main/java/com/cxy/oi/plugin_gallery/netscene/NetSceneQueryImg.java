@@ -3,6 +3,7 @@ package com.cxy.oi.plugin_gallery.netscene;
 
 import android.widget.Toast;
 
+import com.cxy.oi.autogen.BaseNetSceneReq;
 import com.cxy.oi.autogen.NetSceneQueryImgReq;
 import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;
@@ -27,7 +28,6 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
 
     private final String imgPath;
     private NetSceneQueryImgReq req;
-    private NetSceneQueryImgResp resp;
 
 
     public NetSceneQueryImg(String imgPath) {
@@ -70,8 +70,9 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
             return;
         }
 
+        NetSceneQueryImgResp resp;
         try {
-            this.resp = NetSceneQueryImgResp.parseFrom(rr.resp);
+            resp = NetSceneQueryImgResp.parseFrom(rr.resp);
         } catch (InvalidProtocolBufferException e) {
             Log.i(TAG, "rr.resp.len: %d", rr.resp.length);
             Log.e(TAG, "[onNetEnd] InvalidProtocolBufferException: %s", e.getMessage());

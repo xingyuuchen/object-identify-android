@@ -6,6 +6,10 @@ cd ..
 
 project_dir=$(pwd)
 
+if [ ! -d "app/src/main/java/com/cxy/oi/autogen" ]; then
+  mkdir -p "app/src/main/java/com/cxy/oi/autogen"
+fi
+
 cd app/protos
 
 for file in `ls`

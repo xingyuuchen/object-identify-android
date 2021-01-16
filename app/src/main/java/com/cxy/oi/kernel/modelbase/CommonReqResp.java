@@ -1,12 +1,17 @@
 package com.cxy.oi.kernel.modelbase;
 
+import com.cxy.oi.autogen.BaseNetSceneReq;
+import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageV3;
 
 public class CommonReqResp {
     private static final String TAG = "OI.CommonReqResp";
 
     public String uri;
-    public int type;
+    public int type = ConstantsProtocol.NETSCENE_TYPE_UNKNOWN_TYPE;
+
+    public BaseNetSceneReq baseReq;
     public GeneratedMessageV3 req;
     public byte[] resp;
 
@@ -41,6 +46,15 @@ public class CommonReqResp {
         }
 
         public CommonReqResp build() {
+            if (reqResp.type == ConstantsProtocol.NETSCENE_TYPE_UNKNOWN_TYPE ||
+                    reqResp.req == null) {
+                throw new IllegalStateException("[CommonReqResp] arguments NOT Initialized.");
+            }
+            reqResp.baseReq = BaseNetSceneReq.newBuilder()
+                    .setNetSceneType(reqResp.type)
+                    .setNetSceneReqBuff(ByteString.copyFrom(reqResp.req.toByteArray()))
+                    .build();
+            reqResp.reqLen = reqResp.baseReq.toByteArray().length;
             return this.reqResp;
         }
 

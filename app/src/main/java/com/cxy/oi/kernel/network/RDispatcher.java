@@ -2,9 +2,11 @@ package com.cxy.oi.kernel.network;
 
 import android.os.Binder;
 
+import com.cxy.oi.autogen.BaseNetSceneReq;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.util.Log;
+import com.google.protobuf.ByteString;
 
 
 /**
@@ -54,9 +56,7 @@ public class RDispatcher extends Binder implements IDispatcher {
                     Log.e(TAG, "[reqToBuffer] infoPool[%d] == null", netId);
                     return null;
                 }
-                byte[] ret = info.rr.req.toByteArray();
-                info.rr.reqLen = ret.length;
-                return ret;
+                return info.rr.baseReq.toByteArray();
             }
 
             @Override
