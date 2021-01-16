@@ -11,6 +11,7 @@ ShortLink::ShortLink(Task &_task, const std::string &_svr_inet_addr, u_short _po
         , thread_(boost::bind(&ShortLink::__Run, this))
         , port_(_port)
         , svr_inet_addr_(_svr_inet_addr)
+        , err_code_(0)
         , socket_(INVALID_SOCKET) {
     LogI("new ShortLink");
     task_.cgi_ = _task.cgi_;
@@ -32,7 +33,6 @@ int ShortLink::__Run() {
         return err_code_;
     }
     __ReadWrite();
-    close(socket_);
     return err_code_;
 }
 
@@ -77,6 +77,7 @@ void ShortLink::__ReadWrite() {
         err_code_ = RECV_FAILED;
     }
     LogI("[__ReadWrite] recv Len: %d, %d", len, recv_buff_.Length());
+    close(socket_);
 }
 
 pthread_t ShortLink::GetTid() const {
