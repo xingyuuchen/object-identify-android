@@ -1,3 +1,4 @@
+#include <string.h>
 #include "c2java.h"
 #include "util.h"
 
@@ -15,6 +16,7 @@ jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
 //    return JNI_CreateJavaVM(jvm, env, &initArgs);
     return 0;
 }
+
 
 jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
     jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
@@ -43,4 +45,18 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id) {
         return _send_buffer.Length();
     }
     return -1;
+}
+
+
+int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id) {
+    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jmethodID bufferToResp_id = env->GetStaticMethodID(clz, "bufferToResp", "(I[B)I");
+
+    jbyteArray jba = env->NewByteArray(_recv_buffer.Length());
+    env->SetByteArrayRegion(jba, 0,
+            _recv_buffer.Length(),reinterpret_cast<const jbyte *>(_recv_buffer.Ptr()));
+    LogI("[C2Java_BufferToResp] _recv_buffer.Length: %d", _recv_buffer.Length());
+    jint ret = env->CallStaticIntMethod(clz, bufferToResp_id, _net_id, jba);
+    env->DeleteLocalRef(jba);
+    return ret;
 }

@@ -14,7 +14,9 @@ class ShortLink {
 
     int Connect();
 
-    AutoBuffer& GetSendBody() ;
+    AutoBuffer &GetSendBody();
+
+    AutoBuffer &GetRecvBuff();
 
     int SendRequest();
 
@@ -33,7 +35,8 @@ class ShortLink {
     Thread          thread_;
     const bool      use_proxy_;
     SOCKET          socket_;
-    AutoBuffer      send_body_;
+    AutoBuffer      send_buff_;
+    AutoBuffer      recv_buff_;
     u_short         port_;
     std::string     svr_inet_addr_;
 

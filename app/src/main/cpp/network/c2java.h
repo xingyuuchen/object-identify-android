@@ -11,4 +11,6 @@ jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code);
 
 int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id);
 
+int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id);
+
 #endif //OI_C2JAVA_H

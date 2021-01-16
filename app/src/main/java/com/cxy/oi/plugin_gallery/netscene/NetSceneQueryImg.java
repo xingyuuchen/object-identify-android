@@ -1,9 +1,12 @@
 package com.cxy.oi.plugin_gallery.netscene;
 
 
+import android.widget.Toast;
+
 import com.cxy.oi.autogen.NetSceneQueryImgReq;
 import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.modelbase.CommonReqResp;
@@ -36,7 +39,6 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
                 setImgBytes(ByteString.copyFrom(new byte[100])).build();
         reqResp = new CommonReqResp.Builder()
                 .setReq(req)
-                .setResp(resp)
                 .setUri("/oi/queryimg")
                 .setType(getType())
                 .build();
@@ -57,28 +59,44 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
     @Override
     public void onNetEnd(int errCode, CommonReqResp rr) {
         if (errCode == ConstantsProtocol.ERR_OK) {
-
-            if (rr.resp instanceof NetSceneQueryImgResp) {
-
-//            RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-//            if (r.nextBoolean()) {  // FIXME: hardcode
-//                builder.setItemType(ConstantsUI.ObjectItem.TYPE_PLANT);
-//            } else {
-//                builder.setItemType(ConstantsUI.ObjectItem.TYPE_ANIMAL);
-//            }
-//            builder.setItemName("薰衣草")
-//                    .setCreateTime(System.currentTimeMillis())
-//                    .setContent("薰衣草，香的很啊")
-//                    .setImgPath(Util.nullAs(imgPath, ""));
-//            RecognitionInfo info = builder.build();
-//
-//            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
-            } else {
-                Log.e(TAG, "[onNetEnd] rr.resp instanceof NetSceneQueryImgResp");
+            if (rr.resp == null) {
+                Log.e(TAG, "[onNetEnd] rr.resp == null");
+                return;
             }
+
+            try {
+                this.resp = NetSceneQueryImgResp.parseFrom(rr.resp);
+            } catch (InvalidProtocolBufferException e) {
+                Log.i(TAG, "rr.resp.len: %d", rr.resp.length);
+                Log.e(TAG, "[onNetEnd] InvalidProtocolBufferException: %s", e.getMessage());
+                return;
+            }
+            RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
+            builder.setItemType(typeToInt(resp.getItemType()));
+            builder.setItemName(resp.getItemName())
+                    .setCreateTime(System.currentTimeMillis())
+                    .setContent(resp.getItemDesc())
+                    .setImgPath(Util.nullAs(imgPath, ""));
+            RecognitionInfo info = builder.build();
+
+            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
         } else {
             Log.e(TAG, "[onNetEnd] errCode: %s", errCode);
+            Toast.makeText(OIApplicationContext.getContext(),
+                    "NetSceneQueryImg [onNetEnd] errCode: " + errCode, Toast.LENGTH_LONG).show();
         }
+    }
+
+    private int typeToInt(NetSceneQueryImgResp.ItemType type) {
+        switch (type) {
+            case PLANT:
+                return 0;
+            case ANIMAL:
+                return 1;
+            case LANDMARK:
+                return 2;
+        }
+        return -1;
     }
 
 }

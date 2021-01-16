@@ -59,6 +59,19 @@ public class RDispatcher extends Binder implements IDispatcher {
             }
 
             @Override
+            public int bufferToResp(int netId, byte[] resp) {
+                Log.i(TAG, "[bufferToResp] netid = %d", netId);
+                final Info info = infoPool[netId];
+                if (info == null) {
+                    Log.e(TAG, "[bufferToResp] infoPool[%d] == null", netId);
+                    return -1;
+                }
+                info.rr.resp = resp;
+                return 0;
+            }
+
+
+            @Override
             public long getReqBufferSize(int netId) {
                 final Info info = infoPool[netId];
                 if (info == null) {
@@ -111,7 +124,6 @@ public class RDispatcher extends Binder implements IDispatcher {
         task.netID = netId;
         task.cgi = reqResp.uri;
         task.retryCount = 3;
-        task.req = reqResp.req.toByteArray();
 
         return NativeNetTaskAdapter.startTask(task);
     }

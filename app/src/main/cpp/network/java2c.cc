@@ -23,12 +23,14 @@ int StartTaskImpl(Task &_task, JNIEnv* env) {
 #endif
     int ret = C2Java_ReqToBuffer(env, shortLink.GetSendBody(), shortLink.GetNetId());
     LogI("[StartTask] C2Java_ReqToBuffer ret = %d", ret);
-    if (ret > 0) {
-//        ret = shortLink.SendRequest();
+    if (ret >= 0) {
+        ret = shortLink.SendRequest();
     }
 
-    // callback
-//    C2Java_OnTaskEnd(env, shortLink.GetNetId(), ret);
+    if (ret >= 0) {
+        ret = C2Java_BufferToResp(env, shortLink.GetRecvBuff(), shortLink.GetNetId());
+    }
+    C2Java_OnTaskEnd(env, shortLink.GetNetId(), ret);
     return 0;
 }
 

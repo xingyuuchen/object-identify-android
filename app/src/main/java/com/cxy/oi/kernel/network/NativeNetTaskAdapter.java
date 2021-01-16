@@ -30,7 +30,6 @@ public class NativeNetTaskAdapter {
         public int netID;
         public int retryCount = 3;
         public String cgi;
-        public byte[] req;
 
 
         public Task() {
@@ -42,7 +41,7 @@ public class NativeNetTaskAdapter {
     public static native int startTask(Task task);
 
     /**
-     * native callback
+     * native callbacks
      */
     public static int onTaskEnd(int netId, int errCode) {
         if (callBack != null) {
@@ -58,6 +57,13 @@ public class NativeNetTaskAdapter {
         return null;
     }
 
+    public static int bufferToResp(int netId, byte[] resp) {
+        if (callBack != null) {
+            return callBack.bufferToResp(netId, resp);
+        }
+        return -1;
+    }
+
     public static long getReqBufferSize(int netId) {
         if (callBack != null) {
             return callBack.getReqBufferSize(netId);
@@ -70,6 +76,8 @@ public class NativeNetTaskAdapter {
         int onTaskEnd(int netId, int errCode);
 
         byte[] reqToBuffer(int netId);
+
+        int bufferToResp(int netId, byte[] resp);
 
         long getReqBufferSize(int netId);
     }

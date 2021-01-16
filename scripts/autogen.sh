@@ -6,7 +6,7 @@ cd ..
 
 project_dir=$(pwd)
 
-cd app/autogen
+cd app/protos
 
 for file in `ls`
 do

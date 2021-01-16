@@ -49,8 +49,8 @@ int ShortLink::Connect() {
     sockaddr.sin_port = htons(5002);
     sockaddr.sin_addr.s_addr = inet_addr(svr_inet_addr_.c_str());
 
-    if (connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
-        LogE("connect failed");
+    if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
+        LogE("Connect FAILED, errCode: %d", ret);
         close(socket_);
         return CONNECT_FAILED;
     }
@@ -62,19 +62,17 @@ int ShortLink::Connect() {
 
 int ShortLink::__ReadWrite() {
 
-    send_body_.Write((unsigned char *) task_.cgi_.c_str(), task_.cgi_.length());
-
-    int ret = send(socket_, send_body_.Ptr(), send_body_.Length(), 0);
+    int ret = send(socket_, send_buff_.Ptr(), send_buff_.Length(), 0);
     if (ret < 0) {
         LogE("[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
         return -1;
     }
 
-    AutoBuffer recv_buff;
-    recv_buff.AddCapacity(128);
-    size_t len = recv(socket_, recv_buff.Ptr(), kBuffSize, 0);
-    recv_buff.SetLength(len);
-    LogI("[__ReadWrite] recv Len: %d: \"%s\", %d", len, recv_buff.Ptr(), recv_buff.Length());
+    recv_buff_.Reset();
+    recv_buff_.AddCapacity(128);
+    size_t len = recv(socket_, recv_buff_.Ptr(), kBuffSize, 0);
+    recv_buff_.SetLength(len);
+    LogI("[__ReadWrite] recv Len: %d, %d", len, recv_buff_.Length());
     return 0;
 }
 
@@ -91,6 +89,10 @@ u_short ShortLink::GetPort() const {
 }
 
 AutoBuffer &ShortLink::GetSendBody() {
-    return send_body_;
+    return send_buff_;
+}
+
+AutoBuffer &ShortLink::GetRecvBuff() {
+    return recv_buff_;
 }
 

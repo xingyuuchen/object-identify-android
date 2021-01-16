@@ -8,9 +8,9 @@ public class CommonReqResp {
     public String uri;
     public int type;
     public GeneratedMessageV3 req;
-    public GeneratedMessageV3 resp;
+    public byte[] resp;
+
     public long reqLen;
-    public long respLen;
 
 
     public static class Builder {
@@ -35,7 +35,7 @@ public class CommonReqResp {
             return this;
         }
 
-        public Builder setResp(GeneratedMessageV3 resp) {
+        public Builder setResp(byte[] resp) {
             reqResp.resp = resp;
             return this;
         }
