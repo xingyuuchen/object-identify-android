@@ -21,26 +21,27 @@ ShortLink::ShortLink(Task &_task, const std::string &_svr_inet_addr, u_short _po
 
 int ShortLink::SendRequest() {
     thread_.Start();
-    int ret = pthread_join(GetTid(), NULL);
-    LogI("[Thread::Start] pthread_join ret = %d", ret);
-    return ret;
+    LogI("[Thread::Start] pthread_join ret = %d", pthread_join(GetTid(), NULL));
+    return 0;
 }
 
 
-void ShortLink::__Run() {
-    int ret = Connect();
-    if (ret < 0) {
-        return;
+int ShortLink::__Run() {
+    DoConnect();
+    if (err_code_ < 0) {
+        return err_code_;
     }
-    ret = __ReadWrite();
+    __ReadWrite();
     close(socket_);
+    return err_code_;
 }
 
 
-int ShortLink::Connect() {
+void ShortLink::DoConnect() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ <= 0) {
-        return INVALID_SOCKET;
+        err_code_ = INVALID_SOCKET;
+        return;
     }
 
     struct sockaddr_in sockaddr{};
@@ -52,28 +53,30 @@ int ShortLink::Connect() {
     if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
         LogE("Connect FAILED, errCode: %d", ret);
         close(socket_);
-        return CONNECT_FAILED;
+        err_code_ = CONNECT_FAILED;
+        return;
     }
     LogI("connect succeed!");
-
-    return 0;
 }
 
 
-int ShortLink::__ReadWrite() {
+void ShortLink::__ReadWrite() {
 
     int ret = send(socket_, send_buff_.Ptr(), send_buff_.Length(), 0);
     if (ret < 0) {
         LogE("[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
-        return -1;
+        err_code_ = SEND_FAILED;
+        return;
     }
 
     recv_buff_.Reset();
     recv_buff_.AddCapacity(128);
     size_t len = recv(socket_, recv_buff_.Ptr(), kBuffSize, 0);
     recv_buff_.SetLength(len);
+    if (len < 0) {
+        err_code_ = RECV_FAILED;
+    }
     LogI("[__ReadWrite] recv Len: %d, %d", len, recv_buff_.Length());
-    return 0;
 }
 
 pthread_t ShortLink::GetTid() const {
@@ -94,5 +97,9 @@ AutoBuffer &ShortLink::GetSendBody() {
 
 AutoBuffer &ShortLink::GetRecvBuff() {
     return recv_buff_;
+}
+
+int ShortLink::GetErrCode() const {
+    return err_code_;
 }
 

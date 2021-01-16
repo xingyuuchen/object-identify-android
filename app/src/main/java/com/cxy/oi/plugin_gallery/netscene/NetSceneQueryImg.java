@@ -20,13 +20,11 @@ import com.cxy.oi.plugin_storage.RecognitionInfo;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.InvalidProtocolBufferException;
 
-import java.util.Random;
 
 
 public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
     private static final String TAG = "NetSceneQueryImg";
 
-    private static final Random r = new Random();
     private final String imgPath;
     private NetSceneQueryImgReq req;
     private NetSceneQueryImgResp resp;
@@ -55,39 +53,42 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
         return dispatcher.startTask(reqResp, this);
     }
 
+    @Override
+    public String getTag() {
+        return TAG;
+    }
+
 
     @Override
     public void onNetEnd(int errCode, CommonReqResp rr) {
-        if (errCode == ConstantsProtocol.ERR_OK) {
-            if (rr.resp == null) {
-                Log.e(TAG, "[onNetEnd] rr.resp == null");
-                return;
-            }
-
-            try {
-                this.resp = NetSceneQueryImgResp.parseFrom(rr.resp);
-            } catch (InvalidProtocolBufferException e) {
-                Log.i(TAG, "rr.resp.len: %d", rr.resp.length);
-                Log.e(TAG, "[onNetEnd] InvalidProtocolBufferException: %s", e.getMessage());
-                return;
-            }
-            RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-            builder.setItemType(typeToInt(resp.getItemType()));
-            builder.setItemName(resp.getItemName())
-                    .setCreateTime(System.currentTimeMillis())
-                    .setContent(resp.getItemDesc())
-                    .setImgPath(Util.nullAs(imgPath, ""));
-            RecognitionInfo info = builder.build();
-
-            OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
-        } else {
-            Log.e(TAG, "[onNetEnd] errCode: %s", errCode);
-            Toast.makeText(OIApplicationContext.getContext(),
-                    "NetSceneQueryImg [onNetEnd] errCode: " + errCode, Toast.LENGTH_LONG).show();
+        if (!checkErrCodeAndShowToast(errCode)) {
+            return;
         }
+
+        if (rr.resp == null) {
+            Log.e(TAG, "[onNetEnd] rr.resp == null");
+            return;
+        }
+
+        try {
+            this.resp = NetSceneQueryImgResp.parseFrom(rr.resp);
+        } catch (InvalidProtocolBufferException e) {
+            Log.i(TAG, "rr.resp.len: %d", rr.resp.length);
+            Log.e(TAG, "[onNetEnd] InvalidProtocolBufferException: %s", e.getMessage());
+            return;
+        }
+        RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
+        builder.setItemType(typeToDBInt(resp.getItemType()));
+        builder.setItemName(resp.getItemName())
+                .setCreateTime(System.currentTimeMillis())
+                .setContent(resp.getItemDesc())
+                .setImgPath(Util.nullAs(imgPath, ""));
+        RecognitionInfo info = builder.build();
+
+        OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().insert(info);
     }
 
-    private int typeToInt(NetSceneQueryImgResp.ItemType type) {
+    private int typeToDBInt(NetSceneQueryImgResp.ItemType type) {
         switch (type) {
             case PLANT:
                 return 0;

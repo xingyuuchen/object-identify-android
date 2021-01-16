@@ -2,8 +2,6 @@ package com.cxy.oi.kernel.network;
 
 import com.cxy.oi.kernel.util.Log;
 
-import java.util.HashMap;
-import java.util.Map;
 
 
 public class NativeNetTaskAdapter {

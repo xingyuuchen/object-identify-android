@@ -12,7 +12,7 @@ class ShortLink {
     explicit ShortLink(Task &_task, const std::string& _svr_inet_addr = "127.0.0.1",
             u_short _port = 5002, bool _use_proxy = false);
 
-    int Connect();
+    void DoConnect();
 
     AutoBuffer &GetSendBody();
 
@@ -26,14 +26,17 @@ class ShortLink {
 
     pthread_t GetTid() const;
 
+    int GetErrCode() const;
+
   private:
-    int __ReadWrite();
-    void __Run();
+    void __ReadWrite();
+    int __Run();
 
   private:
     Task            task_;
     Thread          thread_;
     const bool      use_proxy_;
+    int             err_code_;
     SOCKET          socket_;
     AutoBuffer      send_buff_;
     AutoBuffer      recv_buff_;

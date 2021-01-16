@@ -36,6 +36,7 @@ public class RDispatcher extends Binder implements IDispatcher {
                 }
                 freeCallbackInfoFromPool(netId);
 
+
                 OIKernel.getNetSceneQueue().getUiHandler().post(new Runnable() {
                     @Override
                     public void run() {

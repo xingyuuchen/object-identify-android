@@ -9,5 +9,7 @@
 #define SOCKET int
 #define INVALID_SOCKET -1
 #define CONNECT_FAILED -2
+#define SEND_FAILED -3
+#define RECV_FAILED -4
 
 #endif //OI_UNIX_SOCKET_H
