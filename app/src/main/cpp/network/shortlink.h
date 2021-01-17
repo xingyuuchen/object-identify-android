@@ -18,7 +18,7 @@ class ShortLink {
 
     AutoBuffer &GetRecvBuff();
 
-    int SendRequest();
+    int DoTask();
 
     int GetNetId() const;
 

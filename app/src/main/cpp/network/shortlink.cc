@@ -20,7 +20,7 @@ ShortLink::ShortLink(Task &_task, const std::string &_svr_inet_addr, u_short _po
 }
 
 
-int ShortLink::SendRequest() {
+int ShortLink::DoTask() {
     thread_.Start();
     LogI("[Thread::Start] pthread_join ret = %d", pthread_join(GetTid(), NULL));
     return 0;

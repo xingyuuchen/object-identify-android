@@ -8,6 +8,10 @@ import android.content.pm.PackageManager;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.util.Collection;
 
 public class Util {
@@ -25,11 +29,25 @@ public class Util {
         return objects == null || objects.length <= 0;
     }
 
+    public static String nullAsNil(String s) {
+        return s != null ? s : "";
+    }
+
+    public static byte[] nullAsNil(byte[] bytes) {
+        return bytes != null ? bytes : new byte[0];
+    }
+
     public static String nullAs(String s, String as) {
         if (s == null) {
             return as;
         }
         return s;
+    }
+    public static byte[] nullAs(byte[] bytes, byte[] as) {
+        if (bytes == null) {
+            return as;
+        }
+        return bytes;
     }
 
     public static String getStack() {
@@ -64,6 +82,26 @@ public class Util {
             }
         }
         return ret;
+    }
+
+    public static byte[] readFromFile(String path) {
+        try {
+            FileInputStream fis = new FileInputStream(path);
+            int len = fis.available();
+            byte[] bytes = new byte[len];
+
+            int ret = fis.read(bytes, 0, len);
+            if (ret > 0) {
+                return bytes;
+            }
+            Log.e(TAG, "[readFromFile] fis.read(bytes, 0, len) <= 0");
+            return null;
+        } catch (FileNotFoundException e) {
+            Log.e(TAG, "[readFromFile] FileNotFoundException %s", path);
+        } catch (IOException e) {
+            Log.e(TAG, "[readFromFile] IOException %s", path);
+        }
+        return null;
     }
 
 }

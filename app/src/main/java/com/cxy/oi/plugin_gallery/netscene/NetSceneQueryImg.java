@@ -1,15 +1,11 @@
 package com.cxy.oi.plugin_gallery.netscene;
 
 
-import android.widget.Toast;
 
-import com.cxy.oi.autogen.BaseNetSceneReq;
 import com.cxy.oi.autogen.NetSceneQueryImgReq;
 import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
-import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
@@ -27,19 +23,23 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
     private static final String TAG = "NetSceneQueryImg";
 
     private final String imgPath;
+    private final byte[] imgData;
     private NetSceneQueryImgReq req;
 
 
     public NetSceneQueryImg(String imgPath) {
         this.imgPath = imgPath;
 
-        req = NetSceneQueryImgReq.newBuilder().
-                setImgBytes(ByteString.copyFrom(new byte[100])).build();
-        reqResp = new CommonReqResp.Builder()
-                .setReq(req)
-                .setUri("/oi/queryimg")
-                .setType(getType())
-                .build();
+        imgData = Util.readFromFile(imgPath);
+        if (imgData != null) {
+            req = NetSceneQueryImgReq.newBuilder().
+                    setImgBytes(ByteString.copyFrom(imgData)).build();
+            reqResp = new CommonReqResp.Builder()
+                    .setReq(req)
+                    .setUri("/oi/queryimg")
+                    .setType(getType())
+                    .build();
+        }
 
     }
 
@@ -50,12 +50,24 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
 
     @Override
     public int doScene(IDispatcher dispatcher) {
+        Log.i(TAG, "[doScene] reqLen size = %d", reqResp.reqLen);
         return dispatcher.startTask(reqResp, this);
     }
 
     @Override
     public String getTag() {
         return TAG;
+    }
+
+    @Override
+    public void onLocalErr(int errCode) {
+        checkLocalErrCodeAndShowToast(errCode);
+        if (imgData == null) {
+            Log.e(TAG, "[onLocalErr] imgData == null");
+        }
+        if (imgPath == null) {
+            Log.e(TAG, "[onLocalErr] imgPath == null");
+        }
     }
 
 

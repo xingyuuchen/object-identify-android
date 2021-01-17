@@ -4,6 +4,7 @@ import android.os.Binder;
 
 import com.cxy.oi.autogen.BaseNetSceneReq;
 import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.util.Log;
 import com.google.protobuf.ByteString;
@@ -120,6 +121,11 @@ public class RDispatcher extends Binder implements IDispatcher {
 
     @Override
     public int startTask(CommonReqResp reqResp, IOnNetEnd onNetEnd) {
+        if (reqResp == null || reqResp.req == null || reqResp.baseReq == null || onNetEnd == null) {
+            Log.e(TAG, "[startTask] reqResp == null || " +
+                    "reqResp.req == null || reqResp.baseReq == null || onNetEnd == null");
+            return ConstantsProtocol.ERR_REQ_DATA_ILLEGAL;
+        }
         int netId = allocCallbackInfoFromPool(reqResp, onNetEnd);
         NativeNetTaskAdapter.Task task = new NativeNetTaskAdapter.Task();
         task.netID = netId;

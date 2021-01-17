@@ -21,6 +21,8 @@ public abstract class NetSceneBase {
 
     public abstract String getTag();
 
+    public abstract void onLocalErr(int errCode);   // callback for local err
+
     protected boolean checkErrCodeAndShowToast(int errCode) {
         String toast = null;
         switch (errCode) {
@@ -44,6 +46,28 @@ public abstract class NetSceneBase {
         }
         if (toast != null) {
             Log.e(getTag(), "[checkErrCodeAndShowToast] errCode: %s", errCode);
+            Toast.makeText(OIApplicationContext.getContext(), toast, Toast.LENGTH_LONG).show();
+        }
+        return toast == null;
+    }
+
+    protected boolean checkLocalErrCodeAndShowToast(int errCode) {
+        String toast = null;
+        switch (errCode) {
+            case ConstantsProtocol.ERR_NO_DISPATCHER:
+                toast = "ERR_NO_DISPATCHER";
+                break;
+            case ConstantsProtocol.ERR_REQ_DATA_ILLEGAL:
+                toast = "本地请求数据不完整";
+                break;
+            case ConstantsProtocol.ERR_OK:
+                break;
+            default:
+                toast = "未知本地错误";
+                break;
+        }
+        if (toast != null) {
+            Log.e(getTag(), "[checkLocalErrCodeAndShowToast] errCode: %s", errCode);
             Toast.makeText(OIApplicationContext.getContext(), toast, Toast.LENGTH_LONG).show();
         }
         return toast == null;

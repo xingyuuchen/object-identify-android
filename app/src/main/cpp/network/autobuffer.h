@@ -15,7 +15,11 @@ class AutoBuffer {
 
     size_t Length() const;
 
+    size_t AvailableSize() const;
+
     void SetLength(size_t _len);
+
+    void AddLength(size_t _len);
 
     unsigned char *Ptr(const size_t _offset = 0) const;
 

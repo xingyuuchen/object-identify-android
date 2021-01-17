@@ -67,15 +67,21 @@ public final class NetSceneQueue implements IAppForegroundListener {
             @Override
             public void run() {
                 final int ret;
-                if (dispatcher == null || netScene.doScene(dispatcher) < 0) {
+                do {
+                    if (dispatcher == null) {
+                        ret = ConstantsProtocol.ERR_NO_DISPATCHER;
+                        break;
+                    }
+                    ret = netScene.doScene(dispatcher);
+                } while (false);
+
+                if (ret < 0) {
                     uiHandler.post(new Runnable() {
                         @Override
                         public void run() {
-//                            netScene.(ret);
+                            netScene.onLocalErr(ret);
                         }
                     });
-                } else {
-                    ret = ConstantsProtocol.ERR_OK;
                 }
 
             }

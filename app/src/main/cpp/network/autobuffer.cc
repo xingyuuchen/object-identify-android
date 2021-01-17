@@ -42,6 +42,10 @@ size_t AutoBuffer::Length() const {
     return length_;
 }
 
+size_t AutoBuffer::AvailableSize() const {
+    return capacity_ - length_;
+}
+
 unsigned char *AutoBuffer::Ptr(const size_t _offset) const {
     return byte_array_ + _offset;
 }
@@ -81,4 +85,10 @@ void AutoBuffer::Reset() {
 
 void AutoBuffer::SetLength(size_t _len) {
     length_ = _len;
+}
+
+void AutoBuffer::AddLength(size_t _len) {
+    if (_len > 0) {
+        length_ += _len;
+    }
 }

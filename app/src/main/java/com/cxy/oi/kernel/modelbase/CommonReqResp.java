@@ -40,11 +40,6 @@ public class CommonReqResp {
             return this;
         }
 
-        public Builder setResp(byte[] resp) {
-            reqResp.resp = resp;
-            return this;
-        }
-
         public CommonReqResp build() {
             if (reqResp.type == ConstantsProtocol.NETSCENE_TYPE_UNKNOWN_TYPE ||
                     reqResp.req == null) {
