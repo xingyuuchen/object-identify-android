@@ -1,7 +1,5 @@
 package com.cxy.oi.plugin_gallery.netscene;
 
-
-
 import com.cxy.oi.autogen.NetSceneQueryImgReq;
 import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;

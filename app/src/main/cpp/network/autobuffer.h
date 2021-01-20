@@ -9,7 +9,7 @@ class AutoBuffer {
 
     ~AutoBuffer();
 
-    void Write(const unsigned char *_byte_array, size_t _len);
+    void Write(const char *_byte_array, size_t _len);
 
     size_t Pos() const;
 
@@ -21,7 +21,7 @@ class AutoBuffer {
 
     void AddLength(size_t _len);
 
-    unsigned char *Ptr(const size_t _offset = 0) const;
+    char *Ptr(const size_t _offset = 0) const;
 
     size_t GetCapacity() const;
 
@@ -31,7 +31,7 @@ class AutoBuffer {
 
 
   private:
-    unsigned char * byte_array_;
+    char * byte_array_;
     size_t           pos_;
     size_t          length_;
     size_t          capacity_;

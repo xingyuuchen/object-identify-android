@@ -1,6 +1,6 @@
 #include <stdlib.h>
 #include "autobuffer.h"
-#include "util.h"
+#include "log.h"
 #include <string>
 
 
@@ -17,7 +17,7 @@ AutoBuffer::AutoBuffer(const AutoBuffer &_auto_buffer)
 
 }
 
-void AutoBuffer::Write(const unsigned char *_byte_array, size_t _len) {
+void AutoBuffer::Write(const char *_byte_array, size_t _len) {
     if (_len <= 0 || _byte_array == NULL) {
         return;
     }
@@ -46,23 +46,23 @@ size_t AutoBuffer::AvailableSize() const {
     return capacity_ - length_;
 }
 
-unsigned char *AutoBuffer::Ptr(const size_t _offset) const {
+char *AutoBuffer::Ptr(const size_t _offset) const {
     return byte_array_ + _offset;
 }
 
 void AutoBuffer::AddCapacity(size_t _size_to_add) {
     if (_size_to_add <= 0) {
-        LogE("Illegal arg _size:%d", _size_to_add);
+        LogE("Illegal arg _size:%zu", _size_to_add);
         return;
     }
-    LogI("[AutoBuffer::AddCapacity] _size_to_add: %d", _size_to_add);
+    LogI("[AutoBuffer::AddCapacity] _size_to_add: %zd", _size_to_add);
     void *p = realloc(byte_array_, capacity_ + _size_to_add);
     if (p == NULL) {
         LogE("[AutoBuffer::AddCapacity] realloc failed, errno(%d): %s", errno, strerror(errno));
         return;
     }
     capacity_ += _size_to_add;
-    byte_array_ = (unsigned char *) p;
+    byte_array_ = (char *) p;
 }
 
 size_t AutoBuffer::GetCapacity() const {

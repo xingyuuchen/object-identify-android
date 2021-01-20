@@ -4,9 +4,9 @@
 #include "shortlink.h"
 #include <pthread.h>
 #include "c2java.h"
-#include "util.h"
+#include "log.h"
 
-#define DEBUG
+//#define DEBUG
 
 typedef pthread_t thread_tid;
 

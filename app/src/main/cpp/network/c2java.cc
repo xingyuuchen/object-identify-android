@@ -1,6 +1,6 @@
 #include <string.h>
 #include "c2java.h"
-#include "util.h"
+#include "log.h"
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
@@ -40,7 +40,7 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id) {
     jlong len = env->CallStaticLongMethod(clz, onTaskEnd_id, _net_id);
     LogI("[C2Java_ReqToBuffer] len = %d, len = %ld", len_, len);
     if (len == len_) {
-        _send_buffer.Write((unsigned char *) jba, len_);
+        _send_buffer.Write((char *) jba, len_);
         LogI("_send_buffer.Length = %d", _send_buffer.Length());
         return _send_buffer.Length();
     }

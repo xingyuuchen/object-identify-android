@@ -1,7 +1,7 @@
 #include "shortlink.h"
 #include <pthread.h>
 #include <boost/bind.hpp>
-#include "util.h"
+#include "log.h"
 
 const size_t kBuffSize = 1024;
 
@@ -76,7 +76,7 @@ void ShortLink::__ReadWrite() {
     if (len < 0) {
         err_code_ = RECV_FAILED;
     }
-    LogI("[__ReadWrite] recv Len: %d, %d", len, recv_buff_.Length());
+    LogI("[__ReadWrite] recv Len: %zd, %zd", len, recv_buff_.Length());
     close(socket_);
 }
 
