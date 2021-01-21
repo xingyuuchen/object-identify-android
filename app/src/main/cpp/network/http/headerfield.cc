@@ -32,9 +32,9 @@ size_t HeaderField::GetHeaderSize() {
 }
 
 uint64_t HeaderField::GetContentLength() const {
-    for (auto iter = header_fields_.begin(); iter != header_fields_.end(); iter++) {
-        if (0 == strcmp(iter->first.c_str(), KContentLength)) {
-            return strtoul(iter->second.c_str(), NULL, 10);
+    for (const auto & header_field : header_fields_) {
+        if (0 == strcmp(header_field.first.c_str(), KContentLength)) {
+            return strtoul(header_field.second.c_str(), NULL, 10);
         }
     }
     LogI("[HeaderField::GetContentLength()] No such field: Content-Length")
@@ -43,12 +43,13 @@ uint64_t HeaderField::GetContentLength() const {
 
 void HeaderField::ToString(std::string &_target) {
     _target.clear();
-    for (auto entry = header_fields_.begin(); entry != header_fields_.end(); entry++) {
-        _target += entry->first;
+    for (auto & header_field : header_fields_) {
+        _target += header_field.first;
         _target += ":";
-        _target += entry->second;
+        _target += header_field.second;
         _target += "\r\n";
     }
+    _target += "\r\n";
 }
 
 bool HeaderField::ParseFromString(std::string &_target) {

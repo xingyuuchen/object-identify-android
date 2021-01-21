@@ -2,6 +2,9 @@
 #include <pthread.h>
 #include <boost/bind.hpp>
 #include "log.h"
+#include "http/httprequest.h"
+#include <map>
+
 
 const size_t kBuffSize = 1024;
 
@@ -61,8 +64,17 @@ void ShortLink::DoConnect() {
 
 
 void ShortLink::__ReadWrite() {
+    AutoBuffer out_buff;
+    std::map<std::string, std::string> empty;
+    http::request::Pack(svr_inet_addr_, task_.cgi_, empty, send_body_,
+                        out_buff);
+//    LogI("header length: %d", out_buff.Length() - send_body_.Length())
+//    for (size_t i = 0; i < out_buff.Length() - send_body_.Length(); i++) {
+//        LogI("0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
+//    }
+    send_body_.Reset();
 
-    int ret = send(socket_, send_buff_.Ptr(), send_buff_.Length(), 0);
+    int ret = send(socket_, out_buff.Ptr(), out_buff.Length(), 0);
     if (ret < 0) {
         LogE("[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
         err_code_ = SEND_FAILED;
@@ -80,27 +92,19 @@ void ShortLink::__ReadWrite() {
     close(socket_);
 }
 
-pthread_t ShortLink::GetTid() const {
-    return thread_.GetTid();
-}
+pthread_t ShortLink::GetTid() const { return thread_.GetTid(); }
 
-int ShortLink::GetNetId() const {
-    return task_.netid_;
-}
+int ShortLink::GetNetId() const { return task_.netid_; }
 
-u_short ShortLink::GetPort() const {
-    return port_;
-}
+u_short ShortLink::GetPort() const { return port_; }
 
-AutoBuffer &ShortLink::GetSendBody() {
-    return send_buff_;
-}
+AutoBuffer &ShortLink::GetSendBody() { return send_body_; }
 
-AutoBuffer &ShortLink::GetRecvBuff() {
-    return recv_buff_;
-}
+AutoBuffer &ShortLink::GetRecvBuff() { return recv_buff_; }
 
-int ShortLink::GetErrCode() const {
-    return err_code_;
-}
+int ShortLink::GetErrCode() const { return err_code_; }
+
+std::string &ShortLink::GetCgi() { return task_.cgi_; }
+
+std::string &ShortLink::GetHost() { return svr_inet_addr_; }
 

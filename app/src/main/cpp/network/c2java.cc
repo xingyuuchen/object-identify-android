@@ -25,7 +25,7 @@ jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
     return ret;
 }
 
-int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id) {
+int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
     jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
     jmethodID reqToBuffer_id = env->GetStaticMethodID(clz, "reqToBuffer", "(I)[B");
     jbyteArray ret = (jbyteArray) env->CallStaticObjectMethod(clz, reqToBuffer_id, _net_id);
@@ -40,9 +40,9 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_buffer, int _net_id) {
     jlong len = env->CallStaticLongMethod(clz, onTaskEnd_id, _net_id);
     LogI("[C2Java_ReqToBuffer] len = %d, len = %ld", len_, len);
     if (len == len_) {
-        _send_buffer.Write((char *) jba, len_);
-        LogI("_send_buffer.Length = %d", _send_buffer.Length());
-        return _send_buffer.Length();
+        _send_body.Write((char *) jba, len_);
+        LogI("_send_body.Length = %d", _send_body.Length());
+        return _send_body.Length();
     }
     return -1;
 }

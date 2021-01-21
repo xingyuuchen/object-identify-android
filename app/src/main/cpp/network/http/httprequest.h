@@ -10,8 +10,8 @@
 namespace http { namespace request {
 
 
-void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> _headers,
-          AutoBuffer& _send_body, AutoBuffer &_out_buff);
+void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> &_headers,
+          AutoBuffer &_send_body, AutoBuffer &_out_buff);
 
 
 class Parser {

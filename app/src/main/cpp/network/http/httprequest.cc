@@ -2,15 +2,15 @@
 #include "requestline.h"
 #include "headerfield.h"
 #include "../log.h"
-#include <string.h>
 #include "../strutil.h"
+#include <string.h>
 
 
 namespace http { namespace request {
 
 
-void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> _headers,
-          AutoBuffer& _send_body, AutoBuffer &_out_buff) {
+void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> &_headers,
+          AutoBuffer &_send_body, AutoBuffer &_out_buff) {
     _out_buff.Reset();
     
     RequestLine request_line;
@@ -20,8 +20,9 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
     request_line.AppendToBuffer(_out_buff);
     
     HeaderField header_field;
-    for (auto iter = _headers.begin(); iter != _headers.end(); iter++) {
-        header_field.InsertOrUpdateHeader(iter->first, iter->second);
+    for (const auto &header : _headers) {
+        LogI("[Pack] %s:%s", header.first.c_str(), header.second.c_str())
+        header_field.InsertOrUpdateHeader(header.first, header.second);
     }
     header_field.InsertOrUpdateHeader(HeaderField::KHost, _host);
     header_field.InsertOrUpdateHeader(HeaderField::KConnection, HeaderField::KConnectionClose);
@@ -31,12 +32,14 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
     header_field.InsertOrUpdateHeader(HeaderField::KContentLength, len_str);
     
     header_field.AppendToBuffer(_out_buff);
+    _out_buff.Write(_send_body.Ptr(), _send_body.Length());
 }
 
 
 Parser::Parser()
     : position_(TPosition::kNone)
-    , request_line_ok_(false) {}
+    , request_line_ok_(false)
+    , resolved_len_(0) {}
         
 
 void Parser::Recv(AutoBuffer &_buff) {

@@ -28,6 +28,10 @@ class ShortLink {
 
     int GetErrCode() const;
 
+    std::string &GetCgi();
+
+    std::string &GetHost();
+
   private:
     void __ReadWrite();
     int __Run();
@@ -38,7 +42,7 @@ class ShortLink {
     const bool      use_proxy_;
     int             err_code_;
     SOCKET          socket_;
-    AutoBuffer      send_buff_;
+    AutoBuffer      send_body_;
     AutoBuffer      recv_buff_;
     u_short         port_;
     std::string     svr_inet_addr_;
