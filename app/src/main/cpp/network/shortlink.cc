@@ -33,7 +33,7 @@ int ShortLink::DoTask() {
 int ShortLink::__Run() {
     DoConnect();
     if (err_code_ < 0) {
-        return err_code_;
+//        return err_code_;
     }
     __ReadWrite();
     return err_code_;
@@ -68,7 +68,7 @@ void ShortLink::__ReadWrite() {
     std::map<std::string, std::string> empty;
     http::request::Pack(svr_inet_addr_, task_.cgi_, empty, send_body_,
                         out_buff);
-//    LogI("header length: %d", out_buff.Length() - send_body_.Length())
+    LogI("header length: %zd", out_buff.Length() - send_body_.Length())
 //    for (size_t i = 0; i < out_buff.Length() - send_body_.Length(); i++) {
 //        LogI("0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
 //    }

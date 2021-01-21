@@ -1,5 +1,7 @@
 #include "requestline.h"
 #include <string.h>
+#include "../log.h"
+#include "../strutil.h"
 
 
 namespace http {
@@ -42,17 +44,16 @@ void RequestLine::ToString(std::string &_target) {
 }
 
 bool RequestLine::ParseFromString(std::string &_from) {
-    std::string::size_type space1 = _from.find(' ');
-    if (space1 != std::string::npos) {
-        method_ = __GetHttpMethod(_from.substr(0, space1));
-        std::string::size_type space2 = _from.find(' ', space1 + 1);
-        if (space2!= std::string::npos) {
-            url_ = _from.substr(space1, space2);
-            version_ = __GetHttpVersion(_from.substr(space2, _from.size()));
-            return true;
-        }
+    std::vector<std::string> res;
+    oi::split(_from, " ", res);
+    if (res.size() != 3) {
+        LogI("[RequestLine::ParseFromString] res.size(): %ld", res.size())
+        return false;
     }
-    return false;
+    method_ = __GetHttpMethod(res[0]);
+    url_ = res[1];
+    version_ = __GetHttpVersion(res[2]);
+    return true;
 }
 
 void RequestLine::AppendToBuffer(AutoBuffer &_buffer) {

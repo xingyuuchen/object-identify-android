@@ -28,6 +28,12 @@ class Parser {
     };
     
     void Recv(AutoBuffer &_buff);
+
+    void __ResolveRequestLine(AutoBuffer &_buff);
+    
+    void __ResolveRequestHeaders(AutoBuffer &_buff);
+    
+    void __ResolveBody(AutoBuffer &_buff);
     
     bool IsEnd() const;
     
@@ -42,9 +48,8 @@ class Parser {
     http::RequestLine                       request_line_;
     bool                                    request_line_ok_;
     http::HeaderField                       headers_;
-    size_t                                  request_line_len_;
-    size_t                                  request_header_len_;
-    size_t                                  body_len_;
+    size_t                                  request_line_len_;      // debug only
+    size_t                                  request_header_len_;    // debug only
     size_t                                  resolved_len_;
     AutoBuffer                              body_;
     

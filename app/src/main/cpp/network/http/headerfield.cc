@@ -1,6 +1,7 @@
 #include "headerfield.h"
 #include "../log.h"
 #include <string.h>
+#include "../strutil.h"
 
 
 namespace http {
@@ -52,10 +53,17 @@ void HeaderField::ToString(std::string &_target) {
     _target += "\r\n";
 }
 
-bool HeaderField::ParseFromString(std::string &_target) {
-    std::string::size_type pos = 0;
-    while ((pos = _target.find("\r\n"), pos) != std::string::npos) {
-    
+bool HeaderField::ParseFromString(std::string &_from) {
+    std::vector<std::string> headers;
+    oi::split(_from, "\r\n", headers);
+    for (auto & header_str : headers) {
+        std::vector<std::string> header_pair;
+        oi::split(header_str, ":", header_pair);
+        if (header_pair.size() != 2) {
+            LogE("[HeaderField::ParseFromString] err header pair")
+            return false;
+        }
+        InsertOrUpdateHeader(header_pair[0], header_pair[1]);
     }
     return true;
 }

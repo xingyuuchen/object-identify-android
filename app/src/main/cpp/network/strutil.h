@@ -3,6 +3,8 @@
 
 #include <stdint.h>
 #include <string.h>
+#include <vector>
+#include <string>
 
 
 namespace oi {
@@ -28,6 +30,28 @@ inline char *strnstr(const char *_haystack,
     }
 
     return NULL;
+}
+
+inline void split(const std::string &_src, const std::string &_split,
+                  std::vector<std::string> &_res) {
+    _res.clear();
+    if (_src.size() == 0) { return; }
+    size_t size = _split.size();
+
+    std::string::size_type curr, last = 0;
+    bool has = false;
+    while ((curr = _src.find(_split, last)) != std::string::npos) {
+        if (curr == last) {
+            last = curr + size;
+            continue;
+        }
+        has = true;
+        _res.push_back(_src.substr(last, curr - last));
+        last = curr + size;
+    }
+    if (has && last < _src.size()) {
+        _res.push_back(_src.substr(last, _src.size() - last));
+    }
 }
 
 }
