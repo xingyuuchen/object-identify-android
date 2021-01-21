@@ -12,16 +12,16 @@ namespace http { namespace request {
 void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> &_headers,
           AutoBuffer& _send_body, AutoBuffer &_out_buff) {
     _out_buff.Reset();
-
+    
     RequestLine request_line;
     request_line.SetMethod(http::RequestLine::kPOST);
     request_line.SetVersion(http::RequestLine::kHTTP_1_1);
     request_line.SetUrl(_url);
     request_line.AppendToBuffer(_out_buff);
-
+    
     HeaderField header_field;
-    for (const auto & header : _headers) {
-        header_field.InsertOrUpdateHeader(header.first, header.second);
+    for (auto iter = _headers.begin(); iter != _headers.end(); iter++) {
+        header_field.InsertOrUpdateHeader(iter->first, iter->second);
     }
     header_field.InsertOrUpdateHeader(HeaderField::KHost, _host);
     header_field.InsertOrUpdateHeader(HeaderField::KConnection, HeaderField::KConnectionClose);
@@ -29,10 +29,10 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
     char len_str[8] = {0, };
     snprintf(len_str, sizeof(len_str), "%zu", _send_body.Length());
     header_field.InsertOrUpdateHeader(HeaderField::KContentLength, len_str);
-
+    
     header_field.AppendToBuffer(_out_buff);
     _out_buff.Write(_send_body.Ptr(), _send_body.Length());
-
+    
 }
 
 
@@ -106,7 +106,7 @@ void Parser::__ResolveBody(AutoBuffer &_buff) {
     } else if (content_length == body_.Length()) {
         position_ = kEnd;
     }
-    LogI("%ld %lld", body_.Length(), content_length)
+
 }
 
 
