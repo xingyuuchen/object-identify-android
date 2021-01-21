@@ -42,10 +42,10 @@ void RequestLine::ToString(std::string &_target) {
 }
 
 bool RequestLine::ParseFromString(std::string &_from) {
-    std::string::size_type space1 = _from.find(" ");
+    std::string::size_type space1 = _from.find(' ');
     if (space1 != std::string::npos) {
         method_ = __GetHttpMethod(_from.substr(0, space1));
-        std::string::size_type space2 = _from.find(" ", space1 + 1);
+        std::string::size_type space2 = _from.find(' ', space1 + 1);
         if (space2!= std::string::npos) {
             url_ = _from.substr(space1, space2);
             version_ = __GetHttpVersion(_from.substr(space2, _from.size()));
