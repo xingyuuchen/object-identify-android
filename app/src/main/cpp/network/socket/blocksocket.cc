@@ -1,4 +1,5 @@
 #include "blocksocket.h"
+#include "../log.h"
 
 
 

@@ -1,7 +1,7 @@
 #ifndef OI_SVR_HTTPREQUSET_H
 #define OI_SVR_HTTPREQUSET_H
 
-#include "requestline.h"
+#include "firstline.h"
 #include "headerfield.h"
 #include "../autobuffer.h"
 #include <map>
@@ -46,7 +46,6 @@ class Parser {
   private:
     TPosition                               position_;
     http::RequestLine                       request_line_;
-    bool                                    request_line_ok_;
     http::HeaderField                       headers_;
     size_t                                  request_line_len_;      // debug only
     size_t                                  request_header_len_;    // debug only
