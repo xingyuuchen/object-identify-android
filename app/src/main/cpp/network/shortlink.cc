@@ -11,18 +11,15 @@
 
 const size_t kBuffSize = 1024;
 
-ShortLink::ShortLink(Task &_task, const std::string &_svr_inet_addr, u_short _port, bool _use_proxy)
+ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, bool _use_proxy)
         : use_proxy_(_use_proxy)
-        , task_()
+        , task_(_task)
         , thread_(boost::bind(&ShortLink::__Run, this))
         , port_(_port)
-        , svr_inet_addr_(_svr_inet_addr)
+        , svr_inet_addr_(std::move(_svr_inet_addr))
         , err_code_(0)
         , socket_(INVALID_SOCKET) {
-    LogI("new ShortLink");
-    task_.cgi_ = _task.cgi_;
-    task_.retry_cnt_ = _task.retry_cnt_;
-    task_.netid_ = _task.netid_;
+    LogI("new ShortLink: %s %d %d", task_.cgi_.c_str(), task_.netid_, task_.retry_cnt_)
 }
 
 
@@ -36,7 +33,7 @@ int ShortLink::DoTask() {
 int ShortLink::__Run() {
     DoConnect();
     if (err_code_ < 0) {
-//        return err_code_;
+        return err_code_;
     }
     __ReadWrite();
     return err_code_;

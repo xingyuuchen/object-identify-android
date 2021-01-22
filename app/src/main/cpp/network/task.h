@@ -11,7 +11,6 @@ class Task {
     int netid_;
     int retry_cnt_;
     std::string cgi_;
-    Task() {}
 
 };
 

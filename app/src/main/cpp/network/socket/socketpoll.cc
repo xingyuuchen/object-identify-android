@@ -27,7 +27,7 @@ void SocketPoll::SetEventRead(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLIN;
         return;
@@ -44,7 +44,7 @@ void SocketPoll::SetEventWrite(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLOUT;
         return;
@@ -61,7 +61,7 @@ void SocketPoll::SetEventError(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLERR;
         return;
@@ -81,7 +81,7 @@ void SocketPoll::ClearEvents() {
 }
 
 bool SocketPoll::IsReadSet(SOCKET _socket) {
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find == pollfds_.end()) {
         return false;
     }
@@ -89,7 +89,7 @@ bool SocketPoll::IsReadSet(SOCKET _socket) {
 }
 
 bool SocketPoll::IsErrSet(SOCKET _socket) {
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find == pollfds_.end()) {
         return false;
     }
@@ -97,7 +97,7 @@ bool SocketPoll::IsErrSet(SOCKET _socket) {
 }
 
 void SocketPoll::RemoveSocket(SOCKET _socket) {
-    auto find = FindPollfd(_socket);
+    auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         pollfds_.erase(find);
     }

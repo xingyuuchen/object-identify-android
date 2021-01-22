@@ -38,10 +38,10 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
 
     jmethodID onTaskEnd_id = env->GetStaticMethodID(clz, "getReqBufferSize", "(I)J");
     jlong len = env->CallStaticLongMethod(clz, onTaskEnd_id, _net_id);
-    LogI("[C2Java_ReqToBuffer] len = %d, len = %ld", len_, len);
+    LogI("[C2Java_ReqToBuffer] len = %d, len = %lld", len_, len);
     if (len == len_) {
         _send_body.Write((char *) jba, len_);
-        LogI("_send_body.Length = %d", _send_body.Length());
+        LogI("_send_body.Length = %zu", _send_body.Length());
         return _send_body.Length();
     }
     return -1;
@@ -55,7 +55,7 @@ int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id) {
     jbyteArray jba = env->NewByteArray(_recv_buffer.Length());
     env->SetByteArrayRegion(jba, 0,
             _recv_buffer.Length(),reinterpret_cast<const jbyte *>(_recv_buffer.Ptr()));
-    LogI("[C2Java_BufferToResp] _recv_buffer.Length: %d", _recv_buffer.Length());
+    LogI("[C2Java_BufferToResp] _recv_buffer.Length: %zu", _recv_buffer.Length());
     jint ret = env->CallStaticIntMethod(clz, bufferToResp_id, _net_id, jba);
     env->DeleteLocalRef(jba);
     return ret;

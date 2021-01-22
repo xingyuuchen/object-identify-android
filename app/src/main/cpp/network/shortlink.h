@@ -11,7 +11,7 @@ typedef pthread_t thread_tid;
 
 class ShortLink {
   public:
-    explicit ShortLink(Task &_task, const std::string& _svr_inet_addr = "127.0.0.1",
+    explicit ShortLink(Task &_task, std::string _svr_inet_addr = "127.0.0.1",
             u_short _port = 5002, bool _use_proxy = false);
 
     void DoConnect();

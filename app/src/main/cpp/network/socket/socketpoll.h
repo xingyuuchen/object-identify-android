@@ -34,7 +34,7 @@ class SocketPoll {
 
   private:
     
-    inline std::vector<pollfd>::iterator FindPollfd(SOCKET _socket) {
+    inline std::vector<pollfd>::iterator __FindPollfd(SOCKET _socket) {
         return std::find_if(pollfds_.begin(), pollfds_.end(),
                     [&_socket] (const pollfd &_fd) -> bool {
             return _socket == _fd.fd;

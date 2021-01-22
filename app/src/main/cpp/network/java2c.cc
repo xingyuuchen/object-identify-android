@@ -6,25 +6,25 @@
 #include "c2java.h"
 #include "log.h"
 
-#define DEBUG
+//#define DEBUG
 
 
 int StartTaskImpl(Task &_task, JNIEnv* env) {
     LogI("StartTaskImpl");
 
 #ifdef DEBUG
-    ShortLink shortLink(_task);
+    ShortLink short_link(_task);
 #else
-    ShortLink shortLink(_task, "49.235.29.121");
+    ShortLink short_link(_task, "49.235.29.121");
 #endif
-    int ret = C2Java_ReqToBuffer(env, shortLink.GetSendBody(), shortLink.GetNetId());
+    int ret = C2Java_ReqToBuffer(env, short_link.GetSendBody(), short_link.GetNetId());
     LogI("[StartTaskImpl] C2Java_ReqToBuffer ret = %d", ret);
     if (ret >= 0) {
-        shortLink.DoTask();
+        short_link.DoTask();
     }
 
-    C2Java_BufferToResp(env, shortLink.GetRecvBody(), shortLink.GetNetId());
-    C2Java_OnTaskEnd(env, shortLink.GetNetId(), shortLink.GetErrCode());
+    C2Java_BufferToResp(env, short_link.GetRecvBody(), short_link.GetNetId());
+    C2Java_OnTaskEnd(env, short_link.GetNetId(), short_link.GetErrCode());
     return 0;
 }
 
