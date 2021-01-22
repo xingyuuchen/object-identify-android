@@ -27,7 +27,7 @@ class Parser {
         kError,
     };
     
-    Parser();
+    Parser(AutoBuffer *_body);
     
     void Recv(AutoBuffer &_buff);
     
@@ -43,7 +43,7 @@ class Parser {
     
     TPosition GetPosition() const;
     
-    AutoBuffer &GetBody();
+    AutoBuffer *GetBody();
 
   private:
     TPosition                               position_;
@@ -52,7 +52,7 @@ class Parser {
     size_t                                  status_line_len_;      // debug only
     size_t                                  response_header_len_;    // debug only
     size_t                                  resolved_len_;
-    AutoBuffer                              body_;
+    AutoBuffer*                             body_;
   
 };
 

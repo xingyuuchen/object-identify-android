@@ -1,6 +1,6 @@
 #include "blocksocket.h"
 #include "../log.h"
-
+#include "../time/timeutil.h"
 
 
 size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
@@ -23,7 +23,7 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
     
     while (true) {
         
-        int poll_timeout = _timeout_mills > cost_time ? _timeout_mills - cost_time : 0;
+        int poll_timeout = _timeout_mills > cost_time ? _timeout_mills - (int) cost_time : 0;
         int ret = _socket_poll.Poll(poll_timeout);
         
         if (ret < 0) {

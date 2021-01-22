@@ -6,11 +6,7 @@
 #include "c2java.h"
 #include "log.h"
 
-//#define DEBUG
-
-typedef pthread_t thread_tid;
-
-extern jint CreateJvm(JavaVM** jvm, JNIEnv** env);
+#define DEBUG
 
 
 int StartTaskImpl(Task &_task, JNIEnv* env) {
@@ -27,7 +23,7 @@ int StartTaskImpl(Task &_task, JNIEnv* env) {
         shortLink.DoTask();
     }
 
-    C2Java_BufferToResp(env, shortLink.GetRecvBuff(), shortLink.GetNetId());
+    C2Java_BufferToResp(env, shortLink.GetRecvBody(), shortLink.GetNetId());
     C2Java_OnTaskEnd(env, shortLink.GetNetId(), shortLink.GetErrCode());
     return 0;
 }

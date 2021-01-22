@@ -3,7 +3,10 @@
 #include <boost/bind.hpp>
 #include "log.h"
 #include "http/httprequest.h"
+#include "http/httpresponse.h"
 #include <map>
+#include "shotlinkmanager.h"
+#include "socket/blocksocket.h"
 
 
 const size_t kBuffSize = 1024;
@@ -68,7 +71,7 @@ void ShortLink::__ReadWrite() {
     std::map<std::string, std::string> empty;
     http::request::Pack(svr_inet_addr_, task_.cgi_, empty, send_body_,
                         out_buff);
-    LogI("header length: %zd", out_buff.Length() - send_body_.Length())
+    LogI("http req header length: %zd", out_buff.Length() - send_body_.Length())
 //    for (size_t i = 0; i < out_buff.Length() - send_body_.Length(); i++) {
 //        LogI("0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
 //    }
@@ -81,18 +84,37 @@ void ShortLink::__ReadWrite() {
         return;
     }
 
-    recv_buff_.Reset();
-    recv_buff_.AddCapacity(128);
-    size_t len = recv(socket_, recv_buff_.Ptr(), kBuffSize, 0);
-    recv_buff_.SetLength(len);
-    if (len < 0) {
-        err_code_ = RECV_FAILED;
+    ShotLinkManager::GetInstance().GetSocketPoll().SetEventRead(socket_);
+    ShotLinkManager::GetInstance().GetSocketPoll().SetEventError(socket_);
+    http::response::Parser parser(&recv_body_);
+
+    AutoBuffer recv_buff;
+
+    while (true) {
+        size_t nsize = BlockSocketReceive(socket_, recv_buff,
+                ShotLinkManager::GetInstance().GetSocketPoll(), kBuffSize);
+        if (nsize <= 0) {
+            LogE("[__ReadWrite] BlockSocketReceive ret: %zd", nsize);
+            break;
+        }
+
+        parser.Recv(recv_buff);
+
+        if (parser.IsEnd()) {
+            break;
+        } else if (parser.IsErr()) {
+            LogE("[__ReadWrite] parser.IsErr()")
+            err_code_ = RECV_FAILED;
+            break;
+        }
     }
-    LogI("[__ReadWrite] recv Len: %zd, %zd", len, recv_buff_.Length());
+    LogI("[__ReadWrite] http total Len: %zd", recv_buff.Length());
+    LogI("[__ReadWrite] http body Len: %zd", recv_body_.Length());
+
     close(socket_);
 }
 
-pthread_t ShortLink::GetTid() const { return thread_.GetTid(); }
+thread_tid ShortLink::GetTid() const { return thread_.GetTid(); }
 
 int ShortLink::GetNetId() const { return task_.netid_; }
 
@@ -100,7 +122,7 @@ u_short ShortLink::GetPort() const { return port_; }
 
 AutoBuffer &ShortLink::GetSendBody() { return send_body_; }
 
-AutoBuffer &ShortLink::GetRecvBuff() { return recv_buff_; }
+AutoBuffer &ShortLink::GetRecvBody() { return recv_body_; }
 
 int ShortLink::GetErrCode() const { return err_code_; }
 

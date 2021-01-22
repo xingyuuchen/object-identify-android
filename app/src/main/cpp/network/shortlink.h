@@ -6,6 +6,8 @@
 #include "socket/unix_socket.h"
 #include "autobuffer.h"
 
+typedef pthread_t thread_tid;
+
 
 class ShortLink {
   public:
@@ -16,7 +18,7 @@ class ShortLink {
 
     AutoBuffer &GetSendBody();
 
-    AutoBuffer &GetRecvBuff();
+    AutoBuffer &GetRecvBody();
 
     int DoTask();
 
@@ -24,7 +26,7 @@ class ShortLink {
 
     u_short GetPort() const;
 
-    pthread_t GetTid() const;
+    thread_tid GetTid() const;
 
     int GetErrCode() const;
 
@@ -43,7 +45,7 @@ class ShortLink {
     int             err_code_;
     SOCKET          socket_;
     AutoBuffer      send_body_;
-    AutoBuffer      recv_buff_;
+    AutoBuffer      recv_body_;
     u_short         port_;
     std::string     svr_inet_addr_;
 

@@ -34,14 +34,15 @@ void Pack(http::THttpVersion _http_ver, int _resp_code, std::string &_status_des
 }
 
 
-Parser::Parser()
+Parser::Parser(AutoBuffer *_body)
     : resolved_len_(0)
+    , body_(_body)
     , position_(kNone)
     , status_line_len_(0)
     , response_header_len_(0) {}
     
 
-AutoBuffer & Parser::GetBody() { return body_; }
+AutoBuffer * Parser::GetBody() { return body_; }
 
 bool Parser::IsErr() const { return position_ == kError; }
 
@@ -101,14 +102,14 @@ void Parser::__ResolveBody(AutoBuffer &_buff) {
         return;
     }
     size_t new_size = _buff.Length() - resolved_len_;
-    body_.Write(_buff.Ptr(resolved_len_), new_size);
+    body_->Write(_buff.Ptr(resolved_len_), new_size);
     resolved_len_ += new_size;
     
-    if (content_length < body_.Length()) {
+    if (content_length < body_->Length()) {
         LogI("[resp::Parser::__ResolveBody] recv more %zd bytes than Content-Length(%lld)",
-             body_.Length(), content_length)
+             body_->Length(), content_length)
         position_ = kError;
-    } else if (content_length == body_.Length()) {
+    } else if (content_length == body_->Length()) {
         position_ = kEnd;
     }
 }
