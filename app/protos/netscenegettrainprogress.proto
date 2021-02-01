@@ -17,8 +17,8 @@ message NetSceneGetTrainProgressReq {
 
 message NetSceneGetTrainProgressResp {
   optional bool is_running = 1;
-  optional uint32 curr_epoch = 2;
-  optional uint32 total_epoch = 3;
+  optional int32 curr_epoch = 2;
+  optional int32 total_epoch = 3;
 
 }
 

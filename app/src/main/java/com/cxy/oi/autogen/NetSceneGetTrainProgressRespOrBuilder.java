@@ -19,23 +19,23 @@ public interface NetSceneGetTrainProgressRespOrBuilder extends
   boolean getIsRunning();
 
   /**
-   * <code>optional uint32 curr_epoch = 2;</code>
+   * <code>optional int32 curr_epoch = 2;</code>
    * @return Whether the currEpoch field is set.
    */
   boolean hasCurrEpoch();
   /**
-   * <code>optional uint32 curr_epoch = 2;</code>
+   * <code>optional int32 curr_epoch = 2;</code>
    * @return The currEpoch.
    */
   int getCurrEpoch();
 
   /**
-   * <code>optional uint32 total_epoch = 3;</code>
+   * <code>optional int32 total_epoch = 3;</code>
    * @return Whether the totalEpoch field is set.
    */
   boolean hasTotalEpoch();
   /**
-   * <code>optional uint32 total_epoch = 3;</code>
+   * <code>optional int32 total_epoch = 3;</code>
    * @return The totalEpoch.
    */
   int getTotalEpoch();

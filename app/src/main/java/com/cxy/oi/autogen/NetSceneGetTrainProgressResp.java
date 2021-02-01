@@ -56,12 +56,12 @@ private static final long serialVersionUID = 0L;
           }
           case 16: {
             bitField0_ |= 0x00000002;
-            currEpoch_ = input.readUInt32();
+            currEpoch_ = input.readInt32();
             break;
           }
           case 24: {
             bitField0_ |= 0x00000004;
-            totalEpoch_ = input.readUInt32();
+            totalEpoch_ = input.readInt32();
             break;
           }
           default: {
@@ -119,7 +119,7 @@ private static final long serialVersionUID = 0L;
   public static final int CURR_EPOCH_FIELD_NUMBER = 2;
   private int currEpoch_;
   /**
-   * <code>optional uint32 curr_epoch = 2;</code>
+   * <code>optional int32 curr_epoch = 2;</code>
    * @return Whether the currEpoch field is set.
    */
   @java.lang.Override
@@ -127,7 +127,7 @@ private static final long serialVersionUID = 0L;
     return ((bitField0_ & 0x00000002) != 0);
   }
   /**
-   * <code>optional uint32 curr_epoch = 2;</code>
+   * <code>optional int32 curr_epoch = 2;</code>
    * @return The currEpoch.
    */
   @java.lang.Override
@@ -138,7 +138,7 @@ private static final long serialVersionUID = 0L;
   public static final int TOTAL_EPOCH_FIELD_NUMBER = 3;
   private int totalEpoch_;
   /**
-   * <code>optional uint32 total_epoch = 3;</code>
+   * <code>optional int32 total_epoch = 3;</code>
    * @return Whether the totalEpoch field is set.
    */
   @java.lang.Override
@@ -146,7 +146,7 @@ private static final long serialVersionUID = 0L;
     return ((bitField0_ & 0x00000004) != 0);
   }
   /**
-   * <code>optional uint32 total_epoch = 3;</code>
+   * <code>optional int32 total_epoch = 3;</code>
    * @return The totalEpoch.
    */
   @java.lang.Override
@@ -172,10 +172,10 @@ private static final long serialVersionUID = 0L;
       output.writeBool(1, isRunning_);
     }
     if (((bitField0_ & 0x00000002) != 0)) {
-      output.writeUInt32(2, currEpoch_);
+      output.writeInt32(2, currEpoch_);
     }
     if (((bitField0_ & 0x00000004) != 0)) {
-      output.writeUInt32(3, totalEpoch_);
+      output.writeInt32(3, totalEpoch_);
     }
     unknownFields.writeTo(output);
   }
@@ -192,11 +192,11 @@ private static final long serialVersionUID = 0L;
     }
     if (((bitField0_ & 0x00000002) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt32Size(2, currEpoch_);
+        .computeInt32Size(2, currEpoch_);
     }
     if (((bitField0_ & 0x00000004) != 0)) {
       size += com.google.protobuf.CodedOutputStream
-        .computeUInt32Size(3, totalEpoch_);
+        .computeInt32Size(3, totalEpoch_);
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -560,7 +560,7 @@ private static final long serialVersionUID = 0L;
 
     private int currEpoch_ ;
     /**
-     * <code>optional uint32 curr_epoch = 2;</code>
+     * <code>optional int32 curr_epoch = 2;</code>
      * @return Whether the currEpoch field is set.
      */
     @java.lang.Override
@@ -568,7 +568,7 @@ private static final long serialVersionUID = 0L;
       return ((bitField0_ & 0x00000002) != 0);
     }
     /**
-     * <code>optional uint32 curr_epoch = 2;</code>
+     * <code>optional int32 curr_epoch = 2;</code>
      * @return The currEpoch.
      */
     @java.lang.Override
@@ -576,7 +576,7 @@ private static final long serialVersionUID = 0L;
       return currEpoch_;
     }
     /**
-     * <code>optional uint32 curr_epoch = 2;</code>
+     * <code>optional int32 curr_epoch = 2;</code>
      * @param value The currEpoch to set.
      * @return This builder for chaining.
      */
@@ -587,7 +587,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>optional uint32 curr_epoch = 2;</code>
+     * <code>optional int32 curr_epoch = 2;</code>
      * @return This builder for chaining.
      */
     public Builder clearCurrEpoch() {
@@ -599,7 +599,7 @@ private static final long serialVersionUID = 0L;
 
     private int totalEpoch_ ;
     /**
-     * <code>optional uint32 total_epoch = 3;</code>
+     * <code>optional int32 total_epoch = 3;</code>
      * @return Whether the totalEpoch field is set.
      */
     @java.lang.Override
@@ -607,7 +607,7 @@ private static final long serialVersionUID = 0L;
       return ((bitField0_ & 0x00000004) != 0);
     }
     /**
-     * <code>optional uint32 total_epoch = 3;</code>
+     * <code>optional int32 total_epoch = 3;</code>
      * @return The totalEpoch.
      */
     @java.lang.Override
@@ -615,7 +615,7 @@ private static final long serialVersionUID = 0L;
       return totalEpoch_;
     }
     /**
-     * <code>optional uint32 total_epoch = 3;</code>
+     * <code>optional int32 total_epoch = 3;</code>
      * @param value The totalEpoch to set.
      * @return This builder for chaining.
      */
@@ -626,7 +626,7 @@ private static final long serialVersionUID = 0L;
       return this;
     }
     /**
-     * <code>optional uint32 total_epoch = 3;</code>
+     * <code>optional int32 total_epoch = 3;</code>
      * @return This builder for chaining.
      */
     public Builder clearTotalEpoch() {

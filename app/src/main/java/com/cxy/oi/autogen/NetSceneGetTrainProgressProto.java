@@ -37,7 +37,7 @@ public final class NetSceneGetTrainProgressProto {
       "negettrainprogress\"*\n\033NetSceneGetTrainPr" +
       "ogressReq\022\013\n\003nop\030\001 \001(\010\"[\n\034NetSceneGetTra" +
       "inProgressResp\022\022\n\nis_running\030\001 \001(\010\022\022\n\ncu" +
-      "rr_epoch\030\002 \001(\r\022\023\n\013total_epoch\030\003 \001(\rB5\n\022c" +
+      "rr_epoch\030\002 \001(\005\022\023\n\013total_epoch\030\003 \001(\005B5\n\022c" +
       "om.cxy.oi.autogenB\035NetSceneGetTrainProgr" +
       "essProtoP\001"
     };
