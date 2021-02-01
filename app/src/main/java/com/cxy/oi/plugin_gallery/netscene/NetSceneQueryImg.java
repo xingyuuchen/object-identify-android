@@ -59,7 +59,7 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd {
 
     @Override
     public void onLocalErr(int errCode) {
-        checkLocalErrCodeAndShowToast(errCode);
+        super.onLocalErr(errCode);
         if (imgData == null) {
             Log.e(TAG, "[onLocalErr] imgData == null");
         }

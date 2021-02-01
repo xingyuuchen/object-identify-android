@@ -3,13 +3,10 @@ package com.cxy.oi.app.ui;
 import android.Manifest;
 import android.app.Activity;
 import android.app.Service;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.ServiceConnection;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.os.IBinder;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -34,11 +31,10 @@ import com.cxy.oi.kernel.network.CoreService;
 import com.cxy.oi.kernel.network.CoreServiceConnection;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
+import com.cxy.oi.plugin_gallery.netscene.NetSceneGetTrainProgress;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
-import com.tencent.mars.app.AppLogic;
-import com.tencent.mars.stn.StnLogic;
 
 import java.io.File;
 
@@ -92,6 +88,14 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), AlbumPreviewUI.class);
                 startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_CODE);
+            }
+        });
+        goToGalleryPreviewIv.setOnLongClickListener(new View.OnLongClickListener() {
+            @Override
+            public boolean onLongClick(View v) {
+                NetSceneGetTrainProgress scene = new NetSceneGetTrainProgress(LauncherUI.this);
+                OIKernel.getNetSceneQueue().doScene(scene);
+                return true;
             }
         });
 

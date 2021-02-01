@@ -1,0 +1,24 @@
+syntax = "proto2";
+
+package netscenegettrainprogress;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "NetSceneGetTrainProgressProto";
+
+option java_multiple_files = true;
+
+
+message NetSceneGetTrainProgressReq {
+  optional bool nop = 1;  // no req body, this is for padding.
+
+}
+
+
+message NetSceneGetTrainProgressResp {
+  optional bool is_running = 1;
+  optional uint32 curr_epoch = 2;
+  optional uint32 total_epoch = 3;
+
+}
+

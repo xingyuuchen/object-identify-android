@@ -21,7 +21,10 @@ public abstract class NetSceneBase {
 
     public abstract String getTag();
 
-    public abstract void onLocalErr(int errCode);   // callback for local err
+    public void onLocalErr(int errCode) {       // callback for local err
+        checkLocalErrCodeAndShowToast(errCode);
+    }
+
 
     protected boolean checkErrCodeAndShowToast(int errCode) {
         String toast = null;
