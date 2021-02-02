@@ -39,4 +39,21 @@ public interface NetSceneGetTrainProgressRespOrBuilder extends
    * @return The totalEpoch.
    */
   int getTotalEpoch();
+
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @return A list containing the hitRates.
+   */
+  java.util.List<java.lang.Float> getHitRatesList();
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @return The count of hitRates.
+   */
+  int getHitRatesCount();
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @param index The index of the element to return.
+   * @return The hitRates at the given index.
+   */
+  float getHitRates(int index);
 }

@@ -105,9 +105,8 @@ bool StatusLine::ParseFromString(std::string &_from) {
     version_ = GetHttpVersion(res[0]);
     status_desc_ = GetHttpVersion(res[2]);
     
-    status_code_ = strtoul(res[1].c_str(), NULL, 10);
-    if (status_code_ < 0 || status_code_ > 1000) { return false; }
-    return true;
+    status_code_ = std::stoi(res[1]);
+    return !(status_code_ < 0 || status_code_ > 1000);
 }
 
 void StatusLine::AppendToBuffer(AutoBuffer &_buffer) {

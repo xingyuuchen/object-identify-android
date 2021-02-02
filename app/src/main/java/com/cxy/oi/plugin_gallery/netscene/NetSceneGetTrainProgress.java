@@ -15,6 +15,8 @@ import com.cxy.oi.kernel.network.IOnNetEnd;
 import com.cxy.oi.kernel.util.Log;
 import com.google.protobuf.InvalidProtocolBufferException;
 
+import java.util.List;
+
 
 public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd {
     private static final String TAG = "NetSceneGetTrainProgress";
@@ -69,7 +71,13 @@ public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd 
         boolean isRunning = resp.getIsRunning();
         int currEpoch = resp.getCurrEpoch();
         int totalEpoch = resp.getTotalEpoch();
-        Log.i(TAG, "isRunning:%b, currEpoch:%d, totalEpoch:%d", isRunning, currEpoch, totalEpoch);
+        int hitRatesCount = resp.getHitRatesCount();
+        List<Float> hitRates = resp.getHitRatesList();
+        Log.i(TAG, "isRunning:%b, currEpoch:%d, totalEpoch:%d, hitRatesCount:%d",
+                isRunning, currEpoch, totalEpoch, hitRatesCount);
+        for (float f : hitRates) {
+            Log.i(TAG, "hit rate: %s", f);
+        }
 
         String msg = isRunning ? "当前轮次 " + currEpoch + ", 共 " + totalEpoch + "。" : "当前无训练任务";
         showDialog("后台训练进度", msg);

@@ -89,11 +89,6 @@ public class RDispatcher extends Binder implements IDispatcher {
     }
 
 
-    @Override
-    public int testBinder(int val) {
-        return val + 1;
-    }
-
     private static int allocCallbackInfoFromPool(CommonReqResp reqResp, IOnNetEnd onNetEnd) {
         for (int netId = 0; netId < callbackPoolSize; netId++) {
             if (infoPool[netId] == null) {

@@ -16,6 +16,7 @@ private static final long serialVersionUID = 0L;
     super(builder);
   }
   private NetSceneGetTrainProgressResp() {
+    hitRates_ = emptyFloatList();
   }
 
   @java.lang.Override
@@ -64,6 +65,27 @@ private static final long serialVersionUID = 0L;
             totalEpoch_ = input.readInt32();
             break;
           }
+          case 37: {
+            if (!((mutable_bitField0_ & 0x00000008) != 0)) {
+              hitRates_ = newFloatList();
+              mutable_bitField0_ |= 0x00000008;
+            }
+            hitRates_.addFloat(input.readFloat());
+            break;
+          }
+          case 34: {
+            int length = input.readRawVarint32();
+            int limit = input.pushLimit(length);
+            if (!((mutable_bitField0_ & 0x00000008) != 0) && input.getBytesUntilLimit() > 0) {
+              hitRates_ = newFloatList();
+              mutable_bitField0_ |= 0x00000008;
+            }
+            while (input.getBytesUntilLimit() > 0) {
+              hitRates_.addFloat(input.readFloat());
+            }
+            input.popLimit(limit);
+            break;
+          }
           default: {
             if (!parseUnknownField(
                 input, unknownFields, extensionRegistry, tag)) {
@@ -79,6 +101,9 @@ private static final long serialVersionUID = 0L;
       throw new com.google.protobuf.InvalidProtocolBufferException(
           e).setUnfinishedMessage(this);
     } finally {
+      if (((mutable_bitField0_ & 0x00000008) != 0)) {
+        hitRates_.makeImmutable(); // C
+      }
       this.unknownFields = unknownFields.build();
       makeExtensionsImmutable();
     }
@@ -154,6 +179,33 @@ private static final long serialVersionUID = 0L;
     return totalEpoch_;
   }
 
+  public static final int HIT_RATES_FIELD_NUMBER = 4;
+  private com.google.protobuf.Internal.FloatList hitRates_;
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @return A list containing the hitRates.
+   */
+  @java.lang.Override
+  public java.util.List<java.lang.Float>
+      getHitRatesList() {
+    return hitRates_;
+  }
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @return The count of hitRates.
+   */
+  public int getHitRatesCount() {
+    return hitRates_.size();
+  }
+  /**
+   * <code>repeated float hit_rates = 4;</code>
+   * @param index The index of the element to return.
+   * @return The hitRates at the given index.
+   */
+  public float getHitRates(int index) {
+    return hitRates_.getFloat(index);
+  }
+
   private byte memoizedIsInitialized = -1;
   @java.lang.Override
   public final boolean isInitialized() {
@@ -177,6 +229,9 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000004) != 0)) {
       output.writeInt32(3, totalEpoch_);
     }
+    for (int i = 0; i < hitRates_.size(); i++) {
+      output.writeFloat(4, hitRates_.getFloat(i));
+    }
     unknownFields.writeTo(output);
   }
 
@@ -197,6 +252,12 @@ private static final long serialVersionUID = 0L;
     if (((bitField0_ & 0x00000004) != 0)) {
       size += com.google.protobuf.CodedOutputStream
         .computeInt32Size(3, totalEpoch_);
+    }
+    {
+      int dataSize = 0;
+      dataSize = 4 * getHitRatesList().size();
+      size += dataSize;
+      size += 1 * getHitRatesList().size();
     }
     size += unknownFields.getSerializedSize();
     memoizedSize = size;
@@ -228,6 +289,8 @@ private static final long serialVersionUID = 0L;
       if (getTotalEpoch()
           != other.getTotalEpoch()) return false;
     }
+    if (!getHitRatesList()
+        .equals(other.getHitRatesList())) return false;
     if (!unknownFields.equals(other.unknownFields)) return false;
     return true;
   }
@@ -251,6 +314,10 @@ private static final long serialVersionUID = 0L;
     if (hasTotalEpoch()) {
       hash = (37 * hash) + TOTAL_EPOCH_FIELD_NUMBER;
       hash = (53 * hash) + getTotalEpoch();
+    }
+    if (getHitRatesCount() > 0) {
+      hash = (37 * hash) + HIT_RATES_FIELD_NUMBER;
+      hash = (53 * hash) + getHitRatesList().hashCode();
     }
     hash = (29 * hash) + unknownFields.hashCode();
     memoizedHashCode = hash;
@@ -391,6 +458,8 @@ private static final long serialVersionUID = 0L;
       bitField0_ = (bitField0_ & ~0x00000002);
       totalEpoch_ = 0;
       bitField0_ = (bitField0_ & ~0x00000004);
+      hitRates_ = emptyFloatList();
+      bitField0_ = (bitField0_ & ~0x00000008);
       return this;
     }
 
@@ -431,6 +500,11 @@ private static final long serialVersionUID = 0L;
         result.totalEpoch_ = totalEpoch_;
         to_bitField0_ |= 0x00000004;
       }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        hitRates_.makeImmutable();
+        bitField0_ = (bitField0_ & ~0x00000008);
+      }
+      result.hitRates_ = hitRates_;
       result.bitField0_ = to_bitField0_;
       onBuilt();
       return result;
@@ -488,6 +562,16 @@ private static final long serialVersionUID = 0L;
       }
       if (other.hasTotalEpoch()) {
         setTotalEpoch(other.getTotalEpoch());
+      }
+      if (!other.hitRates_.isEmpty()) {
+        if (hitRates_.isEmpty()) {
+          hitRates_ = other.hitRates_;
+          bitField0_ = (bitField0_ & ~0x00000008);
+        } else {
+          ensureHitRatesIsMutable();
+          hitRates_.addAll(other.hitRates_);
+        }
+        onChanged();
       }
       this.mergeUnknownFields(other.unknownFields);
       onChanged();
@@ -632,6 +716,85 @@ private static final long serialVersionUID = 0L;
     public Builder clearTotalEpoch() {
       bitField0_ = (bitField0_ & ~0x00000004);
       totalEpoch_ = 0;
+      onChanged();
+      return this;
+    }
+
+    private com.google.protobuf.Internal.FloatList hitRates_ = emptyFloatList();
+    private void ensureHitRatesIsMutable() {
+      if (!((bitField0_ & 0x00000008) != 0)) {
+        hitRates_ = mutableCopy(hitRates_);
+        bitField0_ |= 0x00000008;
+       }
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @return A list containing the hitRates.
+     */
+    public java.util.List<java.lang.Float>
+        getHitRatesList() {
+      return ((bitField0_ & 0x00000008) != 0) ?
+               java.util.Collections.unmodifiableList(hitRates_) : hitRates_;
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @return The count of hitRates.
+     */
+    public int getHitRatesCount() {
+      return hitRates_.size();
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @param index The index of the element to return.
+     * @return The hitRates at the given index.
+     */
+    public float getHitRates(int index) {
+      return hitRates_.getFloat(index);
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @param index The index to set the value at.
+     * @param value The hitRates to set.
+     * @return This builder for chaining.
+     */
+    public Builder setHitRates(
+        int index, float value) {
+      ensureHitRatesIsMutable();
+      hitRates_.setFloat(index, value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @param value The hitRates to add.
+     * @return This builder for chaining.
+     */
+    public Builder addHitRates(float value) {
+      ensureHitRatesIsMutable();
+      hitRates_.addFloat(value);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @param values The hitRates to add.
+     * @return This builder for chaining.
+     */
+    public Builder addAllHitRates(
+        java.lang.Iterable<? extends java.lang.Float> values) {
+      ensureHitRatesIsMutable();
+      com.google.protobuf.AbstractMessageLite.Builder.addAll(
+          values, hitRates_);
+      onChanged();
+      return this;
+    }
+    /**
+     * <code>repeated float hit_rates = 4;</code>
+     * @return This builder for chaining.
+     */
+    public Builder clearHitRates() {
+      hitRates_ = emptyFloatList();
+      bitField0_ = (bitField0_ & ~0x00000008);
       onChanged();
       return this;
     }

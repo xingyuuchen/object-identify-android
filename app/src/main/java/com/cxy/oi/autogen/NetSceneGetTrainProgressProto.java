@@ -35,11 +35,11 @@ public final class NetSceneGetTrainProgressProto {
     java.lang.String[] descriptorData = {
       "\n\036netscenegettrainprogress.proto\022\030netsce" +
       "negettrainprogress\"*\n\033NetSceneGetTrainPr" +
-      "ogressReq\022\013\n\003nop\030\001 \001(\010\"[\n\034NetSceneGetTra" +
+      "ogressReq\022\013\n\003nop\030\001 \001(\010\"n\n\034NetSceneGetTra" +
       "inProgressResp\022\022\n\nis_running\030\001 \001(\010\022\022\n\ncu" +
-      "rr_epoch\030\002 \001(\005\022\023\n\013total_epoch\030\003 \001(\005B5\n\022c" +
-      "om.cxy.oi.autogenB\035NetSceneGetTrainProgr" +
-      "essProtoP\001"
+      "rr_epoch\030\002 \001(\005\022\023\n\013total_epoch\030\003 \001(\005\022\021\n\th" +
+      "it_rates\030\004 \003(\002B5\n\022com.cxy.oi.autogenB\035Ne" +
+      "tSceneGetTrainProgressProtoP\001"
     };
     descriptor = com.google.protobuf.Descriptors.FileDescriptor
       .internalBuildGeneratedFileFrom(descriptorData,
@@ -56,7 +56,7 @@ public final class NetSceneGetTrainProgressProto {
     internal_static_netscenegettrainprogress_NetSceneGetTrainProgressResp_fieldAccessorTable = new
       com.google.protobuf.GeneratedMessageV3.FieldAccessorTable(
         internal_static_netscenegettrainprogress_NetSceneGetTrainProgressResp_descriptor,
-        new java.lang.String[] { "IsRunning", "CurrEpoch", "TotalEpoch", });
+        new java.lang.String[] { "IsRunning", "CurrEpoch", "TotalEpoch", "HitRates", });
   }
 
   // @@protoc_insertion_point(outer_class_scope)

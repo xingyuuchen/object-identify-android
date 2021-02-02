@@ -19,6 +19,7 @@ message NetSceneGetTrainProgressResp {
   optional bool is_running = 1;
   optional int32 curr_epoch = 2;
   optional int32 total_epoch = 3;
+  repeated float hit_rates = 4;
 
 }
 
