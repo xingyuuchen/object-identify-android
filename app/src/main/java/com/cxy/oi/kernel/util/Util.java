@@ -12,7 +12,9 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 
 public class Util {
     private static final String TAG = "Util";
@@ -35,6 +37,10 @@ public class Util {
 
     public static byte[] nullAsNil(byte[] bytes) {
         return bytes != null ? bytes : new byte[0];
+    }
+
+    public static List<Object> nullAsNil(List<Object> objects) {
+        return objects != null ? objects : new ArrayList<>();
     }
 
     public static String nullAs(String s, String as) {

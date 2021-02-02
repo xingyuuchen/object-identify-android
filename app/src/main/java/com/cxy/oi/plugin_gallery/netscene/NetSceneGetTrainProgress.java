@@ -1,18 +1,20 @@
 package com.cxy.oi.plugin_gallery.netscene;
 
-import android.app.AlertDialog;
+import android.app.Dialog;
 import android.content.Context;
-import android.content.DialogInterface;
+import android.view.View;
 
 import com.cxy.oi.R;
 import com.cxy.oi.autogen.NetSceneGetTrainProgressReq;
 import com.cxy.oi.autogen.NetSceneGetTrainProgressResp;
+import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.network.IOnNetEnd;
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.plugin_chart.IPluginChart;
 import com.google.protobuf.InvalidProtocolBufferException;
 
 import java.util.List;
@@ -79,22 +81,31 @@ public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd 
             Log.i(TAG, "hit rate: %s", f);
         }
 
-        String msg = isRunning ? "当前轮次 " + currEpoch + ", 共 " + totalEpoch + "。" : "当前无训练任务";
-        showDialog("后台训练进度", msg);
+        String title, subtitle;
+        if (isRunning && resp.getHitRatesCount() > 0) {
+            title = "后台训练进度";
+            subtitle = "当前轮次" + currEpoch + ", 共 " + totalEpoch + "。";
+        } else {
+            title = "当前无训练任务";
+            subtitle = "当前轮次 0 / 0";
+        }
+        showTrainDialog(title, subtitle, hitRates);
     }
 
-    private void showDialog(String title, String msg) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(mContext)
-                .setTitle(title)
-                .setMessage(msg)
-                .setIcon(R.drawable.icon_findmore_active)
-                .setPositiveButton("我知道了", new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialog, int which) {
-                        dialog.dismiss();
-                    }
-                });
-        builder.show();
+    private void showTrainDialog(String title, String subtitle, List<Float> hitRates) {
+        final Dialog dialog = new Dialog(mContext);
+        dialog.setCancelable(true);
+        dialog.setCanceledOnTouchOutside(true);
+        View progressChartView = OIKernel.plugin(IPluginChart.class)
+                .createTrainProgressChartView(mContext, title, subtitle, hitRates);
+        progressChartView.findViewById(R.id.ok_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                dialog.dismiss();
+            }
+        });
+        dialog.setContentView(progressChartView);
+        dialog.show();
     }
 
 }
