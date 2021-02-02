@@ -5,8 +5,9 @@
     <string name="find_more">发现</string>
     <string name="search_history">搜索历史</string>
     <string name="quick_search">快速查询</string>
-
-
+    <string name="train_detail">后台训练详情</string>
+    <string name="no_hit_rates">后台无hitRates</string>
+    <string name="i_know">我知道了</string>
     <string name="item_name">搜索物品</string>
     <string name="search_time">时间: %s</string>
     <string name="preview">预览</string>

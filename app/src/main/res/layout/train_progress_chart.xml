@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:orientation="vertical" >
+
+    <TextView
+        android:id="@+id/train_progress_tv"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/train_detail"
+        android:textSize="16sp"
+        android:layout_marginStart="@dimen/shadow_width"
+        android:paddingTop="@dimen/btn_corner"
+        android:paddingBottom="@dimen/btn_corner"
+        />
+
+    <com.github.aachartmodel.aainfographics.aachartcreator.AAChartView
+        android:id="@+id/progress_chart"
+        android:layout_height="300dp"
+        android:layout_width="match_parent"
+        />
+
+    <Button
+        android:id="@+id/ok_btn"
+        android:layout_width="match_parent"
+        android:layout_height="45dp"
+        android:text="@string/i_know"
+        android:textColor="@color/dark_green"
+        android:textSize="16sp"
+        android:singleLine="true"
+        android:textStyle="bold"
+        />
+</LinearLayout>
+
