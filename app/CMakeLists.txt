@@ -1,8 +1,7 @@
 project(oi_native)
 
 # custom your boost location here
-set(boost_location /Users/cxy/Downloads/boost_1_66_0)
-#set(boost_location /usr/local/include)
+set(boost_location /usr/local/include)
 
 cmake_minimum_required(VERSION 3.4.1)
 

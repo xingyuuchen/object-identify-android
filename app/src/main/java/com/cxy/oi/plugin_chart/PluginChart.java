@@ -50,7 +50,7 @@ public class PluginChart implements IPluginChart {
                 .backgroundColor("#08D160")
                 .dataLabelsEnabled(true)
                 .series(elements)
-                .setYAxisTitle("Hit Rate");
+                .setYAxisTitle("Accuracy");
         chart.aa_drawChartWithChartModel(model);
         return lv;
     }
