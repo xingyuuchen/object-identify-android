@@ -1,6 +1,6 @@
 #include <string.h>
 #include "c2java.h"
-#include "log.h"
+#include "utils/log.h"
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env) {

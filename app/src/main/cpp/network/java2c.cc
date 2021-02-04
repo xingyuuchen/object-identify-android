@@ -4,7 +4,7 @@
 #include "shortlink.h"
 #include <pthread.h>
 #include "c2java.h"
-#include "log.h"
+#include "utils/log.h"
 
 //#define DEBUG
 

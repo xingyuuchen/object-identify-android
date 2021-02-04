@@ -1,5 +1,4 @@
 #include "thread.h"
-#include "log.h"
 
 
 void Thread::Start() {

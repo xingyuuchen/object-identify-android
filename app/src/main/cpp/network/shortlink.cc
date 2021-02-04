@@ -1,7 +1,7 @@
 #include "shortlink.h"
 #include <pthread.h>
 #include <boost/bind.hpp>
-#include "log.h"
+#include "utils/log.h"
 #include "http/httprequest.h"
 #include "http/httpresponse.h"
 #include <map>

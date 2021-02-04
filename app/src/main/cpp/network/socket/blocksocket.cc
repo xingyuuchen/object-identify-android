@@ -1,6 +1,6 @@
 #include "blocksocket.h"
-#include "../log.h"
-#include "../time/timeutil.h"
+#include "../utils/log.h"
+#include "../utils/timeutil.h"
 
 
 size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,

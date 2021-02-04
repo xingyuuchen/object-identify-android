@@ -1,7 +1,7 @@
 #include "headerfield.h"
-#include "../log.h"
+#include "../utils/log.h"
 #include <string.h>
-#include "../strutil.h"
+#include "../utils/strutil.h"
 
 
 namespace http {
