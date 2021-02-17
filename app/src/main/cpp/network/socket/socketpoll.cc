@@ -27,6 +27,7 @@ void SocketPoll::SetEventRead(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLIN;
@@ -44,6 +45,7 @@ void SocketPoll::SetEventWrite(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLOUT;
@@ -61,6 +63,7 @@ void SocketPoll::SetEventError(SOCKET _socket) {
     if (_socket < 0) {
         return;
     }
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         find->events |= POLLERR;
@@ -75,12 +78,14 @@ void SocketPoll::SetEventError(SOCKET _socket) {
 }
 
 void SocketPoll::ClearEvents() {
+    std::unique_lock<std::mutex> lock(mutex_);
     for (pollfd &fd : pollfds_) {
         fd.revents = 0;
     }
 }
 
 bool SocketPoll::IsReadSet(SOCKET _socket) {
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find == pollfds_.end()) {
         return false;
@@ -89,6 +94,7 @@ bool SocketPoll::IsReadSet(SOCKET _socket) {
 }
 
 bool SocketPoll::IsErrSet(SOCKET _socket) {
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find == pollfds_.end()) {
         return false;
@@ -97,6 +103,7 @@ bool SocketPoll::IsErrSet(SOCKET _socket) {
 }
 
 void SocketPoll::RemoveSocket(SOCKET _socket) {
+    std::unique_lock<std::mutex> lock(mutex_);
     auto find = __FindPollfd(_socket);
     if (find != pollfds_.end()) {
         pollfds_.erase(find);

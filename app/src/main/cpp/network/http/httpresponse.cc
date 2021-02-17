@@ -20,13 +20,12 @@ void Pack(http::THttpVersion _http_ver, int _resp_code, std::string &_status_des
     
     HeaderField header_field;
     for (auto iter = _headers.begin(); iter != _headers.end(); iter++) {
-        header_field.InsertOrUpdateHeader(iter->first, iter->second);
+        header_field.InsertOrUpdate(iter->first, iter->second);
     }
-    header_field.InsertOrUpdateHeader(HeaderField::KConnection, HeaderField::KConnectionClose);
     
     char len_str[9] = {0, };
     snprintf(len_str, sizeof(len_str), "%zu", _send_body.Length());
-    header_field.InsertOrUpdateHeader(HeaderField::KContentLength, len_str);
+    header_field.InsertOrUpdate(HeaderField::KContentLength, len_str);
     
     header_field.AppendToBuffer(_out_buff);
     _out_buff.Write(_send_body.Ptr(), _send_body.Length());

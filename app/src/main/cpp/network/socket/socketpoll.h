@@ -5,6 +5,7 @@
 #include <vector>
 #include <poll.h>
 #include "unix_socket.h"
+#include <mutex>
 
 
 class SocketPoll {
@@ -44,6 +45,7 @@ class SocketPoll {
   private:
     std::vector<pollfd> pollfds_;
     int                 errno_;
+    std::mutex          mutex_;
     
 };
 

@@ -57,6 +57,10 @@ class RequestLine {
     
     void SetMethod(THttpMethod _method);
     
+    THttpMethod GetMethod() const;
+    
+    THttpVersion GetVersion() const;
+    
     void SetVersion(THttpVersion _version);
     
     void ToString(std::string &_target);

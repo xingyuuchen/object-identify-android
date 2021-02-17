@@ -68,6 +68,9 @@ void RequestLine::AppendToBuffer(AutoBuffer &_buffer) {
     _buffer.Write(str.data(), str.size());
 }
 
+THttpMethod RequestLine::GetMethod() const { return method_; }
+
+THttpVersion RequestLine::GetVersion() const { return version_; }
 
 
 

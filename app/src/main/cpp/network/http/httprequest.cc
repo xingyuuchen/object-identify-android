@@ -20,15 +20,15 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
     request_line.AppendToBuffer(_out_buff);
     
     HeaderField header_field;
+    header_field.InsertOrUpdate(HeaderField::KHost, _host);
+    header_field.InsertOrUpdate(HeaderField::KConnection, HeaderField::KConnectionClose);
     for (auto iter = _headers.begin(); iter != _headers.end(); iter++) {
-        header_field.InsertOrUpdateHeader(iter->first, iter->second);
+        header_field.InsertOrUpdate(iter->first, iter->second);
     }
-    header_field.InsertOrUpdateHeader(HeaderField::KHost, _host);
-    header_field.InsertOrUpdateHeader(HeaderField::KConnection, HeaderField::KConnectionClose);
     
     char len_str[9] = {0, };
     snprintf(len_str, sizeof(len_str), "%zu", _send_body.Length());
-    header_field.InsertOrUpdateHeader(HeaderField::KContentLength, len_str);
+    header_field.InsertOrUpdate(HeaderField::KContentLength, len_str);
     
     header_field.AppendToBuffer(_out_buff);
     _out_buff.Write(_send_body.Ptr(), _send_body.Length());
@@ -44,6 +44,7 @@ Parser::Parser()
         
 
 void Parser::__ResolveRequestLine(AutoBuffer &_buff) {
+    LogI("[req::Parser::__ResolveRequestLine]")
     char *start = _buff.Ptr();
     char *crlf = oi::strnstr(start, "\r\n", _buff.Length());
     if (crlf != NULL) {
@@ -66,6 +67,7 @@ void Parser::__ResolveRequestLine(AutoBuffer &_buff) {
 }
 
 void Parser::__ResolveRequestHeaders(AutoBuffer &_buff) {
+    LogI("[req::Parser::__ResolveRequestHeaders]")
     char *ret = oi::strnstr(_buff.Ptr(resolved_len_),
                     "\r\n\r\n", _buff.Length() - resolved_len_);
     if (ret == NULL) { return; }
@@ -75,10 +77,12 @@ void Parser::__ResolveRequestHeaders(AutoBuffer &_buff) {
     if (headers_.ParseFromString(headers_str)) {
         resolved_len_ += ret - _buff.Ptr(resolved_len_) + 4;  // 4 for \r\n\r\n
         request_header_len_ = resolved_len_ - request_line_len_;
-        position_ = kBody;
         
         if (_buff.Length() > resolved_len_) {
+            position_ = kBody;
             __ResolveBody(_buff);
+        } else if (request_line_.GetMethod() == http::THttpMethod::kGET) {
+            position_ = kEnd;
         }
     } else {
         position_ = kError;
@@ -87,9 +91,11 @@ void Parser::__ResolveRequestHeaders(AutoBuffer &_buff) {
 }
 
 void Parser::__ResolveBody(AutoBuffer &_buff) {
+    LogI("[req::Parser::__ResolveBody]")
     uint64_t content_length = headers_.GetContentLength();
+    LogI("?????? %llu", content_length)
     if (content_length == 0) {
-        LogI("[req::Parser::Recv] content_length = 0")
+        LogI("[req::Parser::Recv] Content-Length = 0")
         position_ = kError;
         return;
     }
@@ -117,18 +123,15 @@ void Parser::Recv(AutoBuffer &_buff) {
     }
     
     if (position_ == kNone) {
-        LogI("[req::Parser::Recv] kNone")
         if (resolved_len_ == 0 && _buff.Length() > 0) {
             position_ = kRequestLine;
             __ResolveRequestLine(_buff);
         }
         
     } else if (position_ == kRequestLine) {
-        LogI("[req::Parser::Recv] kRequestLine")
         __ResolveRequestLine(_buff);
     
     } else if (position_ == kRequestHeaders) {
-        LogI("[req::Parser::Recv] kRequestHeaders")
         __ResolveRequestHeaders(_buff);
     
     } else if (position_ == kBody) {
