@@ -36,7 +36,7 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
         } else {
             
             if (_socket_poll.IsReadSet(_socket)) {
-                ssize_t n = recv(_socket, _recv_buff.Ptr(_recv_buff.Length()),
+                ssize_t n = ::recv(_socket, _recv_buff.Ptr(_recv_buff.Length()),
                                  _buff_size - nrecv, 0);
                 
                 if (n > 0) {
