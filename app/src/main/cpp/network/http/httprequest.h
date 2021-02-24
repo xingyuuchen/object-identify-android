@@ -10,7 +10,8 @@
 namespace http { namespace request {
 
 
-void Pack(const std::string &_host, const std::string &_url, const std::map<std::string, std::string> &_headers,
+void Pack(const std::string &_host, const std::string &_url,
+          const std::map<std::string, std::string> &_headers,
           AutoBuffer &_send_body, AutoBuffer &_out_buff);
 
 
@@ -27,13 +28,13 @@ class Parser {
         kError,
     };
     
-    void Recv(AutoBuffer &_buff);
+    void DoParse();
 
-    void __ResolveRequestLine(AutoBuffer &_buff);
+    void __ResolveRequestLine();
     
-    void __ResolveRequestHeaders(AutoBuffer &_buff);
+    void __ResolveRequestHeaders();
     
-    void __ResolveBody(AutoBuffer &_buff);
+    void __ResolveBody();
     
     bool IsEnd() const;
     
@@ -41,16 +42,19 @@ class Parser {
     
     TPosition GetPosition() const;
     
-    AutoBuffer &GetBody();
+    AutoBuffer *GetBody();
+    
+    AutoBuffer *GetBuff();
     
   private:
     TPosition                               position_;
     http::RequestLine                       request_line_;
     http::HeaderField                       headers_;
-    size_t                                  request_line_len_;      // debug only
-    size_t                                  request_header_len_;    // debug only
+    size_t                                  request_line_len_;
+    size_t                                  request_header_len_;
     size_t                                  resolved_len_;
     AutoBuffer                              body_;
+    AutoBuffer                              buff_;
     
 };
 

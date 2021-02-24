@@ -15,7 +15,7 @@ enum THttpMethod {
     // ...
     kMethodMax,
 };
-static const char *const method2string[kMethodMax] = {
+const char *const method2string[kMethodMax] = {
         "unknown",
         "GET",
         "POST",
@@ -32,7 +32,7 @@ enum THttpVersion {
     kVersionMax,
 };
 
-static const char *const version2string[kVersionMax] = {
+const char *const version2string[kVersionMax] = {
         "unknown",
         "HTTP/0.9",
         "HTTP/1.0",
@@ -41,9 +41,9 @@ static const char *const version2string[kVersionMax] = {
 };
 
 
-static THttpMethod GetHttpMethod(const std::string &_str);
+THttpMethod GetHttpMethod(const std::string &_str);
 
-static THttpVersion GetHttpVersion(const std::string &_str);
+THttpVersion GetHttpVersion(const std::string &_str);
 
 
 

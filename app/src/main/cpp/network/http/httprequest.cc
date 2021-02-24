@@ -1,8 +1,8 @@
+#include <string.h>
 #include "httprequest.h"
 #include "firstline.h"
 #include "headerfield.h"
 #include "../utils/log.h"
-#include <string.h>
 #include "../utils/strutil.h"
 
 
@@ -43,10 +43,10 @@ Parser::Parser()
     , request_header_len_(0) {}
         
 
-void Parser::__ResolveRequestLine(AutoBuffer &_buff) {
+void Parser::__ResolveRequestLine() {
     LogI("[req::Parser::__ResolveRequestLine]")
-    char *start = _buff.Ptr();
-    char *crlf = oi::strnstr(start, "\r\n", _buff.Length());
+    char *start = buff_.Ptr();
+    char *crlf = oi::strnstr(start, "\r\n", buff_.Length());
     if (crlf != NULL) {
         std::string req_line(start, crlf - start);
         if (request_line_.ParseFromString(req_line)) {
@@ -54,8 +54,8 @@ void Parser::__ResolveRequestLine(AutoBuffer &_buff) {
             resolved_len_ = crlf - start + 2;   // 2 for CRLF
             request_line_len_ = resolved_len_;
     
-            if (_buff.Length() > resolved_len_) {
-                __ResolveRequestHeaders(_buff);
+            if (buff_.Length() > resolved_len_) {
+                __ResolveRequestHeaders();
             }
             return;
             
@@ -66,23 +66,23 @@ void Parser::__ResolveRequestLine(AutoBuffer &_buff) {
     resolved_len_ = 0;
 }
 
-void Parser::__ResolveRequestHeaders(AutoBuffer &_buff) {
+void Parser::__ResolveRequestHeaders() {
     LogI("[req::Parser::__ResolveRequestHeaders]")
-    char *ret = oi::strnstr(_buff.Ptr(resolved_len_),
-                    "\r\n\r\n", _buff.Length() - resolved_len_);
+    char *ret = oi::strnstr(buff_.Ptr(resolved_len_),
+                    "\r\n\r\n", buff_.Length() - resolved_len_);
     if (ret == NULL) { return; }
     
-    std::string headers_str(_buff.Ptr(resolved_len_), ret - _buff.Ptr(resolved_len_));
+    std::string headers_str(buff_.Ptr(resolved_len_), ret - buff_.Ptr(resolved_len_));
     
     if (headers_.ParseFromString(headers_str)) {
-        resolved_len_ += ret - _buff.Ptr(resolved_len_) + 4;  // 4 for \r\n\r\n
+        resolved_len_ += ret - buff_.Ptr(resolved_len_) + 4;  // 4 for \r\n\r\n
         request_header_len_ = resolved_len_ - request_line_len_;
         
-        if (_buff.Length() > resolved_len_) {
-            position_ = kBody;
-            __ResolveBody(_buff);
-        } else if (request_line_.GetMethod() == http::THttpMethod::kGET) {
+        if (request_line_.GetMethod() == http::THttpMethod::kGET) {
             position_ = kEnd;
+        } else if (buff_.Length() > resolved_len_) {
+            position_ = kBody;
+            __ResolveBody();
         }
     } else {
         position_ = kError;
@@ -90,56 +90,55 @@ void Parser::__ResolveRequestHeaders(AutoBuffer &_buff) {
     }
 }
 
-void Parser::__ResolveBody(AutoBuffer &_buff) {
+void Parser::__ResolveBody() {
     LogI("[req::Parser::__ResolveBody]")
     uint64_t content_length = headers_.GetContentLength();
-    LogI("?????? %llu", content_length)
     if (content_length == 0) {
-        LogI("[req::Parser::Recv] Content-Length = 0")
+        LogE("[req::Parser::Recv] Content-Length = 0")
         position_ = kError;
         return;
     }
-    size_t new_size = _buff.Length() - resolved_len_;
-    body_.Write(_buff.Ptr(resolved_len_), new_size);
+    size_t new_size = buff_.Length() - resolved_len_;
+//    body_.Write(buff_.Ptr(resolved_len_), new_size);
     resolved_len_ += new_size;
     
-    if (content_length < body_.Length()) {
-        LogI("[req::Parser::__ResolveBody] recv more %zd bytes than Content-Length(%lld)",
-             body_.Length(), content_length)
+    size_t curr_body_len = buff_.Length() - request_line_len_ - request_header_len_;
+    if (content_length < curr_body_len) {
+        LogI("[req::Parser::__ResolveBody] recv more bytes than"
+             " Content-Length(%lld)", content_length)
         position_ = kError;
-    } else if (content_length == body_.Length()) {
+    } else if (content_length == curr_body_len) {
         position_ = kEnd;
     }
 
 }
 
 
-void Parser::Recv(AutoBuffer &_buff) {
-    if (_buff.Length() <= 0) { return; }
-    size_t unresolved_len = _buff.Length() - resolved_len_;
+void Parser::DoParse() {
+    size_t unresolved_len = buff_.Length() - resolved_len_;
     if (unresolved_len <= 0) {
-        LogI("[req::Parser::Recv] no bytes need to be resolved: %zd", unresolved_len)
+        LogI("[req::Parser::DoParse] no bytes need to be resolved: %zd", unresolved_len)
         return;
     }
     
     if (position_ == kNone) {
-        if (resolved_len_ == 0 && _buff.Length() > 0) {
+        if (resolved_len_ == 0 && buff_.Length() > 0) {
             position_ = kRequestLine;
-            __ResolveRequestLine(_buff);
+            __ResolveRequestLine();
         }
         
     } else if (position_ == kRequestLine) {
-        __ResolveRequestLine(_buff);
-    
+        __ResolveRequestLine();
+        
     } else if (position_ == kRequestHeaders) {
-        __ResolveRequestHeaders(_buff);
-    
+        __ResolveRequestHeaders();
+        
     } else if (position_ == kBody) {
-        __ResolveBody(_buff);
-    
+        __ResolveBody();
+        
     } else if (position_ == kEnd) {
         LogI("[req::Parser::Recv] kEnd")
-    
+        
     } else if (position_ == kError) {
         LogI("[req::Parser::Recv] error already occurred, do nothing.")
     }
@@ -152,7 +151,22 @@ bool Parser::IsErr() const { return position_ == kError; }
 
 Parser::TPosition Parser::GetPosition() const { return position_; }
 
-AutoBuffer &Parser::GetBody() { return body_; }
+AutoBuffer *Parser::GetBuff() { return &buff_; }
+
+AutoBuffer *Parser::GetBody() {
+    if (request_line_.GetMethod() == http::THttpMethod::kGET) {
+        LogI("[Parser::GetBody] GET, no http body, return NULL")
+        return NULL;
+    }
+    size_t content_len = headers_.GetContentLength();
+    if (content_len <= 0) {
+        LogE("[Parser::GetBody] content_len <= 0, return NULL")
+        return NULL;
+    }
+    body_.SetPtr(buff_.Ptr(buff_.Length() - content_len));
+    body_.SetLength(content_len);
+    return &body_;
+}
 
 }}
 

@@ -52,14 +52,14 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                         orderly shutdown, the value 0 is
                         returned.
                      */
-                    LogI("[BlockSocketReceive] n == 0, nrecv = %zd", nrecv)
+                    LogI("[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
                     return 0;
                 } else {
-                    LogI("[BlockSocketReceive] n:%zd, nrecv = %zd", n, nrecv)
+                    LogI("[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
                     return nrecv;
                 }
             } else if (_socket_poll.IsErrSet(_socket)) {
-                LogI("[BlockSocketReceive] POLLERR, nrecv = %zd", nrecv)
+                LogI("[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
                 return nrecv;
             }
         }
@@ -67,4 +67,3 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
     }
     
 }
-

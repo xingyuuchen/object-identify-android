@@ -13,5 +13,4 @@ size_t BlockSocketReceive(SOCKET _socket,
                             int _timeout_mills = 5000,
                             bool _wait_full = false);
 
-
 #endif //OI_SVR_BLOCKSOCKET_H
