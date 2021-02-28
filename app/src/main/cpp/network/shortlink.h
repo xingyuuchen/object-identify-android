@@ -48,6 +48,7 @@ class ShortLink {
     AutoBuffer      recv_body_;
     u_short         port_;
     std::string     svr_inet_addr_;
+    static const char *const TAG;
 
 };
 

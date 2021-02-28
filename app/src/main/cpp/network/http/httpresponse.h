@@ -47,6 +47,7 @@ class Parser {
     void __ResolveBody(AutoBuffer &_buff);
     
   private:
+    static const char *const TAG;
     TPosition                               position_;
     http::StatusLine                        status_line_;
     http::HeaderField                       headers_;
@@ -54,7 +55,7 @@ class Parser {
     size_t                                  response_header_len_;    // debug only
     size_t                                  resolved_len_;
     AutoBuffer*                             body_;
-  
+    
 };
 
 }}

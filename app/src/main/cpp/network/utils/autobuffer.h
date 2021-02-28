@@ -38,6 +38,7 @@ class AutoBuffer {
     void ShareFromOther(bool _val);
 
   private:
+    static const char *const   TAG;
     char *              byte_array_;
     bool                share_from_other_;
     size_t              pos_;

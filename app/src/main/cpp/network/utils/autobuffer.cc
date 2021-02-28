@@ -6,6 +6,8 @@
 #include <errno.h>
 
 
+const char *const AutoBuffer::TAG = "AutoBuffer";
+
 AutoBuffer::AutoBuffer(size_t _malloc_unit_size)
         : byte_array_(NULL)
         , share_from_other_(false)
@@ -46,7 +48,7 @@ void AutoBuffer::SetPtr(char *_ptr) {
 
 void AutoBuffer::AddCapacity(size_t _size_to_add) {
     if (_size_to_add <= 0) {
-        LogE("Illegal arg _size_to_add:%zd", _size_to_add);
+        LogE(TAG, "[AddCapacity] Illegal arg _size_to_add:%zd", _size_to_add);
         return;
     }
     if (_size_to_add % malloc_unit_size_ != 0) {
@@ -55,7 +57,7 @@ void AutoBuffer::AddCapacity(size_t _size_to_add) {
     
     void *p = realloc(byte_array_, capacity_ + _size_to_add);
     if (p == NULL) {
-        LogE("[AutoBuffer::AddCapacity] realloc failed, errno(%d): %s", errno, strerror(errno));
+        LogE(TAG, "[AddCapacity] realloc failed, errno(%d): %s", errno, strerror(errno));
         free(byte_array_);
         byte_array_ = NULL;
         capacity_ = 0;

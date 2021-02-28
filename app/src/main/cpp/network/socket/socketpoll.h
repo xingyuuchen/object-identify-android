@@ -43,9 +43,10 @@ class SocketPoll {
     }
     
   private:
-    std::vector<pollfd> pollfds_;
-    int                 errno_;
-    std::mutex          mutex_;
+    static const char *const    TAG;
+    std::vector<pollfd>         pollfds_;
+    int                         errno_;
+    std::mutex                  mutex_;
     
 };
 

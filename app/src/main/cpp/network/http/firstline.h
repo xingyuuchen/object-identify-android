@@ -74,6 +74,7 @@ class RequestLine {
     THttpMethod     method_;
     std::string     url_;
     THttpVersion    version_;
+    static const char *const TAG;
     
 };
 
@@ -101,6 +102,7 @@ class StatusLine {
     THttpVersion    version_;
     int             status_code_;
     std::string     status_desc_;
+    static const char *const TAG;
 
 };
 

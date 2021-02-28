@@ -1,8 +1,8 @@
-#include <string.h>
 #include "httprequest.h"
 #include "firstline.h"
 #include "headerfield.h"
 #include "../utils/log.h"
+#include <string.h>
 #include "../utils/strutil.h"
 
 
@@ -36,6 +36,8 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
 }
 
 
+const char *const Parser::TAG = "http::req::Parser";
+
 Parser::Parser()
     : position_(TPosition::kNone)
     , resolved_len_(0)
@@ -44,7 +46,7 @@ Parser::Parser()
         
 
 void Parser::__ResolveRequestLine() {
-    LogI("[req::Parser::__ResolveRequestLine]")
+    LogI(TAG, "[__ResolveRequestLine]")
     char *start = buff_.Ptr();
     char *crlf = oi::strnstr(start, "\r\n", buff_.Length());
     if (crlf != NULL) {
@@ -67,7 +69,7 @@ void Parser::__ResolveRequestLine() {
 }
 
 void Parser::__ResolveRequestHeaders() {
-    LogI("[req::Parser::__ResolveRequestHeaders]")
+    LogI(TAG, "[__ResolveRequestHeaders]")
     char *ret = oi::strnstr(buff_.Ptr(resolved_len_),
                     "\r\n\r\n", buff_.Length() - resolved_len_);
     if (ret == NULL) { return; }
@@ -78,23 +80,23 @@ void Parser::__ResolveRequestHeaders() {
         resolved_len_ += ret - buff_.Ptr(resolved_len_) + 4;  // 4 for \r\n\r\n
         request_header_len_ = resolved_len_ - request_line_len_;
         
-        if (request_line_.GetMethod() == http::THttpMethod::kGET) {
-            position_ = kEnd;
-        } else if (buff_.Length() > resolved_len_) {
+        if (buff_.Length() > resolved_len_) {
             position_ = kBody;
             __ResolveBody();
+        } else if (request_line_.GetMethod() == http::THttpMethod::kGET) {
+            position_ = kEnd;
         }
     } else {
         position_ = kError;
-        LogE("[__ResolveRequestHeaders] headers_.ParseFromString Err")
+        LogE(TAG, "[__ResolveRequestHeaders] headers_.ParseFromString Err")
     }
 }
 
 void Parser::__ResolveBody() {
-    LogI("[req::Parser::__ResolveBody]")
+    LogI(TAG, "[__ResolveBody]")
     uint64_t content_length = headers_.GetContentLength();
     if (content_length == 0) {
-        LogE("[req::Parser::Recv] Content-Length = 0")
+        LogE(TAG, "[__ResolveBody] Content-Length = 0")
         position_ = kError;
         return;
     }
@@ -104,7 +106,7 @@ void Parser::__ResolveBody() {
     
     size_t curr_body_len = buff_.Length() - request_line_len_ - request_header_len_;
     if (content_length < curr_body_len) {
-        LogI("[req::Parser::__ResolveBody] recv more bytes than"
+        LogI(TAG, "[__ResolveBody] recv more bytes than"
              " Content-Length(%lld)", content_length)
         position_ = kError;
     } else if (content_length == curr_body_len) {
@@ -117,7 +119,7 @@ void Parser::__ResolveBody() {
 void Parser::DoParse() {
     size_t unresolved_len = buff_.Length() - resolved_len_;
     if (unresolved_len <= 0) {
-        LogI("[req::Parser::DoParse] no bytes need to be resolved: %zd", unresolved_len)
+        LogI(TAG, "[DoParse] no bytes need to be resolved: %zd", unresolved_len)
         return;
     }
     
@@ -137,10 +139,10 @@ void Parser::DoParse() {
         __ResolveBody();
         
     } else if (position_ == kEnd) {
-        LogI("[req::Parser::Recv] kEnd")
+        LogI(TAG, "[DoParse] kEnd")
         
     } else if (position_ == kError) {
-        LogI("[req::Parser::Recv] error already occurred, do nothing.")
+        LogI(TAG, "[DoParse] error already occurred, do nothing.")
     }
 }
 
@@ -155,16 +157,17 @@ AutoBuffer *Parser::GetBuff() { return &buff_; }
 
 AutoBuffer *Parser::GetBody() {
     if (request_line_.GetMethod() == http::THttpMethod::kGET) {
-        LogI("[Parser::GetBody] GET, no http body, return NULL")
+        LogI(TAG, "[GetBody] GET, no http body, return NULL")
         return NULL;
     }
     size_t content_len = headers_.GetContentLength();
     if (content_len <= 0) {
-        LogE("[Parser::GetBody] content_len <= 0, return NULL")
+        LogE(TAG, "[GetBody] content_len <= 0, return NULL")
         return NULL;
     }
     body_.SetPtr(buff_.Ptr(buff_.Length() - content_len));
     body_.SetLength(content_len);
+    body_.ShareFromOther(true);
     return &body_;
 }
 

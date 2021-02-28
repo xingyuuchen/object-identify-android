@@ -2,6 +2,7 @@
 #include <errno.h>
 
 
+const char *const SocketPoll::TAG = "SocketPoll";
 
 SocketPoll::SocketPoll()
     : errno_(0) {}

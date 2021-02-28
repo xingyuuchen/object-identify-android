@@ -8,6 +8,7 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                           size_t _buff_size,
                           int _timeout_mills/* = 5000*/,
                           bool _wait_full/* = false*/) {
+    const char *const TAG = "";
     
     uint64_t start_time = GetCurrentTimeMillis();
     
@@ -28,10 +29,10 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
         
         if (ret < 0) {
             int errno_ = _socket_poll.GetErrno();
-            LogE("[BlockSocketReceive] poll errno: %d", errno_)
+            LogE(TAG, "[BlockSocketReceive] poll errno: %d", errno_)
             return -1;
         } else if (ret == 0) {
-            LogE("[BlockSocketReceive] timeout, nrecv = %zd, poll_timeout = %d", nrecv, poll_timeout)
+            LogE(TAG, "[BlockSocketReceive] timeout, nrecv = %zd, poll_timeout = %d", nrecv, poll_timeout)
             return nrecv;
         } else {
             
@@ -52,14 +53,14 @@ size_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                         orderly shutdown, the value 0 is
                         returned.
                      */
-                    LogI("[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
+                    LogI(TAG, "[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
                     return 0;
                 } else {
-                    LogI("[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
+                    LogI(TAG, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
                     return nrecv;
                 }
             } else if (_socket_poll.IsErrSet(_socket)) {
-                LogI("[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
+                LogI(TAG, "[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
                 return nrecv;
             }
         }

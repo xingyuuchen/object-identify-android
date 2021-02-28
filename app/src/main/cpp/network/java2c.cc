@@ -10,7 +10,7 @@
 
 
 int StartTaskImpl(Task &_task, JNIEnv* env) {
-    LogI("StartTaskImpl");
+    LogI("", "[StartTaskImpl]");
 
 #ifdef DEBUG
     ShortLink short_link(_task);
@@ -18,7 +18,7 @@ int StartTaskImpl(Task &_task, JNIEnv* env) {
     ShortLink short_link(_task, "49.235.29.121");
 #endif
     int ret = C2Java_ReqToBuffer(env, short_link.GetSendBody(), short_link.GetNetId());
-    LogI("[StartTaskImpl] C2Java_ReqToBuffer ret = %d", ret);
+    LogI("", "[StartTaskImpl] C2Java_ReqToBuffer ret = %d", ret);
     if (ret >= 0) {
         short_link.DoTask();
     }

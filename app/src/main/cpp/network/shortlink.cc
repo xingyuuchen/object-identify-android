@@ -11,6 +11,8 @@
 
 const size_t kBuffSize = 1024;
 
+const char *const ShortLink::TAG = "ShortLink";
+
 ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, bool _use_proxy)
         : use_proxy_(_use_proxy)
         , task_(_task)
@@ -19,13 +21,13 @@ ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, boo
         , svr_inet_addr_(std::move(_svr_inet_addr))
         , err_code_(0)
         , socket_(INVALID_SOCKET) {
-    LogI("new ShortLink: %s %d %d", task_.cgi_.c_str(), task_.netid_, task_.retry_cnt_)
+    LogI(TAG, "new ShortLink: %s %d %d", task_.cgi_.c_str(), task_.netid_, task_.retry_cnt_)
 }
 
 
 int ShortLink::DoTask() {
     thread_.Start();
-    LogI("[Thread::Start] pthread_join ret = %d", pthread_join(GetTid(), NULL));
+    LogI(TAG, "[Thread::Start] pthread_join ret = %d", pthread_join(GetTid(), NULL));
     return 0;
 }
 
@@ -54,12 +56,12 @@ void ShortLink::DoConnect() {
     sockaddr.sin_addr.s_addr = inet_addr(svr_inet_addr_.c_str());
 
     if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
-        LogE("Connect FAILED, errCode: %d", ret);
+        LogE(TAG, "Connect FAILED, errCode: %d", ret);
         close(socket_);
         err_code_ = CONNECT_FAILED;
         return;
     }
-    LogI("connect succeed!");
+    LogI(TAG, "connect succeed!");
 }
 
 
@@ -68,15 +70,15 @@ void ShortLink::__ReadWrite() {
     std::map<std::string, std::string> empty;
     http::request::Pack(svr_inet_addr_, task_.cgi_, empty, send_body_,
                         out_buff);
-    LogI("http req header length: %zd", out_buff.Length() - send_body_.Length())
+    LogI(TAG, "http req header length: %zd", out_buff.Length() - send_body_.Length())
 //    for (size_t i = 0; i < out_buff.Length() - send_body_.Length(); i++) {
-//        LogI("0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
+//        LogI(TAG, "0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
 //    }
     send_body_.Reset();
 
     int ret = send(socket_, out_buff.Ptr(), out_buff.Length(), 0);
     if (ret < 0) {
-        LogE("[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
+        LogE(TAG, "[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
         err_code_ = SEND_FAILED;
         return;
     }
@@ -91,7 +93,7 @@ void ShortLink::__ReadWrite() {
         size_t nsize = BlockSocketReceive(socket_, recv_buff,
                 ShotLinkManager::GetInstance().GetSocketPoll(), kBuffSize);
         if (nsize <= 0) {
-            LogE("[__ReadWrite] BlockSocketReceive ret: %zd", nsize);
+            LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize);
             break;
         }
 
@@ -100,13 +102,13 @@ void ShortLink::__ReadWrite() {
         if (parser.IsEnd()) {
             break;
         } else if (parser.IsErr()) {
-            LogE("[__ReadWrite] parser.IsErr()")
+            LogE(TAG, "[__ReadWrite] parser.IsErr()")
             err_code_ = RECV_FAILED;
             break;
         }
     }
-    LogI("[__ReadWrite] http total Len: %zd", recv_buff.Length());
-    LogI("[__ReadWrite] http body Len: %zd", recv_body_.Length());
+    LogI(TAG, "[__ReadWrite] http total Len: %zd", recv_buff.Length());
+    LogI(TAG, "[__ReadWrite] http body Len: %zd", recv_body_.Length());
 
     close(socket_);
 }

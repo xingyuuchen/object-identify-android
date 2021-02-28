@@ -64,7 +64,7 @@ class Thread {
     Runnable* runnable_;
     pthread_t tid_;
     pthread_attr_t attr_;
-
+    static const char *const TAG;
 
 };
 
