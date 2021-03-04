@@ -20,15 +20,15 @@ jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
 
 jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
     jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
-    jmethodID onTaskEnd_id = env->GetStaticMethodID(clz, "onTaskEnd", "(II)I");
-    jint ret = env->CallStaticIntMethod(clz, onTaskEnd_id, _netid, _err_code);
+    jmethodID method_id = env->GetStaticMethodID(clz, "onTaskEnd", "(II)I");
+    jint ret = env->CallStaticIntMethod(clz, method_id, _netid, _err_code);
     return ret;
 }
 
 int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
     jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
-    jmethodID reqToBuffer_id = env->GetStaticMethodID(clz, "reqToBuffer", "(I)[B");
-    jbyteArray ret = (jbyteArray) env->CallStaticObjectMethod(clz, reqToBuffer_id, _net_id);
+    jmethodID method_id = env->GetStaticMethodID(clz, "reqToBuffer", "(I)[B");
+    jbyteArray ret = (jbyteArray) env->CallStaticObjectMethod(clz, method_id, _net_id);
     if (ret == NULL) {
         LogE("", "[C2Java_ReqToBuffer] ret == null");
     }
@@ -50,13 +50,20 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
 
 int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id) {
     jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
-    jmethodID bufferToResp_id = env->GetStaticMethodID(clz, "bufferToResp", "(I[B)I");
+    jmethodID method_id = env->GetStaticMethodID(clz, "bufferToResp", "(I[B)I");
 
     jbyteArray jba = env->NewByteArray(_recv_buffer.Length());
     env->SetByteArrayRegion(jba, 0,
             _recv_buffer.Length(),reinterpret_cast<const jbyte *>(_recv_buffer.Ptr()));
     LogI("", "[C2Java_BufferToResp] _recv_buffer.Length: %zu", _recv_buffer.Length());
-    jint ret = env->CallStaticIntMethod(clz, bufferToResp_id, _net_id, jba);
+    jint ret = env->CallStaticIntMethod(clz, method_id, _net_id, jba);
     env->DeleteLocalRef(jba);
+    return ret;
+}
+
+int C2Java_OnUploadProgress(JNIEnv *env, int _net_id, jlong _curr, jlong _total) {
+    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jmethodID method_id = env->GetStaticMethodID(clz, "onUploadProgress", "(IJJ)I");
+    jint ret = env->CallStaticIntMethod(clz, method_id, _net_id, _curr, _total);
     return ret;
 }

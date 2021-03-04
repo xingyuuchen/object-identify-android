@@ -25,7 +25,8 @@ public final class ConstantsUI {
     public static final class AlbumPreviewUI {
         private AlbumPreviewUI() {
         }
-        public static final int ACTIVITY_REQUEST_CODE = 123;
+        public static final int ACTIVITY_REQUEST_QUERY_IMG = 12345;
+        public static final String KQUERY_IMG_PATH = "AlbumPreviewUI.KQUERY_IMG_PATH";
         public static final int REQUEST_PERMISSION = 0;
         public static final int SPAN_COUNT = 4;
         public static final int VIEW_TYPE_IMAGE = 0;

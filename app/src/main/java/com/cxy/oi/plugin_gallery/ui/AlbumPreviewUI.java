@@ -26,7 +26,7 @@ import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
 import static com.cxy.oi.kernel.contants.ConstantsUI.AlbumPreviewUI.REQUEST_PERMISSION;
 
 public class AlbumPreviewUI extends Activity {
-    private static final String TAG = "AlbumPreviewUI";
+    private static final String TAG = "OI.AlbumPreviewUI";
 
     private RecyclerView gallery;
     private AlbumAdapter adapter;
@@ -85,19 +85,10 @@ public class AlbumPreviewUI extends Activity {
 
 
     public void doQueryImage(String imgPath) {
-        NetSceneQueryImg netScene = new NetSceneQueryImg(imgPath);
-        OIKernel.getNetSceneQueue().doScene(netScene);
+        Intent intent = new Intent();
+        intent.putExtra(ConstantsUI.AlbumPreviewUI.KQUERY_IMG_PATH, imgPath);
+        setResult(Activity.RESULT_OK, intent);
         finish();
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "[onActivityResult], requestCode: %d", requestCode);
-        if (requestCode == ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_CODE) {
-            Intent intent = getIntent();
-
-        }
     }
 
 

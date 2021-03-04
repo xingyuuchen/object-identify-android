@@ -5,8 +5,8 @@
 #include "thread.h"
 #include "socket/unix_socket.h"
 #include "utils/autobuffer.h"
-
-typedef pthread_t thread_tid;
+#include <functional>
+#include <memory>
 
 
 class ShortLink {
@@ -22,11 +22,11 @@ class ShortLink {
 
     int DoTask();
 
+    void SetUploadProgressCallback(std::shared_ptr<std::function<void(long, long)>> _progress_cb);
+
     int GetNetId() const;
 
     u_short GetPort() const;
-
-    thread_tid GetTid() const;
 
     int GetErrCode() const;
 
@@ -40,7 +40,6 @@ class ShortLink {
 
   private:
     Task            task_;
-    Thread          thread_;
     const bool      use_proxy_;
     int             err_code_;
     SOCKET          socket_;
@@ -48,6 +47,7 @@ class ShortLink {
     AutoBuffer      recv_body_;
     u_short         port_;
     std::string     svr_inet_addr_;
+    std::shared_ptr<std::function<void (long, long)>> progress_cb_;
     static const char *const TAG;
 
 };

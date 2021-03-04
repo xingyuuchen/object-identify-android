@@ -22,7 +22,7 @@ public final class NetSceneQueue implements IAppForegroundListener {
     private final OIHandler uiHandler;
     private IDispatcher dispatcher;
     private HandlerThread workerThread;
-    private OIHandler workerHandler;
+    private final OIHandler workerHandler;
 
 
     private NetSceneQueue() {
@@ -61,7 +61,6 @@ public final class NetSceneQueue implements IAppForegroundListener {
             uiHandler.sendMessageDelayed(msg, delaySeconds);
             return;
         }
-
         this.workerHandler.post(new Runnable() {
 
             @Override

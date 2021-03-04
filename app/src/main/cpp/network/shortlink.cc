@@ -1,10 +1,9 @@
 #include "shortlink.h"
-#include <pthread.h>
-#include <boost/bind.hpp>
 #include "utils/log.h"
 #include "http/httprequest.h"
 #include "http/httpresponse.h"
 #include <map>
+#include <utility>
 #include "shotlinkmanager.h"
 #include "socket/blocksocket.h"
 
@@ -16,7 +15,6 @@ const char *const ShortLink::TAG = "ShortLink";
 ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, bool _use_proxy)
         : use_proxy_(_use_proxy)
         , task_(_task)
-        , thread_(boost::bind(&ShortLink::__Run, this))
         , port_(_port)
         , svr_inet_addr_(std::move(_svr_inet_addr))
         , err_code_(0)
@@ -26,8 +24,8 @@ ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, boo
 
 
 int ShortLink::DoTask() {
-    thread_.Start();
-    LogI(TAG, "[Thread::Start] pthread_join ret = %d", pthread_join(GetTid(), NULL));
+    // TODO: async call __Run()
+    __Run();
     return 0;
 }
 
@@ -76,11 +74,25 @@ void ShortLink::__ReadWrite() {
 //    }
     send_body_.Reset();
 
-    int ret = send(socket_, out_buff.Ptr(), out_buff.Length(), 0);
-    if (ret < 0) {
-        LogE(TAG, "[__ReadWrite] send, errno: %d: \"%s\"", errno, strerror(errno));
-        err_code_ = SEND_FAILED;
-        return;
+    ssize_t nsend = 0;
+    ssize_t ntotal = out_buff.Length();
+    while (true) {
+        // FIXME: 不是真实进度
+        ssize_t n = BlockSocketSend(socket_, out_buff, 2 * kBuffSize);
+        if (n < 0) {
+            LogE(TAG, "[__ReadWrite] send, errno（%d）: %s", errno, strerror(errno));
+            err_code_ = SEND_FAILED;
+            ::close(socket_);
+            return;
+        }
+        nsend += n;
+        LogI(TAG, "[__ReadWrite] send %d/%d bytes", nsend, ntotal)
+        if (task_.care_about_progress_) {
+            (*progress_cb_)(nsend, ntotal);
+        }
+        if (ntotal <= nsend) {
+            break;
+        }
     }
 
     ShotLinkManager::GetInstance().GetSocketPoll().SetEventRead(socket_);
@@ -90,7 +102,7 @@ void ShortLink::__ReadWrite() {
     AutoBuffer recv_buff;
 
     while (true) {
-        size_t nsize = BlockSocketReceive(socket_, recv_buff,
+        ssize_t nsize = BlockSocketReceive(socket_, recv_buff,
                 ShotLinkManager::GetInstance().GetSocketPoll(), kBuffSize);
         if (nsize <= 0) {
             LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize);
@@ -110,10 +122,12 @@ void ShortLink::__ReadWrite() {
     LogI(TAG, "[__ReadWrite] http total Len: %zd", recv_buff.Length());
     LogI(TAG, "[__ReadWrite] http body Len: %zd", recv_body_.Length());
 
-    close(socket_);
+    ::close(socket_);
 }
 
-thread_tid ShortLink::GetTid() const { return thread_.GetTid(); }
+void ShortLink::SetUploadProgressCallback(std::shared_ptr<std::function<void (long, long)>> _progress_cb) {
+    progress_cb_ = _progress_cb;
+}
 
 int ShortLink::GetNetId() const { return task_.netid_; }
 

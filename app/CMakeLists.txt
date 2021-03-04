@@ -1,10 +1,11 @@
 project(oi_native)
 
-# custom your boost location here
-set(boost_location /usr/local/include)
-
 cmake_minimum_required(VERSION 3.4.1)
 
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -std=c++11")
+
+# custom your boost location here
+set(boost_location /usr/local/include)
 
 #aux_source_directory(src/main/cpp/network src_files)
 file(GLOB_RECURSE src_files "*.cc")

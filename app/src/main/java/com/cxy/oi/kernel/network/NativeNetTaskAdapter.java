@@ -26,8 +26,8 @@ public class NativeNetTaskAdapter {
     public static class Task {
         public int netID;
         public int retryCount = 3;
+        public boolean careAboutProgress;
         public String cgi;
-
 
         public Task() {
         }
@@ -68,6 +68,12 @@ public class NativeNetTaskAdapter {
         return -1;
     }
 
+    public static int onUploadProgress(int netId, long currSize, long totalSize) {
+        if (callBack != null) {
+            return callBack.onUploadProgress(netId, currSize, totalSize);
+        }
+        return -1;
+    }
 
     public interface ICallBack {
         int onTaskEnd(int netId, int errCode);
@@ -77,5 +83,7 @@ public class NativeNetTaskAdapter {
         int bufferToResp(int netId, byte[] resp);
 
         long getReqBufferSize(int netId);
+
+        int onUploadProgress(int netId, long currSize, long totalSize);
     }
 }

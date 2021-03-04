@@ -43,7 +43,7 @@ import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSI
 
 
 public class LauncherUI extends AppCompatActivity implements IAppForegroundListener {
-    private static final String TAG = "LauncherUI";
+    private static final String TAG = "OI.LauncherUI";
     private RelativeLayout ui;
     private ImageView goToGalleryPreviewIv;
     private ImageView gotoTakePhotoIv;
@@ -66,14 +66,6 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
 
     }
 
-    private void startService() {
-        Intent intent = new Intent(this, CoreService.class);
-        intent.putExtra("a", "haha");
-        startService(intent);
-
-    }
-
-
     private void initView() {
         ui = findViewById(R.id.main_ui);
         initTabbar();
@@ -87,7 +79,7 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
             public void onClick(View v) {
                 Intent intent = new Intent();
                 intent.setClass(getApplicationContext(), AlbumPreviewUI.class);
-                startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_CODE);
+                startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_QUERY_IMG);
             }
         });
         goToGalleryPreviewIv.setOnLongClickListener(new View.OnLongClickListener() {
@@ -143,10 +135,23 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
                 if (resultCode == Activity.RESULT_OK) {
                     String photoPath = TakePhotoUtil.getLastPhotoPath();
                     if (new File(photoPath).exists()) {
-                        NetSceneQueryImg scene = new NetSceneQueryImg(photoPath);
+                        NetSceneQueryImg scene = new NetSceneQueryImg(this, photoPath);
                         OIKernel.getNetSceneQueue().doScene(scene);
                     }
                 }
+                break;
+            case ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_QUERY_IMG:
+                if (data == null) {
+                    Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, data == null");
+                    return;
+                }
+                String imgPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KQUERY_IMG_PATH);
+                if (imgPath == null) {
+                    Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, imgPath == null");
+                    return;
+                }
+                NetSceneQueryImg netScene = new NetSceneQueryImg(this, imgPath);
+                OIKernel.getNetSceneQueue().doScene(netScene);
                 break;
         }
     }

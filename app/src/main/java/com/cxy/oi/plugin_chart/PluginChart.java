@@ -36,8 +36,8 @@ public class PluginChart implements IPluginChart {
         TextView trainProgressTv = lv.findViewById(R.id.train_progress_tv);
 
         trainProgressTv.setText(title);
-        Object[] hitRateArr = hitRates.toArray();
-        if (hitRateArr == null) {
+        Object[] hitRateArr;
+        if (hitRates == null || (hitRateArr = hitRates.toArray()) == null) {
             return lv;
         }
 

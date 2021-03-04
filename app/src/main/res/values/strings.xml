@@ -12,5 +12,8 @@
     <string name="search_time">时间: %s</string>
     <string name="preview">预览</string>
     <string name="confirm">确定</string>
+    <string name="please_wait">请稍后</string>
+    <string name="uploading">上传中</string>
+    <string name="querying">查询中</string>
 
 </resources>
