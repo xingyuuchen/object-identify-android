@@ -9,7 +9,7 @@ import com.cxy.oi.autogen.NetSceneGetTrainProgressReq;
 import com.cxy.oi.autogen.NetSceneGetTrainProgressResp;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
-import com.cxy.oi.kernel.modelbase.CommonReqResp;
+import com.cxy.oi.kernel.network.CommonReqResp;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.network.IOnNetEnd;
@@ -75,10 +75,10 @@ public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd 
         int totalEpoch = resp.getTotalEpoch();
         int hitRatesCount = resp.getHitRatesCount();
         List<Float> hitRates = resp.getHitRatesList();
-        Log.i(TAG, "isRunning:%b, currEpoch:%d, totalEpoch:%d, hitRatesCount:%d",
+        Log.i(TAG, "[onNetEnd] isRunning:%b, currEpoch:%d, totalEpoch:%d, hitRatesCount:%d",
                 isRunning, currEpoch, totalEpoch, hitRatesCount);
         for (float f : hitRates) {
-            Log.i(TAG, "hit rate: %s", f);
+            Log.i(TAG, "[onNetEnd] hit rate: %s", f);
         }
 
         String title, subtitle;

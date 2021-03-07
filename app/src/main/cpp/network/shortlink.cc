@@ -1,31 +1,40 @@
 #include "shortlink.h"
 #include "utils/log.h"
+#include "jni/c2java.h"
 #include "http/httprequest.h"
 #include "http/httpresponse.h"
-#include <map>
-#include <utility>
 #include "shotlinkmanager.h"
 #include "socket/blocksocket.h"
+#include "utils/threadpool.h"
+#include "jni/scopejenv.h"
+#include <map>
+#include <utility>
+#include <unistd.h>
 
-
-const size_t kBuffSize = 1024;
 
 const char *const ShortLink::TAG = "ShortLink";
+const size_t ShortLink::kRecvBuffSize = 1024;
+const size_t ShortLink::kSendBuffSize = 20480;
 
-ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port, bool _use_proxy)
-        : use_proxy_(_use_proxy)
+ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port)
+        : status_(kNotStart)
         , task_(_task)
         , port_(_port)
         , svr_inet_addr_(std::move(_svr_inet_addr))
         , err_code_(0)
         , socket_(INVALID_SOCKET) {
-    LogI(TAG, "new ShortLink: %s %d %d", task_.cgi_.c_str(), task_.netid_, task_.retry_cnt_)
+    LogI(TAG, "[ShortLink] %s %d %d", task_.cgi_.c_str(), task_.netid_, task_.retry_cnt_)
 }
 
 
 int ShortLink::DoTask() {
-    // TODO: async call __Run()
-    __Run();
+    status_ = kRunning;
+    ScopeJEnv scope_jenv;
+    JNIEnv *env = scope_jenv.GetEnv();
+    C2Java_ReqToBuffer(env, send_body_, GetNetId());
+    async_ret_ = ThreadPool::Instance().Execute([this] () -> int {
+        return this->__Run();
+    });
     return 0;
 }
 
@@ -33,6 +42,7 @@ int ShortLink::DoTask() {
 int ShortLink::__Run() {
     DoConnect();
     if (err_code_ < 0) {
+        status_ = kError;
         return err_code_;
     }
     __ReadWrite();
@@ -43,6 +53,7 @@ int ShortLink::__Run() {
 void ShortLink::DoConnect() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ <= 0) {
+        status_ = kError;
         err_code_ = INVALID_SOCKET;
         return;
     }
@@ -55,11 +66,12 @@ void ShortLink::DoConnect() {
 
     if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
         LogE(TAG, "Connect FAILED, errCode: %d", ret);
-        close(socket_);
+        CLOSE_SOCKET(socket_);
         err_code_ = CONNECT_FAILED;
+        status_ = kError;
         return;
     }
-    LogI(TAG, "connect succeed!");
+    LogI(TAG, "connect SUCCEED!");
 }
 
 
@@ -68,44 +80,49 @@ void ShortLink::__ReadWrite() {
     std::map<std::string, std::string> empty;
     http::request::Pack(svr_inet_addr_, task_.cgi_, empty, send_body_,
                         out_buff);
-    LogI(TAG, "http req header length: %zd", out_buff.Length() - send_body_.Length())
+    LogI(TAG, "[__ReadWrite] http req header length: %zd", out_buff.Length() - send_body_.Length())
 //    for (size_t i = 0; i < out_buff.Length() - send_body_.Length(); i++) {
 //        LogI(TAG, "0x%x %c", *out_buff.Ptr(i), *out_buff.Ptr(i))
 //    }
     send_body_.Reset();
 
+    ScopeJEnv scope_jenv;
+    JNIEnv *env = scope_jenv.GetEnv();
+
     ssize_t nsend = 0;
     ssize_t ntotal = out_buff.Length();
     while (true) {
-        // FIXME: 不是真实进度
-        ssize_t n = BlockSocketSend(socket_, out_buff, 2 * kBuffSize);
+        ssize_t n = BlockSocketSend(socket_, out_buff, kSendBuffSize);
         if (n < 0) {
             LogE(TAG, "[__ReadWrite] send, errno（%d）: %s", errno, strerror(errno));
+            status_ = kError;
             err_code_ = SEND_FAILED;
-            ::close(socket_);
+            CLOSE_SOCKET(socket_);
             return;
         }
         nsend += n;
-        LogI(TAG, "[__ReadWrite] send %d/%d bytes", nsend, ntotal)
+        LogI(TAG, "[__ReadWrite] send %d/%zd bytes", nsend, ntotal)
         if (task_.care_about_progress_) {
-            (*progress_cb_)(nsend, ntotal);
+            C2Java_OnUploadProgress(env, GetNetId(), nsend, ntotal);
         }
         if (ntotal <= nsend) {
             break;
         }
     }
 
-    ShotLinkManager::GetInstance().GetSocketPoll().SetEventRead(socket_);
-    ShotLinkManager::GetInstance().GetSocketPoll().SetEventError(socket_);
+    ShotLinkManager::Instance().GetSocketPoll().SetEventRead(socket_);
+    ShotLinkManager::Instance().GetSocketPoll().SetEventError(socket_);
     http::response::Parser parser(&recv_body_);
 
     AutoBuffer recv_buff;
 
     while (true) {
         ssize_t nsize = BlockSocketReceive(socket_, recv_buff,
-                ShotLinkManager::GetInstance().GetSocketPoll(), kBuffSize);
+                ShotLinkManager::Instance().GetSocketPoll(), kRecvBuffSize);
         if (nsize <= 0) {
-            LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize);
+            LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize)
+            status_ = kError;
+            err_code_ = RECV_FAILED;
             break;
         }
 
@@ -115,21 +132,34 @@ void ShortLink::__ReadWrite() {
             break;
         } else if (parser.IsErr()) {
             LogE(TAG, "[__ReadWrite] parser.IsErr()")
+            status_ = kError;
             err_code_ = RECV_FAILED;
             break;
         }
     }
-    LogI(TAG, "[__ReadWrite] http total Len: %zd", recv_buff.Length());
-    LogI(TAG, "[__ReadWrite] http body Len: %zd", recv_body_.Length());
+    LogI(TAG, "[__ReadWrite] http total Len: %zd", recv_buff.Length())
+    LogI(TAG, "[__ReadWrite] http body Len: %zd", recv_body_.Length())
 
-    ::close(socket_);
+    CLOSE_SOCKET(socket_);
+
+    C2Java_BufferToResp(env, GetRecvBody(), GetNetId());
+    C2Java_OnTaskEnd(env, GetNetId(), GetErrCode());
+    status_ = kFinished;
 }
 
-void ShortLink::SetUploadProgressCallback(std::shared_ptr<std::function<void (long, long)>> _progress_cb) {
-    progress_cb_ = _progress_cb;
+void ShortLink::__WaitForWorker() {
+    if (async_ret_.valid()) {
+        LogI(TAG, "[__WaitForWorker] waiting...")
+        async_ret_.get();
+        LogI(TAG, "[__WaitForWorker] done")
+    }
 }
 
 int ShortLink::GetNetId() const { return task_.netid_; }
+
+int ShortLink::GetStatus() const { return status_; }
+
+bool ShortLink::HasDone() const { return status_ == kFinished || status_ == kError; }
 
 u_short ShortLink::GetPort() const { return port_; }
 
@@ -143,3 +173,6 @@ std::string &ShortLink::GetCgi() { return task_.cgi_; }
 
 std::string &ShortLink::GetHost() { return svr_inet_addr_; }
 
+ShortLink::~ShortLink() {
+    __WaitForWorker();
+}

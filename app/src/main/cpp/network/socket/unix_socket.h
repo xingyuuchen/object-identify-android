@@ -8,6 +8,7 @@
 
 
 #define SOCKET int
+#define CLOSE_SOCKET ::close
 #define INVALID_SOCKET -1
 #define CONNECT_FAILED -2
 #define SEND_FAILED -3

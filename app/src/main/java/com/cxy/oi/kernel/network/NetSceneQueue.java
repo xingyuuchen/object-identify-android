@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.modelbase;
+package com.cxy.oi.kernel.network;
 
 import android.os.HandlerThread;
 import android.os.Looper;
@@ -8,7 +8,7 @@ import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIHandler;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
-import com.cxy.oi.kernel.network.IDispatcher;
+import com.cxy.oi.kernel.modelbase.NetSceneBase;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.modelbase;
+package com.cxy.oi.kernel.network;
 
 import com.cxy.oi.autogen.BaseNetSceneReq;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;

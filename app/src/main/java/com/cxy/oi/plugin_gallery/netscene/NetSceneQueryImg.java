@@ -11,7 +11,7 @@ import com.cxy.oi.autogen.NetSceneQueryImgReq;
 import com.cxy.oi.autogen.NetSceneQueryImgResp;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
-import com.cxy.oi.kernel.modelbase.CommonReqResp;
+import com.cxy.oi.kernel.network.CommonReqResp;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.network.IOnNetEnd;
@@ -111,8 +111,8 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd, IOnUplo
         dismissProgressDialog();
 
         RecognitionInfo.Builder builder = new RecognitionInfo.Builder();
-        builder.setItemType(typeToDBInt(resp.getItemType()));
-        builder.setItemName(resp.getItemName())
+        builder.setItemType(typeToDBInt(resp.getItemType()))
+                .setItemName(resp.getItemName())
                 .setCreateTime(System.currentTimeMillis())
                 .setContent(resp.getItemDesc())
                 .setImgPath(Util.nullAs(imgPath, ""));

@@ -1,6 +1,7 @@
-#include <string.h>
 #include "c2java.h"
-#include "utils/log.h"
+#include "../utils/log.h"
+#include "varcache.h"
+#include <string.h>
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
@@ -19,14 +20,14 @@ jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
 
 
 jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
-    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jclass clz = VarCache::Instance().GetClass(kJavaClassNativeNetTaskAdapter);
     jmethodID method_id = env->GetStaticMethodID(clz, "onTaskEnd", "(II)I");
     jint ret = env->CallStaticIntMethod(clz, method_id, _netid, _err_code);
     return ret;
 }
 
 int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
-    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jclass clz = VarCache::Instance().GetClass(kJavaClassNativeNetTaskAdapter);
     jmethodID method_id = env->GetStaticMethodID(clz, "reqToBuffer", "(I)[B");
     jbyteArray ret = (jbyteArray) env->CallStaticObjectMethod(clz, method_id, _net_id);
     if (ret == NULL) {
@@ -49,7 +50,7 @@ int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id) {
 
 
 int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id) {
-    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jclass clz = VarCache::Instance().GetClass(kJavaClassNativeNetTaskAdapter);
     jmethodID method_id = env->GetStaticMethodID(clz, "bufferToResp", "(I[B)I");
 
     jbyteArray jba = env->NewByteArray(_recv_buffer.Length());
@@ -62,7 +63,7 @@ int C2Java_BufferToResp(JNIEnv *env, AutoBuffer &_recv_buffer, int _net_id) {
 }
 
 int C2Java_OnUploadProgress(JNIEnv *env, int _net_id, jlong _curr, jlong _total) {
-    jclass clz = env->FindClass("com/cxy/oi/kernel/network/NativeNetTaskAdapter");
+    jclass clz = VarCache::Instance().GetClass(kJavaClassNativeNetTaskAdapter);
     jmethodID method_id = env->GetStaticMethodID(clz, "onUploadProgress", "(IJJ)I");
     jint ret = env->CallStaticIntMethod(clz, method_id, _net_id, _curr, _total);
     return ret;

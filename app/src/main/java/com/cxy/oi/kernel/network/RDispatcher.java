@@ -4,7 +4,6 @@ import android.os.Binder;
 
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
-import com.cxy.oi.kernel.modelbase.CommonReqResp;
 import com.cxy.oi.kernel.util.Log;
 
 
@@ -93,7 +92,6 @@ public class RDispatcher extends Binder implements IDispatcher {
                     return -1;
                 }
                 final IOnUploadListener uploadUpdate = info.uploadListener;
-                Log.i(TAG, "[onUploadProgress] tid=%d", Thread.currentThread().getId());
                 if (uploadUpdate != null) {
                     OIKernel.getNetSceneQueue().getUiHandler().post(new Runnable() {
                         @Override

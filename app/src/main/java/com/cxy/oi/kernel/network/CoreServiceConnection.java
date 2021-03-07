@@ -17,7 +17,7 @@ public class CoreServiceConnection implements ServiceConnection {
         if (service instanceof RDispatcher) {
             OIKernel.network().getNetSceneQueue().setDispatcher((RDispatcher) service);
         } else {
-            Log.e(TAG, "service NOT instanceof RDispatcher");
+            Log.e(TAG, "[onServiceConnected] service NOT instanceof RDispatcher");
         }
     }
 

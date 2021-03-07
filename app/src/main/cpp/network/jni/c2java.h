@@ -2,7 +2,7 @@
 #define OI_C2JAVA_H
 
 #include <jni.h>
-#include "utils/autobuffer.h"
+#include "../utils/autobuffer.h"
 
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env);

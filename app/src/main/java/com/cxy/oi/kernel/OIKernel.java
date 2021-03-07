@@ -1,7 +1,7 @@
 package com.cxy.oi.kernel;
 
 import com.cxy.oi.kernel.modelbase.IPlugin;
-import com.cxy.oi.kernel.modelbase.NetSceneQueue;
+import com.cxy.oi.kernel.network.NetSceneQueue;
 import com.cxy.oi.kernel.util.Log;
 
 import java.util.HashMap;
