@@ -23,7 +23,10 @@ class ShotLinkManager {
     void StartTask(ShortLink *_cmd);
 
   private:
+
     void __RunOnClearInvalidTask();
+
+    void __RunOnRetryFailedTask();
 
   private:
     static const char* const    TAG;

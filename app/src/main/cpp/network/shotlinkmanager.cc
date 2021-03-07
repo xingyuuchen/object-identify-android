@@ -28,13 +28,19 @@ ShotLinkManager::~ShotLinkManager() {
     }
 }
 
+void ShotLinkManager::StartTask(ShortLink *_cmd) {
+    _cmd->DoTask();
+    __RunOnRetryFailedTask();
+    __RunOnClearInvalidTask();
+}
+
 void ShotLinkManager::__RunOnClearInvalidTask() {
     std::unique_lock<std::mutex> lock(mutex_);
 
-    LogI(TAG, "[__RunOnClearInvalidTask] list size: %u", lst_cmd_.size())
     if (lst_cmd_.empty()) { return; }
 
     bool anyone_running = false;
+    int clear_cnt = 0;
     auto it = lst_cmd_.begin();
     auto end = lst_cmd_.end();
 
@@ -48,20 +54,44 @@ void ShotLinkManager::__RunOnClearInvalidTask() {
             delete (*it);
             lst_cmd_.erase(it);
             (*it) = NULL;
+            ++clear_cnt;
         } else {
             anyone_running = true;
         }
         it = next;
     }
+    LogI(TAG, "[__RunOnClearInvalidTask] clear %d tasks", clear_cnt)
     if (!anyone_running) { return; }
 
     ThreadPool::Instance().ExecuteAfter(1000,
             std::bind(&ShotLinkManager::__RunOnClearInvalidTask, this));
 }
 
-void ShotLinkManager::StartTask(ShortLink *_cmd) {
-    _cmd->DoTask();
-    __RunOnClearInvalidTask();
+void ShotLinkManager::__RunOnRetryFailedTask() {
+    std::unique_lock<std::mutex> lock(mutex_);
+
+    if (lst_cmd_.empty()) { return; }
+
+    bool anyone_failed = false;
+    int retry_num = 0;
+    auto it = lst_cmd_.begin();
+    auto end = lst_cmd_.end();
+
+    while (it != end) {
+        if ((*it) == NULL) { continue; }
+
+        if ((*it)->StatusErr() && (*it)->CanRetry()) {
+            (*it)->DoTask();
+            ++retry_num;
+        } else {
+            anyone_failed = true;
+        }
+        ++it;
+    }
+    LogI(TAG, "[__RunOnRetryFailedTask] retry %d tasks", retry_num)
+    if (!anyone_failed) { return; }
+    ThreadPool::Instance().ExecuteAfter(2000,
+            std::bind(&ShotLinkManager::__RunOnRetryFailedTask, this));
 }
 
 SocketPoll &ShotLinkManager::GetSocketPoll() { return socket_poll_; }

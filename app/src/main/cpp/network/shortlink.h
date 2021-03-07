@@ -40,6 +40,10 @@ class ShortLink {
 
     bool HasDone() const;
 
+    bool StatusErr() const;
+
+    bool CanRetry() const;
+
     u_short GetPort() const;
 
     int GetErrCode() const;
@@ -56,6 +60,7 @@ class ShortLink {
   private:
     static const char *const    TAG;
     AtomicStatus                status_;
+    std::atomic_int             curr_retry_cnt_;
     static const size_t         kRecvBuffSize;
     static const size_t         kSendBuffSize;
     Task                        task_;

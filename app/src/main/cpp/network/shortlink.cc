@@ -19,6 +19,7 @@ const size_t ShortLink::kSendBuffSize = 20480;
 ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port)
         : status_(kNotStart)
         , task_(_task)
+        , curr_retry_cnt_(0)
         , port_(_port)
         , svr_inet_addr_(std::move(_svr_inet_addr))
         , err_code_(0)
@@ -28,6 +29,7 @@ ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port)
 
 
 int ShortLink::DoTask() {
+    ++curr_retry_cnt_;
     status_ = kRunning;
     ScopeJEnv scope_jenv;
     JNIEnv *env = scope_jenv.GetEnv();
@@ -159,7 +161,11 @@ int ShortLink::GetNetId() const { return task_.netid_; }
 
 int ShortLink::GetStatus() const { return status_; }
 
-bool ShortLink::HasDone() const { return status_ == kFinished || status_ == kError; }
+bool ShortLink::HasDone() const { return status_ == kFinished || (status_ == kError && !CanRetry()); }
+
+bool ShortLink::StatusErr() const { return status_ == kError; }
+
+bool ShortLink::CanRetry() const { return curr_retry_cnt_ < task_.retry_cnt_; }
 
 u_short ShortLink::GetPort() const { return port_; }
 
