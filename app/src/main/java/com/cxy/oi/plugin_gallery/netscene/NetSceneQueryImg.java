@@ -91,6 +91,7 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd, IOnUplo
     @Override
     public void onNetEnd(int errCode, CommonReqResp rr) {
         if (!checkErrCodeAndShowToast(errCode)) {
+            dismissProgressDialog();
             return;
         }
 

@@ -39,7 +39,7 @@ void ShotLinkManager::__RunOnClearInvalidTask() {
 
     if (lst_cmd_.empty()) { return; }
 
-    bool anyone_running = false;
+    bool anyone_valid = false;
     int clear_cnt = 0;
     auto it = lst_cmd_.begin();
     auto end = lst_cmd_.end();
@@ -50,21 +50,22 @@ void ShotLinkManager::__RunOnClearInvalidTask() {
 
         if ((*it) == NULL) { continue; }
 
-        if ((*it)->HasDone()) {
+        if ((*it)->IsInvalid()) {
             delete (*it);
             lst_cmd_.erase(it);
             (*it) = NULL;
             ++clear_cnt;
         } else {
-            anyone_running = true;
+            anyone_valid = true;
         }
         it = next;
     }
     LogI(TAG, "[__RunOnClearInvalidTask] clear %d tasks", clear_cnt)
-    if (!anyone_running) { return; }
 
-    ThreadPool::Instance().ExecuteAfter(1000,
-            std::bind(&ShotLinkManager::__RunOnClearInvalidTask, this));
+    if (anyone_valid) {
+        ThreadPool::Instance().ExecuteAfter(1000,
+                std::bind(&ShotLinkManager::__RunOnClearInvalidTask, this));
+    }
 }
 
 void ShotLinkManager::__RunOnRetryFailedTask() {
@@ -72,7 +73,6 @@ void ShotLinkManager::__RunOnRetryFailedTask() {
 
     if (lst_cmd_.empty()) { return; }
 
-    bool anyone_failed = false;
     int retry_num = 0;
     auto it = lst_cmd_.begin();
     auto end = lst_cmd_.end();
@@ -83,15 +83,14 @@ void ShotLinkManager::__RunOnRetryFailedTask() {
         if ((*it)->StatusErr() && (*it)->CanRetry()) {
             (*it)->DoTask();
             ++retry_num;
-        } else {
-            anyone_failed = true;
         }
         ++it;
     }
     LogI(TAG, "[__RunOnRetryFailedTask] retry %d tasks", retry_num)
-    if (!anyone_failed) { return; }
-    ThreadPool::Instance().ExecuteAfter(2000,
+    if (retry_num > 0) {
+        ThreadPool::Instance().ExecuteAfter(2000,
             std::bind(&ShotLinkManager::__RunOnRetryFailedTask, this));
+    }
 }
 
 SocketPoll &ShotLinkManager::GetSocketPoll() { return socket_poll_; }

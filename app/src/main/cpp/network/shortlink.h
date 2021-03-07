@@ -38,7 +38,7 @@ class ShortLink {
 
     int GetStatus() const;
 
-    bool HasDone() const;
+    bool IsInvalid() const;
 
     bool StatusErr() const;
 

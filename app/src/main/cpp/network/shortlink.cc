@@ -161,7 +161,7 @@ int ShortLink::GetNetId() const { return task_.netid_; }
 
 int ShortLink::GetStatus() const { return status_; }
 
-bool ShortLink::HasDone() const { return status_ == kFinished || (status_ == kError && !CanRetry()); }
+bool ShortLink::IsInvalid() const { return status_ == kFinished || (status_ == kError && !CanRetry()); }
 
 bool ShortLink::StatusErr() const { return status_ == kError; }
 
