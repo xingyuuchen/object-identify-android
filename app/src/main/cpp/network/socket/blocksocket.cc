@@ -1,6 +1,6 @@
 #include "blocksocket.h"
-#include "../utils/log.h"
-#include "../utils/timeutil.h"
+#include "log.h"
+#include "timeutil.h"
 #include <unistd.h>
 
 
@@ -11,7 +11,7 @@ ssize_t BlockSocketSend(SOCKET _socket,
                        bool _wait_full/* =false*/) {
     const char *const TAG = "BlockSocketSend";
 
-    uint64_t start_time = GetCurrentTimeMillis();
+    uint64_t start_time = ::gettickcount();
 
     ssize_t nsend = 0;
     ssize_t ntotal = _send_buff.Length() - _send_buff.Pos();
@@ -39,7 +39,7 @@ ssize_t BlockSocketSend(SOCKET _socket,
             return nsend;
         }
 
-        cost_time = GetCurrentTimeMillis() - start_time;
+        cost_time = ::gettickcount() - start_time;
         if (cost_time > _timeout_mills) {
             _send_buff.Seek(_send_buff.Pos() + nsend);
             return nsend;
@@ -55,7 +55,7 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                           bool _wait_full/* = false*/) {
     const char *const TAG = "BlockSocketReceive";
     
-    uint64_t start_time = GetCurrentTimeMillis();
+    uint64_t start_time = ::gettickcount();
     
     if (_timeout_mills < -1) { _timeout_mills = -1; }
     size_t available = _recv_buff.AvailableSize();
@@ -109,7 +109,7 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                 return nrecv;
             }
         }
-        cost_time = GetCurrentTimeMillis() - start_time;
+        cost_time = ::gettickcount() - start_time;
     }
     
 }

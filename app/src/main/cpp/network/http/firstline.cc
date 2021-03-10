@@ -1,7 +1,7 @@
 #include "firstline.h"
 #include <string.h>
-#include "../utils/log.h"
-#include "../utils/strutil.h"
+#include "log.h"
+#include "strutil.h"
 
 
 namespace http {

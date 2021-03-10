@@ -1,9 +1,9 @@
 #ifndef OI_SHOTLINKMANAGER_H
 #define OI_SHOTLINKMANAGER_H
 
-#include "socket/socketpoll.h"
+#include "socketpoll.h"
 #include "shortlink.h"
-#include "utils/singleton.h"
+#include "singleton.h"
 #include <list>
 #include <mutex>
 

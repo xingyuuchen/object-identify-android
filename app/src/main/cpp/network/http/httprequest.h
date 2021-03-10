@@ -3,7 +3,7 @@
 
 #include "firstline.h"
 #include "headerfield.h"
-#include "../utils/autobuffer.h"
+#include "autobuffer.h"
 #include <map>
 
 

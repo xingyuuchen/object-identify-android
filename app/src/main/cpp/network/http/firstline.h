@@ -2,7 +2,7 @@
 #define OI_SVR_REQUESTLINE_H
 
 #include <string>
-#include "../utils/autobuffer.h"
+#include "autobuffer.h"
 
 
 namespace http {

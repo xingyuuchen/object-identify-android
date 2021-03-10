@@ -1,5 +1,5 @@
 #include "scopejenv.h"
-#include "../utils/log.h"
+#include "log.h"
 #include <unistd.h>
 #include <thread>
 

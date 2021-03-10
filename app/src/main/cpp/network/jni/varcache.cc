@@ -1,6 +1,6 @@
 #include "varcache.h"
 #include "scopejenv.h"
-#include "../utils/log.h"
+#include "log.h"
 
 
 const char *const VarCache::TAG = "VarCache";

@@ -2,8 +2,8 @@
 #define OI_SHORTLINK_H
 
 #include "task.h"
-#include "socket/unix_socket.h"
-#include "utils/autobuffer.h"
+#include "unix_socket.h"
+#include "autobuffer.h"
 #include <functional>
 #include <memory>
 #include <future>

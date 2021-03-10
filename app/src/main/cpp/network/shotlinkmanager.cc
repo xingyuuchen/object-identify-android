@@ -1,7 +1,7 @@
 #include "shotlinkmanager.h"
 #include "jni/scopejenv.h"
-#include "utils/threadpool.h"
-#include "utils/log.h"
+#include "threadpool.h"
+#include "log.h"
 #include <utility>
 
 

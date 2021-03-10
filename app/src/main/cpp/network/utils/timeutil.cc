@@ -3,7 +3,7 @@
 
 using namespace std::chrono;
 
-uint64_t GetCurrentTimeMillis() {
+uint64_t gettickcount() {
     time_point <std::chrono::system_clock, milliseconds> tp =
             time_point_cast<milliseconds>(system_clock::now());
 

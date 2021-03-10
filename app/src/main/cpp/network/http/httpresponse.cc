@@ -1,6 +1,6 @@
 #include "httpresponse.h"
-#include "../utils/strutil.h"
-#include "../utils/log.h"
+#include "strutil.h"
+#include "log.h"
 
 
 namespace http { namespace response {

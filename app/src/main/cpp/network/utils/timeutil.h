@@ -5,7 +5,7 @@
 #include <stdint.h>
 
 
-uint64_t GetCurrentTimeMillis();
+uint64_t gettickcount();
 
 
 

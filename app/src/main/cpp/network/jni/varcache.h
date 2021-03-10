@@ -1,7 +1,7 @@
 #ifndef OI_VARCACHE_H
 #define OI_VARCACHE_H
 
-#include "../utils/singleton.h"
+#include "singleton.h"
 #include <string>
 #include <map>
 #include <jni.h>
