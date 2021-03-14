@@ -157,7 +157,7 @@ public class NetSceneQueryImg extends NetSceneBase implements IOnNetEnd, IOnUplo
             return;
         }
         if (uploadProgressBar != null) {
-            Log.e(TAG, "[updateProgress] percent: %d", percent);
+            Log.i(TAG, "[updateProgress] percent: %d", percent);
             uploadProgressBar.setProgress(percent);
         }
     }

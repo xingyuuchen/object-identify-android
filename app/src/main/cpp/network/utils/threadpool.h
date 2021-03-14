@@ -1,5 +1,5 @@
-#ifndef OI_SVR_THREADPOOL_H
-#define OI_SVR_THREADPOOL_H
+#ifndef THREADPOOL_H
+#define THREADPOOL_H
 
 #include <vector>
 #include <list>
@@ -13,23 +13,13 @@
 #include <iomanip>
 
 
-inline uint64_t gettickcount() {
-    using namespace std::chrono;
-    time_point<std::chrono::system_clock, milliseconds> tp =
-            time_point_cast<milliseconds>(system_clock::now());
-    return tp.time_since_epoch().count();
-}
-
 struct TaskProfile {
     enum TTiming {
         kImmediate,
         kAfter,
         kPeriodic,
     };
-    TaskProfile(TTiming _timing, int _serial_tag, int _after, int _period)
-            : type(_timing), serial_tag(_serial_tag), after(_after), period(_period), seq(__MakeSeq()) {
-        if (type != kImmediate) { record = ::gettickcount(); }
-    }
+    TaskProfile(TTiming _timing, int _serial_tag, int _after, int _period);
     static uint64_t __MakeSeq() {
         static uint64_t seq = 0;
         return ++seq;
@@ -48,19 +38,24 @@ class ThreadPool {
     void operator=(ThreadPool const &) = delete;
     ThreadPool(ThreadPool const &) = delete;
     ~ThreadPool();
-    
+
     static ThreadPool &Instance() {
         static ThreadPool instance;
         return instance;
     }
-    
-    
+
+    /**
+     * Initializes ThreadPool singleton in advance,
+     * instead of lazy loading when first used.
+     */
+    void Init();
+
     template<class F, class... Args>
     std::future<typename std::result_of<F(Args...)>::type>
     Execute(F&& _f, Args&&... _args) {
         return __AddTask(TaskProfile::TTiming::kImmediate, -1, 0, 0, _f, _args...);
     }
-    
+
     /**
      * @param _serial_tag: tasks with the same _serial_tag(>0) execute serially.
      */
@@ -69,13 +64,13 @@ class ThreadPool {
     Execute(int _serial_tag, F&& _f, Args&&... _args) {
         return __AddTask(TaskProfile::TTiming::kImmediate, _serial_tag, 0, 0, _f, _args...);
     }
-    
+
     template<class F, class... Args>
     std::future<typename std::result_of<F(Args...)>::type>
     ExecuteAfter(int _after_millis, F&& _f, Args&&... _args) {
         return __AddTask(TaskProfile::TTiming::kAfter, -1, _after_millis, 0, _f, _args...);
     }
-    
+
     template<class F, class... Args>
     void ExecutePeriodic(int _period_millis, F&& _f, Args&&... _args) {
         {
@@ -86,34 +81,34 @@ class ThreadPool {
         }
         cv_.notify_one();
     }
-    
+
   private:
 
-    using ScopeLock = std::unique_lock<std::mutex>;
+    using ScopedLock = std::unique_lock<std::mutex>;
     using TaskPairPtr = std::pair<TaskProfile, std::function<void()>> *;
 
-    ThreadPool(size_t _n_threads = 4);
+    explicit ThreadPool(size_t _n_threads = 4);
 
     /**
      *
-     * A task is regarded Faster than the given {@param _old},
-     * only when the task satisfies either of the conditions below:
-     *          1. The task is kImmediate, or
-     *          2. The task is kAfter or kPeriodic and
-     *             expires earlier than the given {@param _old}.
+     * A task is considered Faster than another,
+     * only if the task meets either of the following conditions:
+     *          1. The task is kImmediate and the other is not, or
+     *          2. The task is kAfter or kPeriodic and expires earlier than the other.
      *
      * If a faster task is found, it will be picked out from the task queue,
-     * while the {@param _old} will be put in if it is not NULL.
+     * while the {@param _old} will be push back to the queue if it is not NULL.
      *
      * @param _old: Such task will be compared to the others in the task queue.
      *              If it is NULL, any task is faster than the given {@param _old}.
-     * @return: if {@param _old} is kImmediate, return NULL, because no task is faster than a kImmediate one.
+     * @return: if {@param _old} is kImmediate, return NULL, because no task is faster than a kImmediate one,
      *          else return pointer of the kImmediate task if exists,
-     *          else return the pointer of task with the minimum time to wait until its (next) execution if exists,
+     *          else return the pointer of the task with the minimum time to wait
+     *          until its (next) execution if exists,
      *          else return NULL, indicating that there is no task faster.
      */
     TaskPairPtr __PickOutTaskFasterThan(TaskPairPtr _old = NULL);
-    
+
 
     void __CreateWorkerThread();
 
@@ -128,11 +123,11 @@ class ThreadPool {
     __AddTask(TaskProfile::TTiming _timing, int _serial_tag, int _after, int _period, F&& _f, Args&&... _args) {
         using return_t = typename std::result_of<F(Args...)>::type;
         using pack_task_t = std::packaged_task<return_t(void)>;
-        
+
         auto task = std::make_shared<pack_task_t>(std::bind(_f, _args...));
         std::future<return_t> ret = task->get_future();
         {
-            std::unique_lock<std::mutex> lock(mutex_);
+            ScopedLock lock(mutex_);
             tasks_.push_back(new std::pair<TaskProfile, std::function<void()>>(
                     TaskProfile(_timing, _serial_tag, _after, _period), [=] { (*task)(); }));
         }
@@ -148,7 +143,7 @@ class ThreadPool {
     std::mutex                                                      mutex_;
     std::condition_variable                                         cv_;
     bool                                                            stop_;
-    static const uint64_t                                           kUInt64MaxValue;
+    static uint64_t const                                           kUInt64MaxValue;
 };
 
-#endif //OI_SVR_THREADPOOL_H
+#endif //THREADPOOL_H

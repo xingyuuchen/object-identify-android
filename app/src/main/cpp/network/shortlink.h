@@ -15,6 +15,7 @@ class ShortLink {
     enum TStatus {
         kNotStart = 0,
         kRunning,
+        kTimeout,
         kFinished,
         kError,
     };
@@ -59,10 +60,11 @@ class ShortLink {
 
   private:
     static const char *const    TAG;
-    AtomicStatus                status_;
-    std::atomic_int             curr_retry_cnt_;
+    static const uint64_t       kTimeoutMillis;
     static const size_t         kRecvBuffSize;
     static const size_t         kSendBuffSize;
+    AtomicStatus                status_;
+    std::atomic_int             curr_retry_cnt_;
     Task                        task_;
     int                         err_code_;
     SOCKET                      socket_;
@@ -71,7 +73,7 @@ class ShortLink {
     u_short                     port_;
     std::string                 svr_inet_addr_;
     std::future<int>            async_ret_;
-    std::shared_ptr<std::function<void (long, long)>> progress_cb_;
+    std::uint64_t               start_;
 
 };
 

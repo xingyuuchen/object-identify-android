@@ -1,24 +1,27 @@
 #include "shortlink.h"
-#include "utils/log.h"
-#include "jni/c2java.h"
-#include "http/httprequest.h"
-#include "http/httpresponse.h"
+#include "log.h"
+#include "c2java.h"
+#include "httprequest.h"
+#include "httpresponse.h"
 #include "shotlinkmanager.h"
-#include "socket/blocksocket.h"
-#include "utils/threadpool.h"
-#include "jni/scopejenv.h"
+#include "blocksocket.h"
+#include "threadpool.h"
+#include "scopejenv.h"
+#include "timeutil.h"
 #include <map>
 #include <utility>
 #include <unistd.h>
 
 
 const char *const ShortLink::TAG = "ShortLink";
+const uint64_t ShortLink::kTimeoutMillis = 10000;
 const size_t ShortLink::kRecvBuffSize = 1024;
 const size_t ShortLink::kSendBuffSize = 20480;
 
 ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port)
         : status_(kNotStart)
         , task_(_task)
+        , start_(::gettickcount())
         , curr_retry_cnt_(0)
         , port_(_port)
         , svr_inet_addr_(std::move(_svr_inet_addr))
@@ -30,6 +33,7 @@ ShortLink::ShortLink(Task &_task, std::string _svr_inet_addr, u_short _port)
 
 int ShortLink::DoTask() {
     ++curr_retry_cnt_;
+    start_ = ::gettickcount();
     status_ = kRunning;
     ScopeJEnv scope_jenv;
     JNIEnv *env = scope_jenv.GetEnv();
@@ -128,6 +132,12 @@ void ShortLink::__ReadWrite() {
             break;
         }
 
+        if (::gettickcount() - start_ > kTimeoutMillis) {
+            status_ = kTimeout;
+            err_code_ = OPERATION_TIMEOUT;
+            break;
+        }
+
         parser.Recv(recv_buff);
 
         if (parser.IsEnd()) {
@@ -179,6 +189,4 @@ std::string &ShortLink::GetCgi() { return task_.cgi_; }
 
 std::string &ShortLink::GetHost() { return svr_inet_addr_; }
 
-ShortLink::~ShortLink() {
-    __WaitForWorker();
-}
+ShortLink::~ShortLink() { __WaitForWorker(); }

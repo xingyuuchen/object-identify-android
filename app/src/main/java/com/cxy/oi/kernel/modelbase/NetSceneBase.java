@@ -42,6 +42,9 @@ public abstract class NetSceneBase {
             case ConstantsProtocol.ERR_RECV_FAIL:
                 toast = "接受数据失败，检查网络";
                 break;
+            case ConstantsProtocol.ERR_OPERATION_TIMEOUT:
+                toast = "请求超时";
+                break;
             case ConstantsProtocol.ERR_OK:
                 break;
             default:
