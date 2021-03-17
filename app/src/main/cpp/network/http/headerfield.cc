@@ -6,7 +6,6 @@
 
 namespace http {
 
-const char *const HeaderField::TAG = "HeaderField";
 
 const char *const HeaderField::KHost = "Host";
 const char *const HeaderField::KContentLength = "Content-Length";
@@ -42,7 +41,7 @@ uint64_t HeaderField::GetContentLength() const {
             return strtoul(header_field.second.c_str(), NULL, 10);
         }
     }
-    LogI(TAG, "[GetContentLength] No such field: Content-Length")
+    LogI(__FILE__, "[GetContentLength] No such field: Content-Length")
     return 0;
 }
 
@@ -64,7 +63,7 @@ bool HeaderField::ParseFromString(std::string &_from) {
         std::vector<std::string> header_pair;
         oi::split(header_str, ": ", header_pair);
         if (header_pair.size() != 2) {
-            LogE(TAG, "[ParseFromString] err header pair: %s", header_str.c_str())
+            LogE(__FILE__, "[ParseFromString] err header pair: %s", header_str.c_str())
             return false;
         }
         InsertOrUpdate(header_pair[0], header_pair[1]);

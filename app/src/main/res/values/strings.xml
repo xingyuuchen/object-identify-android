@@ -15,5 +15,7 @@
     <string name="please_wait">请稍后</string>
     <string name="uploading">上传中</string>
     <string name="querying">查询中</string>
+    <string name="default_nickname">点击设置昵称</string>
+    <string name="usrid">usr_id: %s</string>
 
 </resources>

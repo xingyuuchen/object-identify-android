@@ -13,6 +13,7 @@ public class OIKernel {
 
     private static CoreStorage coreStorage;
     private static CoreNetwork coreNetwork;
+    private static CoreAccount coreAccount;
     private static final Map<Class<? extends IPlugin>, IPlugin> pluginMap = new HashMap<>();
 
     public static CoreStorage storage() {
@@ -27,6 +28,13 @@ public class OIKernel {
             throw new NullPointerException("[network] coreNetwork == null");
         }
         return coreNetwork;
+    }
+
+    public static CoreAccount account() {
+        if (coreAccount == null) {
+            throw new NullPointerException("[network] coreNetwork == null");
+        }
+        return coreAccount;
     }
 
     public static <T extends IPlugin> T plugin(Class<T> clazz) {
@@ -90,6 +98,7 @@ public class OIKernel {
     public static void makeKernel() {
         coreNetwork = new CoreNetwork();
         coreStorage = new CoreStorage();
+        coreAccount = new CoreAccount();
 
         DefaultBootStep.installPlugins();
     }

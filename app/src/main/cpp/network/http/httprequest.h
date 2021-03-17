@@ -55,7 +55,6 @@ class Parser {
     size_t                                  resolved_len_;
     AutoBuffer                              body_;
     AutoBuffer                              buff_;
-    static const char *const                TAG;
     
 };
 

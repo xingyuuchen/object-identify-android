@@ -72,7 +72,11 @@ public class ConstantsStorage {
         return f.getAbsolutePath();
     }
 
-
     public static final String SYSTEM_CONFIG_PREFS = "system_config_prefs";
+
+    public static final String ACCOUNT_CONFIG_PREFS = "account_config_prefs";
+    public static final String ACCOUNT_KUSRID = "account_kusrid";
+
+
 
 }

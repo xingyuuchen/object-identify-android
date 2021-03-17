@@ -33,7 +33,6 @@ void Pack(http::THttpVersion _http_ver, int _resp_code, std::string &_status_des
 }
 
 
-const char *const Parser::TAG = "http::resp::Parser";
 
 Parser::Parser(AutoBuffer *_body)
     : resolved_len_(0)
@@ -91,14 +90,14 @@ void Parser::__ResolveResponseHeaders(AutoBuffer &_buff) {
         }
     } else {
         position_ = kError;
-        LogE(TAG, "[__ResolveResponseHeaders] headers_.ParseFromString Err")
+        LogE(__FILE__, "[__ResolveResponseHeaders] headers_.ParseFromString Err")
     }
 }
 
 void Parser::__ResolveBody(AutoBuffer &_buff) {
     uint64_t content_length = headers_.GetContentLength();
     if (content_length == 0) {
-        LogI(TAG, "[__ResolveBody] content_length = 0")
+        LogI(__FILE__, "[__ResolveBody] content_length = 0")
         position_ = kError;
         return;
     }
@@ -107,7 +106,7 @@ void Parser::__ResolveBody(AutoBuffer &_buff) {
     resolved_len_ += new_size;
     
     if (content_length < body_->Length()) {
-        LogI(TAG, "[__ResolveBody] recv more %zd bytes than Content-Length(%lld)",
+        LogI(__FILE__, "[__ResolveBody] recv more %zd bytes than Content-Length(%lld)",
              body_->Length(), content_length)
         position_ = kError;
     } else if (content_length == body_->Length()) {
@@ -119,33 +118,33 @@ void Parser::Recv(AutoBuffer &_buff) {
     if (_buff.Length() <= 0) { return; }
     size_t unresolved_len = _buff.Length() - resolved_len_;
     if (unresolved_len <= 0) {
-        LogI(TAG, "[resp::Parser::Recv] no bytes need to be resolved: %zd", unresolved_len)
+        LogI(__FILE__, "[resp::Parser::Recv] no bytes need to be resolved: %zd", unresolved_len)
         return;
     }
     
     if (position_ == kNone) {
-        LogI(TAG, "[Recv] kNone")
+        LogI(__FILE__, "[Recv] kNone")
         if (resolved_len_ == 0 && _buff.Length() > 0) {
             position_ = kStatusLine;
             __ResolveStatusLine(_buff);
         }
         
     } else if (position_ == kStatusLine) {
-        LogI(TAG, "[Recv] kRequestLine")
+        LogI(__FILE__, "[Recv] kRequestLine")
         __ResolveStatusLine(_buff);
         
     } else if (position_ == kResponseHeaders) {
-        LogI(TAG, "[Recv] kRequestHeaders")
+        LogI(__FILE__, "[Recv] kRequestHeaders")
         __ResolveResponseHeaders(_buff);
         
     } else if (position_ == kBody) {
         __ResolveBody(_buff);
         
     } else if (position_ == kEnd) {
-        LogI(TAG, "[Recv] kEnd")
+        LogI(__FILE__, "[Recv] kEnd")
         
     } else if (position_ == kError) {
-        LogI(TAG, "[Recv] error already occurred, do nothing.")
+        LogI(__FILE__, "[Recv] error already occurred, do nothing.")
     }
 }
 

@@ -41,7 +41,6 @@ class HeaderField {
     
   private:
     std::map<std::string, std::string>  header_fields_;
-    static const char *const            TAG;
 
 };
 

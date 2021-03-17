@@ -26,9 +26,13 @@ public final class ConstantsProtocol {
     /**
      * All NetScene Type are declared here.
      */
-    public static final int NETSCENE_TYPE_UNKNOWN_TYPE =        -1;
-    public static final int NETSCENE_TYPE_INDEX =               0;
-    public static final int NETSCENE_TYPE_QUERY_IMG =           1;
-    public static final int NETSCENE_TYPE_GET_TRAIN_PROGRESS =  2;
+    public static final int NETSCENE_TYPE_UNKNOWN_TYPE          = -1;
+    public static final int NETSCENE_TYPE_HELLO_SVR             = 0;
+    public static final int NETSCENE_TYPE_QUERY_IMG             = 1;
+    public static final int NETSCENE_TYPE_GET_TRAIN_PROGRESS    = 2;
+    public static final int NETSCENE_TYPE_REGISTER              = 3;
+    public static final int NETSCENE_TYPE_UPLOAD_AVATAR         = 4;
+    public static final int NETSCENE_TYPE_GET_HOT_SEARCH        = 5;
+    public static final int NETSCENE_TYPE_GET_RECENT_QUERY      = 6;
 
 }

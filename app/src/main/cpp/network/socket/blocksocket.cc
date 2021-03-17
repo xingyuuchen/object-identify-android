@@ -9,8 +9,6 @@ ssize_t BlockSocketSend(SOCKET _socket,
                        size_t _buff_size,
                        int _timeout_mills/* = 5000*/,
                        bool _wait_full/* =false*/) {
-    const char *const TAG = "BlockSocketSend";
-
     uint64_t start_time = ::gettickcount();
 
     ssize_t nsend = 0;
@@ -25,7 +23,7 @@ ssize_t BlockSocketSend(SOCKET _socket,
                 _send_buff.Pos() + nsend), ntotal - nsend);
 
         if (n <= 0) {
-            LogE(TAG, "nsend: %d", n)
+            LogE(__FILE__, "nsend: %d", n)
             return -1;
         }
 
@@ -53,8 +51,6 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                           size_t _buff_size,
                           int _timeout_mills/* = 5000*/,
                           bool _wait_full/* = false*/) {
-    const char *const TAG = "BlockSocketReceive";
-    
     uint64_t start_time = ::gettickcount();
     
     if (_timeout_mills < -1) { _timeout_mills = -1; }
@@ -74,10 +70,10 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
         
         if (ret < 0) {
             int errno_ = _socket_poll.GetErrno();
-            LogE(TAG, "[BlockSocketReceive] poll errno: %d", errno_)
+            LogE(__FILE__, "[BlockSocketReceive] poll errno: %d", errno_)
             return -1;
         } else if (ret == 0) {
-            LogE(TAG, "[BlockSocketReceive] timeout, nrecv = %zd, poll_timeout = %d", nrecv, poll_timeout)
+            LogE(__FILE__, "[BlockSocketReceive] timeout, nrecv = %zd, poll_timeout = %d", nrecv, poll_timeout)
             return nrecv;
         } else {
             
@@ -98,14 +94,14 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                         orderly shutdown, the value 0 is
                         returned.
                      */
-                    LogI(TAG, "[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
+                    LogI(__FILE__, "[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
                     return 0;
                 } else {
-                    LogI(TAG, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
+                    LogI(__FILE__, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
                     return nrecv;
                 }
             } else if (_socket_poll.IsErrSet(_socket)) {
-                LogI(TAG, "[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
+                LogI(__FILE__, "[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
                 return nrecv;
             }
         }

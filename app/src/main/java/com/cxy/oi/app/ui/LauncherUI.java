@@ -17,6 +17,9 @@ import android.widget.Toast;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.fragment.app.Fragment;
+import androidx.fragment.app.FragmentStatePagerAdapter;
+import androidx.viewpager.widget.ViewPager;
 
 import com.cxy.oi.R;
 import com.cxy.oi.app.TestEvent;
@@ -37,6 +40,8 @@ import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
 
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
 import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
@@ -45,18 +50,18 @@ import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSI
 public class LauncherUI extends AppCompatActivity implements IAppForegroundListener {
     private static final String TAG = "OI.LauncherUI";
     private RelativeLayout ui;
-    private ImageView goToGalleryPreviewIv;
-    private ImageView gotoTakePhotoIv;
 
     private BottomTabUI tabbar;
-    private SearchHistoryUI searchHistoryUI;
     private final CoreServiceConnection coreServiceConnection = new CoreServiceConnection();
 
+    private ViewPager viewPager;
+    private List<Fragment> fragments;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.main);
+        viewPager = findViewById(R.id.viewpager);
         initView();
         AppForegroundDelegate.INSTANCE.registerListener(this);
 
@@ -68,34 +73,25 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
 
     private void initView() {
         ui = findViewById(R.id.main_ui);
+        initViewPager();
         initTabbar();
-        ImageView bgImage = findViewById(R.id.bg_image);
-        ListView historyItemListView = findViewById(R.id.history_items);
-        searchHistoryUI = new SearchHistoryUI(historyItemListView, OIApplicationContext.getContext());
+    }
 
-        goToGalleryPreviewIv = findViewById(R.id.btn_gallery);
-        goToGalleryPreviewIv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent();
-                intent.setClass(getApplicationContext(), AlbumPreviewUI.class);
-                startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_QUERY_IMG);
-            }
-        });
-        goToGalleryPreviewIv.setOnLongClickListener(new View.OnLongClickListener() {
-            @Override
-            public boolean onLongClick(View v) {
-                NetSceneGetTrainProgress scene = new NetSceneGetTrainProgress(LauncherUI.this);
-                OIKernel.getNetSceneQueue().doScene(scene);
-                return true;
-            }
-        });
+    private void initViewPager() {
+        fragments = new ArrayList<>();
+        fragments.add(new IndexPagerUI());
+        fragments.add(new SettingsUI());
 
-        gotoTakePhotoIv = findViewById(R.id.btn_take_photo);
-        gotoTakePhotoIv.setOnClickListener(new View.OnClickListener() {
+        viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
+            @NonNull
             @Override
-            public void onClick(View v) {
-                TakePhotoUtil.takePhoto(LauncherUI.this);
+            public Fragment getItem(int position) {
+                return fragments.get(position);
+            }
+
+            @Override
+            public int getCount() {
+                return fragments.size();
             }
         });
     }
@@ -109,7 +105,11 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
         tabbar.setOnTabClickedListener(new IOnTabClickListener() {
             @Override
             public void onTabClick(int idxOfTab) {
-
+                if (idxOfTab < 0 || idxOfTab >= fragments.size()) {
+                    Log.e(TAG, "[onTabClick] idxOfTab: %d", idxOfTab);
+                    return;
+                }
+                viewPager.setCurrentItem(idxOfTab);
             }
         });
     }
@@ -127,36 +127,6 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
 
 
     @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        Log.i(TAG, "[onActivityResult] requestCode: %s, resultCode: %s", requestCode, resultCode);
-        switch (requestCode) {
-            case ConstantsUI.LauncherUI.REQUEST_CODE_TAKE_PHOTO:
-                if (resultCode == Activity.RESULT_OK) {
-                    String photoPath = TakePhotoUtil.getLastPhotoPath();
-                    if (new File(photoPath).exists()) {
-                        NetSceneQueryImg scene = new NetSceneQueryImg(this, photoPath);
-                        OIKernel.getNetSceneQueue().doScene(scene);
-                    }
-                }
-                break;
-            case ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_QUERY_IMG:
-                if (data == null) {
-                    Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, data == null");
-                    return;
-                }
-                String imgPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KQUERY_IMG_PATH);
-                if (imgPath == null) {
-                    Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, imgPath == null");
-                    return;
-                }
-                NetSceneQueryImg netScene = new NetSceneQueryImg(this, imgPath);
-                OIKernel.getNetSceneQueue().doScene(netScene);
-                break;
-        }
-    }
-
-    @Override
     protected void attachBaseContext(Context newBase) {
         super.attachBaseContext(newBase);
         OICrashReporter.INSTANCE.init();
@@ -164,8 +134,6 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
         OIKernel.makeKernel();
         bindService(new Intent(this, CoreService.class), coreServiceConnection, Service.BIND_AUTO_CREATE);
 
-//        AppLogic.setCallBack(stub);
-//        StnLogic.setCallBack(stub);
     }
 
 
@@ -193,7 +161,7 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
                 return;
             }
             Log.i(TAG, "user grant camera permission, retry open camera");
-            TakePhotoUtil.takePhoto(this);
+//            TakePhotoUtil.takePhoto(this);
         }
     }
 

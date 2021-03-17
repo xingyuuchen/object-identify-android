@@ -6,8 +6,6 @@
 
 namespace http {
 
-const char *const RequestLine::TAG = "RequestLine";
-const char *const StatusLine::TAG = "StatusLine";
 
     
 THttpMethod GetHttpMethod(const std::string &_str) {
@@ -56,7 +54,7 @@ bool RequestLine::ParseFromString(std::string &_from) {
     std::vector<std::string> res;
     oi::split(_from, " ", res);
     if (res.size() != 3) {
-        LogI(TAG, "[ParseFromString] res.size(): %zd", res.size())
+        LogI(__FILE__, "[ParseFromString] res.size(): %zd", res.size())
         return false;
     }
     method_ = GetHttpMethod(res[0]);
@@ -105,7 +103,7 @@ bool StatusLine::ParseFromString(std::string &_from) {
     std::vector<std::string> res;
     oi::split(_from, " ", res);
     if (res.size() != 3) {
-        LogI(TAG, "[ParseFromString] res.size(): %zd", res.size())
+        LogI(__FILE__, "[ParseFromString] res.size(): %zd", res.size())
         return false;
     }
     version_ = GetHttpVersion(res[0]);

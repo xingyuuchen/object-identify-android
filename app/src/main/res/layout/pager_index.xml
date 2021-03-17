@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/tab1wrapper"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+        <ImageView
+            android:id="@+id/bg_image"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg"
+            android:alpha="0.4"
+            />
+        <ImageView
+            android:id="@+id/bg_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/alpha_0_3"
+            />
+    </RelativeLayout>
+
+
+    <LinearLayout
+        android:id="@+id/fast_search"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="10dp"
+        android:orientation="vertical"
+        >
+        <TextView
+            style="@style/MainTextTheme"
+            android:text="@string/quick_search" />
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+            <ImageView
+                android:id="@+id/btn_take_photo"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_camera"
+                />
+            <ImageView
+                android:id="@+id/btn_gallery"
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:layout_weight="1"
+                android:src="@drawable/icon_album"
+                />
+        </LinearLayout>
+    </LinearLayout>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/fast_search">
+
+        <TextView
+            style="@style/MainTextTheme"
+            android:id="@+id/search_history_tv"
+            android:text="@string/search_history"
+            />
+        <ListView
+            android:id="@+id/history_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_history_tv"
+            android:layout_marginTop="10dp"
+            />
+    </RelativeLayout>
+
+</RelativeLayout>

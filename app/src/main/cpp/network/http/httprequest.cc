@@ -36,7 +36,6 @@ void Pack(const std::string &_host, const std::string &_url, const std::map<std:
 }
 
 
-const char *const Parser::TAG = "http::req::Parser";
 
 Parser::Parser()
     : position_(TPosition::kNone)
@@ -46,7 +45,7 @@ Parser::Parser()
         
 
 void Parser::__ResolveRequestLine() {
-    LogI(TAG, "[__ResolveRequestLine]")
+    LogI(__FILE__, "[__ResolveRequestLine]")
     char *start = buff_.Ptr();
     char *crlf = oi::strnstr(start, "\r\n", buff_.Length());
     if (crlf != NULL) {
@@ -69,7 +68,7 @@ void Parser::__ResolveRequestLine() {
 }
 
 void Parser::__ResolveRequestHeaders() {
-    LogI(TAG, "[__ResolveRequestHeaders]")
+    LogI(__FILE__, "[__ResolveRequestHeaders]")
     char *ret = oi::strnstr(buff_.Ptr(resolved_len_),
                     "\r\n\r\n", buff_.Length() - resolved_len_);
     if (ret == NULL) { return; }
@@ -88,15 +87,15 @@ void Parser::__ResolveRequestHeaders() {
         }
     } else {
         position_ = kError;
-        LogE(TAG, "[__ResolveRequestHeaders] headers_.ParseFromString Err")
+        LogE(__FILE__, "[__ResolveRequestHeaders] headers_.ParseFromString Err")
     }
 }
 
 void Parser::__ResolveBody() {
-    LogI(TAG, "[__ResolveBody]")
+    LogI(__FILE__, "[__ResolveBody]")
     uint64_t content_length = headers_.GetContentLength();
     if (content_length == 0) {
-        LogE(TAG, "[__ResolveBody] Content-Length = 0")
+        LogE(__FILE__, "[__ResolveBody] Content-Length = 0")
         position_ = kError;
         return;
     }
@@ -106,7 +105,7 @@ void Parser::__ResolveBody() {
     
     size_t curr_body_len = buff_.Length() - request_line_len_ - request_header_len_;
     if (content_length < curr_body_len) {
-        LogI(TAG, "[__ResolveBody] recv more bytes than"
+        LogI(__FILE__, "[__ResolveBody] recv more bytes than"
              " Content-Length(%lld)", content_length)
         position_ = kError;
     } else if (content_length == curr_body_len) {
@@ -119,7 +118,7 @@ void Parser::__ResolveBody() {
 void Parser::DoParse() {
     size_t unresolved_len = buff_.Length() - resolved_len_;
     if (unresolved_len <= 0) {
-        LogI(TAG, "[DoParse] no bytes need to be resolved: %zd", unresolved_len)
+        LogI(__FILE__, "[DoParse] no bytes need to be resolved: %zd", unresolved_len)
         return;
     }
     
@@ -139,10 +138,10 @@ void Parser::DoParse() {
         __ResolveBody();
         
     } else if (position_ == kEnd) {
-        LogI(TAG, "[DoParse] kEnd")
+        LogI(__FILE__, "[DoParse] kEnd")
         
     } else if (position_ == kError) {
-        LogI(TAG, "[DoParse] error already occurred, do nothing.")
+        LogI(__FILE__, "[DoParse] error already occurred, do nothing.")
     }
 }
 
@@ -157,12 +156,12 @@ AutoBuffer *Parser::GetBuff() { return &buff_; }
 
 AutoBuffer *Parser::GetBody() {
     if (request_line_.GetMethod() == http::THttpMethod::kGET) {
-        LogI(TAG, "[GetBody] GET, no http body, return NULL")
+        LogI(__FILE__, "[GetBody] GET, no http body, return NULL")
         return NULL;
     }
     size_t content_len = headers_.GetContentLength();
     if (content_len <= 0) {
-        LogE(TAG, "[GetBody] content_len <= 0, return NULL")
+        LogE(__FILE__, "[GetBody] content_len <= 0, return NULL")
         return NULL;
     }
     body_.SetPtr(buff_.Ptr(buff_.Length() - content_len));

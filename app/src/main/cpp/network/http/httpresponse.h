@@ -47,7 +47,6 @@ class Parser {
     void __ResolveBody(AutoBuffer &_buff);
     
   private:
-    static const char *const TAG;
     TPosition                               position_;
     http::StatusLine                        status_line_;
     http::HeaderField                       headers_;
