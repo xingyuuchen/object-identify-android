@@ -47,7 +47,7 @@ class ShortLink {
 
     u_short GetPort() const;
 
-    int GetErrCode() const;
+    uint32_t GetErrCode() const;
 
     std::string &GetCgi();
 
@@ -66,7 +66,7 @@ class ShortLink {
     AtomicStatus                status_;
     std::atomic_int             curr_retry_cnt_;
     Task                        task_;
-    int                         err_code_;
+    uint32_t                    err_code_;
     SOCKET                      socket_;
     AutoBuffer                  send_body_;
     AutoBuffer                  recv_body_;

@@ -2,9 +2,11 @@ package com.cxy.oi.kernel.network;
 
 import android.os.Binder;
 
+import com.cxy.oi.autogen.BaseNetSceneResp;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.contants.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
+import com.google.protobuf.InvalidProtocolBufferException;
 
 
 /**
@@ -29,7 +31,7 @@ public class RDispatcher extends Binder implements IDispatcher {
     static {
         NativeNetTaskAdapter.setCallBack(new NativeNetTaskAdapter.ICallBack() {
             @Override
-            public int onTaskEnd(int netId, final int errCode) {
+            public int onTaskEnd(int netId, int errCode) {
                 final Info info = infoPool[netId];
                 Log.i(TAG, "[onTaskEnd] netid:%d, onNetEndCallback:%s", netId, info);
                 if (info == null) {
@@ -38,11 +40,25 @@ public class RDispatcher extends Binder implements IDispatcher {
                 }
                 freeCallbackInfoFromPool(netId);
 
+                String errmsg;
+                try {
+                    BaseNetSceneResp resp = BaseNetSceneResp.parseFrom(info.rr.baseResp);
+                    errCode |= resp.getErrcode();
+                    errmsg = resp.getErrmsg();
+                    info.rr.resp = resp.getNetSceneRespBuff();
 
+                } catch (InvalidProtocolBufferException e) {
+                    errmsg = "InvalidProtocolBufferException";
+                    errCode = ConstantsProtocol.ERR_ILLEGAL_RESP;
+                    Log.e(TAG, "[onTaskEnd] %s", e.getMessage());
+                }
+
+                final int finalErrCode = errCode;
+                final String finalErrmsg = errmsg;
                 OIKernel.getNetSceneQueue().getUiHandler().post(new Runnable() {
                     @Override
                     public void run() {
-                        info.callback.onNetEnd(errCode, info.rr);
+                        info.callback.onNetEnd(finalErrCode, finalErrmsg, info.rr);
                     }
                 });
                 return 0;
@@ -67,7 +83,7 @@ public class RDispatcher extends Binder implements IDispatcher {
                     Log.e(TAG, "[bufferToResp] infoPool[%d] == null", netId);
                     return -1;
                 }
-                info.rr.resp = resp;
+                info.rr.baseResp = resp;
                 return 0;
             }
 

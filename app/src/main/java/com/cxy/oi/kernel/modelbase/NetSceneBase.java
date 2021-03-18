@@ -27,35 +27,38 @@ public abstract class NetSceneBase {
     }
 
 
-    protected boolean checkErrCodeAndShowToast(int errCode) {
-        String toast = null;
-        switch (errCode) {
-            case ConstantsProtocol.ERR_INVALID_SOCKET:
-                toast = "unix socket打开失败";
-                break;
-            case ConstantsProtocol.ERR_CONNECT_FAIL:
-                toast = "连接服务器失败，检查网络";
-                break;
-            case ConstantsProtocol.ERR_SEND_FAIL:
-                toast = "数据发送失败，检查网络";
-                break;
-            case ConstantsProtocol.ERR_RECV_FAIL:
-                toast = "接受数据失败，检查网络";
-                break;
-            case ConstantsProtocol.ERR_OPERATION_TIMEOUT:
-                toast = "请求超时";
-                break;
-            case ConstantsProtocol.ERR_OK:
-                break;
-            default:
-                toast = "未知错误";
-                break;
+    protected boolean checkErrCodeAndShowToast(int errCode, String errmsg) {
+        StringBuilder toast = new StringBuilder();
+        if ((errCode & ConstantsProtocol.ERR_INVALID_SOCKET) > 0) {
+            toast.append("unix socket打开失败 ");
         }
-        if (toast != null) {
+        if ((errCode & ConstantsProtocol.ERR_CONNECT_FAIL) > 0) {
+            toast.append("连接服务器失败 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_SEND_FAIL) > 0) {
+            toast.append("数据发送失败 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_RECV_FAIL) > 0) {
+            toast.append("接受数据失败 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_OPERATION_TIMEOUT) > 0) {
+            toast.append("网络超时 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_SVR_UNKNOWN) > 0) {
+            toast.append("服务器未知错误 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_SVR_DATABASE) > 0) {
+            toast.append("服务器数据库错误 ");
+        }
+        if ((errCode & ConstantsProtocol.ERR_ILLEGAL_RESP) > 0) {
+            toast.append("返回数据包不合法 ");
+        }
+        if (toast.length() > 0) {
+            toast.append(errmsg);
             Log.e(getTag(), "[checkErrCodeAndShowToast] errCode: %s", errCode);
             Toast.makeText(OIApplicationContext.getContext(), toast, Toast.LENGTH_LONG).show();
         }
-        return toast == null;
+        return toast.length() == 0;
     }
 
     protected boolean checkLocalErrCodeAndShowToast(int errCode) {

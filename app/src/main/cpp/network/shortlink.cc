@@ -47,7 +47,7 @@ int ShortLink::DoTask() {
 
 int ShortLink::__Run() {
     DoConnect();
-    if (err_code_ < 0) {
+    if (err_code_ != 0) {
         status_ = kError;
         return err_code_;
     }
@@ -60,7 +60,7 @@ void ShortLink::DoConnect() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ <= 0) {
         status_ = kError;
-        err_code_ = INVALID_SOCKET;
+        err_code_ |= INVALID_SOCKET;
         return;
     }
 
@@ -73,7 +73,7 @@ void ShortLink::DoConnect() {
     if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
         LogE(TAG, "Connect FAILED, errCode: %d", ret);
         CLOSE_SOCKET(socket_);
-        err_code_ = CONNECT_FAILED;
+        err_code_ |= CONNECT_FAILED;
         status_ = kError;
         return;
     }
@@ -102,7 +102,7 @@ void ShortLink::__ReadWrite() {
         if (n < 0) {
             LogE(TAG, "[__ReadWrite] send, errno（%d）: %s", errno, strerror(errno));
             status_ = kError;
-            err_code_ = SEND_FAILED;
+            err_code_ |= SEND_FAILED;
             CLOSE_SOCKET(socket_);
             return;
         }
@@ -128,13 +128,13 @@ void ShortLink::__ReadWrite() {
         if (nsize <= 0) {
             LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize)
             status_ = kError;
-            err_code_ = RECV_FAILED;
+            err_code_ |= RECV_FAILED;
             break;
         }
 
         if (::gettickcount() - start_ > kTimeoutMillis) {
             status_ = kTimeout;
-            err_code_ = OPERATION_TIMEOUT;
+            err_code_ |= OPERATION_TIMEOUT;
             break;
         }
 
@@ -145,7 +145,7 @@ void ShortLink::__ReadWrite() {
         } else if (parser.IsErr()) {
             LogE(TAG, "[__ReadWrite] parser.IsErr()")
             status_ = kError;
-            err_code_ = RECV_FAILED;
+            err_code_ |= RECV_FAILED;
             break;
         }
     }
@@ -183,7 +183,7 @@ AutoBuffer &ShortLink::GetSendBody() { return send_body_; }
 
 AutoBuffer &ShortLink::GetRecvBody() { return recv_body_; }
 
-int ShortLink::GetErrCode() const { return err_code_; }
+uint32_t ShortLink::GetErrCode() const { return err_code_; }
 
 std::string &ShortLink::GetCgi() { return task_.cgi_; }
 

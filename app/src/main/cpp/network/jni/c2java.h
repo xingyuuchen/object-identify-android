@@ -7,7 +7,7 @@
 
 jint CreateJvm(JavaVM** jvm, JNIEnv** env);
 
-jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code);
+jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, uint32_t _err_code);
 
 int C2Java_ReqToBuffer(JNIEnv *env, AutoBuffer &_send_body, int _net_id);
 

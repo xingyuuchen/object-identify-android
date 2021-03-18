@@ -1,0 +1,17 @@
+syntax = "proto2";
+
+package basenetsceneresp;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "BaseNetSceneRespProto";
+
+option java_multiple_files = true;
+
+
+message BaseNetSceneResp {
+  optional int32 errcode = 1;
+  optional string errmsg = 2;
+  optional bytes net_scene_resp_buff = 3;
+
+}

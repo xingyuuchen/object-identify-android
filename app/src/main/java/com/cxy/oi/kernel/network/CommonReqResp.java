@@ -13,7 +13,8 @@ public class CommonReqResp {
 
     public BaseNetSceneReq baseReq;
     public GeneratedMessageV3 req;
-    public byte[] resp;
+    public byte[] baseResp;
+    public ByteString resp;
 
     public long reqLen;
 

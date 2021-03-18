@@ -19,7 +19,7 @@ jint CreateJvm(JavaVM** jvm, JNIEnv** env) {
 }
 
 
-jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, int _err_code) {
+jint C2Java_OnTaskEnd(JNIEnv* env, int _netid, uint32_t _err_code) {
     jclass clz = VarCache::Instance().GetClass(kJavaClassNativeNetTaskAdapter);
     jmethodID method_id = env->GetStaticMethodID(clz, "onTaskEnd", "(II)I");
     jint ret = env->CallStaticIntMethod(clz, method_id, _netid, _err_code);

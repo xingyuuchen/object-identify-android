@@ -53,8 +53,8 @@ public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd 
 
 
     @Override
-    public void onNetEnd(int errCode, CommonReqResp rr) {
-        if (!checkErrCodeAndShowToast(errCode)) {
+    public void onNetEnd(int errCode, String errmsg, CommonReqResp rr) {
+        if (!checkErrCodeAndShowToast(errCode, errmsg)) {
             return;
         }
         if (rr.resp == null) {
@@ -66,7 +66,7 @@ public class NetSceneGetTrainProgress extends NetSceneBase implements IOnNetEnd 
         try {
             resp = NetSceneGetTrainProgressResp.parseFrom(rr.resp);
         } catch (InvalidProtocolBufferException e) {
-            Log.i(TAG, "rr.resp.len: %d", rr.resp.length);
+            Log.i(TAG, "rr.resp.len: %d", rr.resp.size());
             Log.e(TAG, "[onNetEnd] InvalidProtocolBufferException: %s", e.getMessage());
             return;
         }

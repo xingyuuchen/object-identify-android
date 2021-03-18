@@ -4,16 +4,19 @@ public final class ConstantsProtocol {
     private ConstantsProtocol() {
     }
 
-    public static final int ERR_OK = 0;
 
     /**
      * 网络错误
      */
-    public static final int ERR_INVALID_SOCKET =    -1;
-    public static final int ERR_CONNECT_FAIL =      -2;
-    public static final int ERR_SEND_FAIL =         -3;
-    public static final int ERR_RECV_FAIL =         -4;
-    public static final int ERR_OPERATION_TIMEOUT = -5;
+    public static final int ERR_OK                  = 0x00;
+    public static final int ERR_INVALID_SOCKET      = 0x01;
+    public static final int ERR_CONNECT_FAIL        = 0x02;
+    public static final int ERR_SEND_FAIL           = 0x04;
+    public static final int ERR_RECV_FAIL           = 0x08;
+    public static final int ERR_OPERATION_TIMEOUT   = 0x10;
+    public static final int ERR_SVR_UNKNOWN         = 0x20;
+    public static final int ERR_SVR_DATABASE        = 0x40;
+    public static final int ERR_ILLEGAL_RESP        = 0x80;
 
     /**
      * 本地错误

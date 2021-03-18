@@ -14,7 +14,7 @@ import com.google.protobuf.InvalidProtocolBufferException;
 
 public class NetSceneRegister extends NetSceneBase implements IOnNetEnd {
     private static final String TAG = "NetSceneRegister";
-    private Callback callback;
+    private final Callback callback;
 
     public NetSceneRegister() {
         this(null);
@@ -46,8 +46,8 @@ public class NetSceneRegister extends NetSceneBase implements IOnNetEnd {
     }
 
     @Override
-    public void onNetEnd(int errCode, CommonReqResp rr) {
-        if (!checkErrCodeAndShowToast(errCode)) {
+    public void onNetEnd(int errCode, String errmsg, CommonReqResp rr) {
+        if (!checkErrCodeAndShowToast(errCode, errmsg)) {
             return;
         }
         NetSceneRegisterResp resp;
