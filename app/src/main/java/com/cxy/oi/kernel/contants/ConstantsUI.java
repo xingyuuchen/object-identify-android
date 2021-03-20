@@ -16,7 +16,7 @@ public final class ConstantsUI {
         public static final int REQUEST_PERMISSION_CAMERA = 1;
         public static final int REQUEST_PERMISSION_CAMERA_FORCE = 2;
 
-        public static final int REQUEST_CODE_TAKE_PHOTO = 0;
+        public static final int REQUEST_CODE_TAKE_PHOTO = 10000;
         public static final String KPHOTO_PATH = "photo_path";
 
     }
@@ -25,7 +25,7 @@ public final class ConstantsUI {
     public static final class AlbumPreviewUI {
         private AlbumPreviewUI() {
         }
-        public static final int ACTIVITY_REQUEST_QUERY_IMG = 12345;
+        public static final int ACTIVITY_REQUEST_QUERY_IMG = 10001;
         public static final String KQUERY_IMG_PATH = "AlbumPreviewUI.KQUERY_IMG_PATH";
         public static final int REQUEST_PERMISSION = 0;
         public static final int SPAN_COUNT = 4;
@@ -41,6 +41,13 @@ public final class ConstantsUI {
         public static final int TYPE_ANIMAL = 1;
         public static final int TYPE_LANDMARK = 2;
 
+    }
+
+    public static final class SetNicknameUI {
+        private SetNicknameUI() {
+        }
+        public static final int ACTIVITY_REQUEST_SET_NICKNAME = 10002;
+        public static final String KNICKNAME = "nickname";
     }
 
 }

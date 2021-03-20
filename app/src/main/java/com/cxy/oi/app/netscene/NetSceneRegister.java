@@ -60,7 +60,7 @@ public class NetSceneRegister extends NetSceneBase implements IOnNetEnd {
         int id = resp.getUsrId();
         Log.i(TAG, "[onNetEnd] usrid is: %d", id);
 
-        OIKernel.account().updateUsrId(id);
+        OIKernel.account().saveUsrId(id);
 
         if (callback != null) {
             callback.onUpdateUsrId(id);

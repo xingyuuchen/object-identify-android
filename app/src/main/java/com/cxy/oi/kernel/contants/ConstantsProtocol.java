@@ -37,5 +37,6 @@ public final class ConstantsProtocol {
     public static final int NETSCENE_TYPE_UPLOAD_AVATAR         = 4;
     public static final int NETSCENE_TYPE_GET_HOT_SEARCH        = 5;
     public static final int NETSCENE_TYPE_GET_RECENT_QUERY      = 6;
+    public static final int NETSCENE_TYPE_CHANGE_NICKNAME       = 7;
 
 }

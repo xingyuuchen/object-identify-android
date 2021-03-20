@@ -1,5 +1,7 @@
 package com.cxy.oi.app.ui;
 
+import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -16,7 +18,9 @@ import com.cxy.oi.R;
 import com.cxy.oi.app.netscene.NetSceneRegister;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.OIApplicationContext;
+import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
+import com.cxy.oi.kernel.util.Util;
 
 
 public class SettingsUI extends Fragment {
@@ -24,6 +28,17 @@ public class SettingsUI extends Fragment {
 
     private RelativeLayout ui;
     private TextView usrIdTv;
+    private TextView nicknameTv;
+    private TextView gotoChangeNicknameBtn;
+
+    private final View.OnClickListener gotoChangeNicknameUIListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Intent intent = new Intent();
+            intent.setClass(getActivity(), SetNicknameUI.class);
+            startActivityForResult(intent, ConstantsUI.SetNicknameUI.ACTIVITY_REQUEST_SET_NICKNAME);
+        }
+    };
 
     @Nullable
     @Override
@@ -46,14 +61,10 @@ public class SettingsUI extends Fragment {
         });
 
         usrIdTv = root.findViewById(R.id.usrid_tv);
-
-        final TextView nicknameTv = root.findViewById(R.id.nickname_tv);
-        nicknameTv.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-            }
-        });
+        gotoChangeNicknameBtn = root.findViewById(R.id.goto_change_nickname_btn);
+        gotoChangeNicknameBtn.setOnClickListener(gotoChangeNicknameUIListener);
+        nicknameTv = root.findViewById(R.id.nickname_tv);
+        nicknameTv.setOnClickListener(gotoChangeNicknameUIListener);
     }
 
     @Override
@@ -81,6 +92,33 @@ public class SettingsUI extends Fragment {
                     }
                 });
                 OIKernel.getNetSceneQueue().doScene(netScene);
+            }
+            String nickname = OIKernel.account().getNickName();
+            if (!Util.isNullOrNil(nickname)) {
+                nicknameTv.setText(nickname);
+            }
+        }
+    }
+
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        Log.i(TAG, "requestCode: %d, resultCode: %d", requestCode, resultCode);
+        if (requestCode == ConstantsUI.SetNicknameUI.ACTIVITY_REQUEST_SET_NICKNAME) {
+            if (resultCode == Activity.RESULT_OK) {
+                String nickname = data.getStringExtra(ConstantsUI.SetNicknameUI.KNICKNAME);
+                if (!Util.isNullOrNil(nickname)) {
+                    nicknameTv.setText(nickname);
+                    return;
+                }
+                Log.w(TAG, "[onActivityResult] getStringExtra() == null");
+                nickname = OIKernel.account().getNickName();
+                if (!Util.isNullOrNil(nickname)) {
+                    nicknameTv.setText(nickname);
+                    return;
+                }
+                Log.w(TAG, "[onActivityResult] OIKernel.account().getNickName() == null");
             }
         }
     }

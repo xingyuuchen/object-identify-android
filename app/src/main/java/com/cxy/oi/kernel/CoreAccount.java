@@ -11,6 +11,7 @@ public final class CoreAccount {
     private static final String TAG = "CoreAccount";
     private int usrId = -1;
     private static final int INVALID_USR_ID = -1;
+    private String nickName;
 
     CoreAccount() {
         SharedPreferences sp = OIApplicationContext.getContext().getSharedPreferences(ConstantsStorage.ACCOUNT_CONFIG_PREFS, 0);
@@ -18,13 +19,21 @@ public final class CoreAccount {
         if (id != INVALID_USR_ID) {
             usrId = id;
         }
+        nickName = sp.getString(ConstantsStorage.ACCOUNT_KNICKNAME, "");
     }
 
-    public void updateUsrId(int usrId) {
+    public void saveUsrId(int usrId) {
         this.usrId = usrId;
         SharedPreferences sp = OIApplicationContext.getContext().getSharedPreferences(ConstantsStorage.ACCOUNT_CONFIG_PREFS, 0);
         SharedPreferences.Editor editor = sp.edit();
         editor.putInt(ConstantsStorage.ACCOUNT_KUSRID, usrId).apply();
+    }
+
+    public void saveNickname(String nickName) {
+        this.nickName = nickName;
+        SharedPreferences sp = OIApplicationContext.getContext().getSharedPreferences(ConstantsStorage.ACCOUNT_CONFIG_PREFS, 0);
+        SharedPreferences.Editor editor = sp.edit();
+        editor.putString(ConstantsStorage.ACCOUNT_KNICKNAME, nickName).apply();
     }
 
     public int getUsrId() {
@@ -36,6 +45,10 @@ public final class CoreAccount {
 
     public boolean accountReady() {
         return usrId != INVALID_USR_ID;
+    }
+
+    public String getNickName() {
+        return nickName;
     }
 
 }

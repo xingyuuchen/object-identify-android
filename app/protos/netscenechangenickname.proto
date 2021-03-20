@@ -1,0 +1,21 @@
+syntax = "proto2";
+
+package netscenechangenickname;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "NetSceneChangeNicknameProto";
+
+option java_multiple_files = true;
+
+
+message NetSceneChangeNicknameReq {
+  optional uint32 usr_id = 1;
+  optional string nickname = 2;
+
+}
+
+message NetSceneChangeNicknameResp {
+  optional bool nop = 1;  // no req body, this is for padding.
+
+}

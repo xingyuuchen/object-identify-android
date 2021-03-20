@@ -5,32 +5,77 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <ImageView
-        android:id="@+id/avatar_iv"
-        android:layout_marginStart="5dp"
-        android:layout_width="60dp"
-        android:layout_height="60dp"
-        android:src="@drawable/icon_default"
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        >
 
-        />
-    <TextView
-        android:id="@+id/usrid_tv"
-        android:layout_toEndOf="@id/avatar_iv"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/usrid"
-        android:textSize="17sp"
+        <com.cxy.oi.app.ui.RoundCornerImageView
+            android:id="@+id/avatar_iv"
+            android:layout_marginStart="20dp"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/default_avatar"
+            />
+        <TextView
+            android:id="@+id/nickname_tv"
+            android:layout_toEndOf="@id/avatar_iv"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="8dp"
+            android:textSize="25sp"
+            android:text="@string/default_nickname"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/goto_change_nickname_btn"
+            android:textSize="25sp"
+            android:text="@string/goto_change_nickname"
+            android:layout_alignBottom="@id/nickname_tv"
+            android:layout_alignParentEnd="true"
+            android:layout_marginEnd="5dp"
+            android:padding="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+        <TextView
+            android:id="@+id/usrid_tv"
+            android:layout_below="@id/nickname_tv"
+            android:layout_toEndOf="@id/avatar_iv"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="15dp"
+            android:text="@string/usrid"
+            android:textSize="20sp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+    </RelativeLayout>
+
+
+
+    <RelativeLayout
+        android:id="@+id/copyright"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
-    <TextView
-        android:id="@+id/nickname_tv"
-        android:layout_toEndOf="@id/avatar_iv"
-        android:layout_below="@id/usrid_tv"
-        android:layout_marginStart="10dp"
-        android:layout_marginTop="5dp"
-        android:text="@string/default_nickname"
-        android:textSize="17sp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"/>
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginBottom="@dimen/copyright_margin_below"
+        android:layout_centerHorizontal="true"
+        >
+        <TextView
+            android:id="@+id/copyright_zh_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="13sp"
+            android:text="@string/copyright_zh" />
+        <TextView
+            android:id="@+id/copyright_en_tv"
+            android:layout_below="@id/copyright_zh_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerHorizontal="true"
+            android:textSize="13sp"
+            android:text="@string/copyright_en" />
+    </RelativeLayout>
+
+
 
 </RelativeLayout>

@@ -15,7 +15,10 @@
     <string name="please_wait">请稍后</string>
     <string name="uploading">上传中</string>
     <string name="querying">查询中</string>
-    <string name="default_nickname">点击设置昵称</string>
-    <string name="usrid">usr_id: %s</string>
+    <string name="default_nickname">设置昵称…</string>
+    <string name="usrid">用户ID: %s</string>
+    <string name="copyright_zh">陈星宇 版权所有</string>
+    <string name="copyright_en">Copyright ©️2020–2021 xingyuuchen. All Rights Reserved.</string>
+    <string name="goto_change_nickname">>></string>
 
 </resources>

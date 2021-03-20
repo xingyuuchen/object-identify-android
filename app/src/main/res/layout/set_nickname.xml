@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >
+
+    <EditText
+        android:id="@+id/nickname_et"
+        android:layout_marginTop="100dp"
+        android:hint="@string/default_nickname"
+        android:textColorHint="@color/alpha_0_2"
+        android:inputType="text"
+        android:textSize="25sp"
+        android:paddingStart="20dp"
+        android:paddingEnd="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_centerHorizontal="true"
+        android:autofillHints="@string/default_nickname" />
+
+
+    <TextView
+        android:id="@+id/nickname_btn_confirm"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:textSize="23sp"
+        android:paddingStart="25dp"
+        android:paddingEnd="25dp"
+        android:paddingTop="8dp"
+        android:paddingBottom="8dp"
+        android:layout_below="@id/nickname_et"
+        android:layout_marginTop="50dp"
+        android:background="@drawable/btn_solid_green"
+        android:textColor="@color/text_color_selector_white"
+        android:layout_centerHorizontal="true"
+        android:text="@string/confirm" />
+
+</RelativeLayout>
