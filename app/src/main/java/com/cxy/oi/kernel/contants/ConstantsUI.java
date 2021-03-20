@@ -26,7 +26,8 @@ public final class ConstantsUI {
         private AlbumPreviewUI() {
         }
         public static final int ACTIVITY_REQUEST_QUERY_IMG = 10001;
-        public static final String KQUERY_IMG_PATH = "AlbumPreviewUI.KQUERY_IMG_PATH";
+        public static final int ACTIVITY_REQUEST_SELECT_AVATAR = 10002;
+        public static final String KSELECT_IMG_PATH = "AlbumPreviewUI.KSELECT_IMG_PATH";
         public static final int REQUEST_PERMISSION = 0;
         public static final int SPAN_COUNT = 4;
         public static final int VIEW_TYPE_IMAGE = 0;
@@ -46,7 +47,7 @@ public final class ConstantsUI {
     public static final class SetNicknameUI {
         private SetNicknameUI() {
         }
-        public static final int ACTIVITY_REQUEST_SET_NICKNAME = 10002;
+        public static final int ACTIVITY_REQUEST_SET_NICKNAME = 10003;
         public static final String KNICKNAME = "nickname";
     }
 

@@ -16,7 +16,9 @@ public final class ConstantsProtocol {
     public static final int ERR_OPERATION_TIMEOUT   = 0x10;
     public static final int ERR_SVR_UNKNOWN         = 0x20;
     public static final int ERR_SVR_DATABASE        = 0x40;
-    public static final int ERR_ILLEGAL_RESP        = 0x80;
+    public static final int ERR_ILLEGAL_REQ         = 0x80;
+    public static final int ERR_ILLEGAL_RESP        = 0x100;
+    public static final int ERR_FILE_BROKEN         = 0x200;
 
     /**
      * 本地错误

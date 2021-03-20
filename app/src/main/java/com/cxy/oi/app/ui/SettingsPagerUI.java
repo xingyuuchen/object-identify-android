@@ -9,6 +9,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -16,19 +17,23 @@ import androidx.fragment.app.Fragment;
 
 import com.cxy.oi.R;
 import com.cxy.oi.app.netscene.NetSceneRegister;
+import com.cxy.oi.app.netscene.NetSceneUploadAvatar;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
+import com.cxy.oi.plugin_gallery.IPluginGallery;
+import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 
 
-public class SettingsUI extends Fragment {
+public class SettingsPagerUI extends Fragment {
     private static final String TAG = "SettingsUI";
 
     private RelativeLayout ui;
     private TextView usrIdTv;
     private TextView nicknameTv;
+    private ImageView avatarIv;
     private TextView gotoChangeNicknameBtn;
 
     private final View.OnClickListener gotoChangeNicknameUIListener = new View.OnClickListener() {
@@ -52,11 +57,13 @@ public class SettingsUI extends Fragment {
     private void initView(View root) {
         Log.i(TAG, "[initView]");
         ui = root.findViewById(R.id.tab2wrapper);
-        ImageView avatarIv = root.findViewById(R.id.avatar_iv);
+        avatarIv = root.findViewById(R.id.avatar_iv);
         avatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
+                Intent intent = new Intent();
+                intent.setClass(getActivity(), AlbumPreviewUI.class);
+                startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_SELECT_AVATAR);
             }
         });
 
@@ -105,20 +112,53 @@ public class SettingsUI extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         Log.i(TAG, "requestCode: %d, resultCode: %d", requestCode, resultCode);
-        if (requestCode == ConstantsUI.SetNicknameUI.ACTIVITY_REQUEST_SET_NICKNAME) {
-            if (resultCode == Activity.RESULT_OK) {
-                String nickname = data.getStringExtra(ConstantsUI.SetNicknameUI.KNICKNAME);
-                if (!Util.isNullOrNil(nickname)) {
-                    nicknameTv.setText(nickname);
-                    return;
+        switch (requestCode) {
+            case ConstantsUI.SetNicknameUI.ACTIVITY_REQUEST_SET_NICKNAME: {
+                if (resultCode == Activity.RESULT_OK) {
+                    String nickname = data.getStringExtra(ConstantsUI.SetNicknameUI.KNICKNAME);
+                    if (!Util.isNullOrNil(nickname)) {
+                        nicknameTv.setText(nickname);
+                        return;
+                    }
+                    Log.w(TAG, "[onActivityResult] getStringExtra() == null");
+                    nickname = OIKernel.account().getNickName();
+                    if (!Util.isNullOrNil(nickname)) {
+                        nicknameTv.setText(nickname);
+                        return;
+                    }
+                    Log.w(TAG, "[onActivityResult] OIKernel.account().getNickName() == null");
                 }
-                Log.w(TAG, "[onActivityResult] getStringExtra() == null");
-                nickname = OIKernel.account().getNickName();
-                if (!Util.isNullOrNil(nickname)) {
-                    nicknameTv.setText(nickname);
-                    return;
+                break;
+            }
+            case ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_SELECT_AVATAR: {
+                if (resultCode == Activity.RESULT_OK) {
+                    String avatarPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KSELECT_IMG_PATH);
+                    if (avatarPath == null) {
+                        Log.e(TAG, "[onActivityResult avatarPath == null");
+                        return;
+                    }
+                    if (!OIKernel.account().accountReady()) {
+                        Toast.makeText(OIApplicationContext.getContext(), "账户尚未注册",
+                                Toast.LENGTH_LONG).show();
+                        Log.e(TAG, "[onActivityResult] accountReady() = false");
+                        return;
+                    }
+                    NetSceneUploadAvatar netScene = new NetSceneUploadAvatar(avatarPath, getContext(),
+                            new NetSceneUploadAvatar.IAvatarUploadListener() {
+                                @Override
+                                public void onAvatarUploaded(String avatarPath, boolean isSuccess) {
+                                    String toast = isSuccess ? "头像上传成功" : "头像上传失败";
+                                    Toast.makeText(OIApplicationContext.getContext(), "头像上传成功",
+                                            Toast.LENGTH_SHORT).show();
+                                    if (isSuccess) {
+                                        OIKernel.plugin(IPluginGallery.class).
+                                                AttachThumbDrawable(avatarIv, avatarPath);
+                                    }
+                                }
+                    });
+                    OIKernel.getNetSceneQueue().doScene(netScene);
                 }
-                Log.w(TAG, "[onActivityResult] OIKernel.account().getNickName() == null");
+                break;
             }
         }
     }

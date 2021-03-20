@@ -70,7 +70,7 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
     private void initViewPager() {
         fragments = new ArrayList<>();
         fragments.add(new IndexPagerUI());
-        fragments.add(new SettingsUI());
+        fragments.add(new SettingsPagerUI());
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @NonNull

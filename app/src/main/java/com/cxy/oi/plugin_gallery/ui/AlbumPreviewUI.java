@@ -63,7 +63,7 @@ public class AlbumPreviewUI extends Activity {
             public void onClick(View v) {
                 MediaItem selectedItem = adapter.getSelectedItem();
                 if (selectedItem != null) {
-                    doQueryImage(selectedItem.originalPath);
+                    onImageSelected(selectedItem.originalPath);
                 }
             }
         });
@@ -82,9 +82,9 @@ public class AlbumPreviewUI extends Activity {
     }
 
 
-    public void doQueryImage(String imgPath) {
+    private void onImageSelected(String imgPath) {
         Intent intent = new Intent();
-        intent.putExtra(ConstantsUI.AlbumPreviewUI.KQUERY_IMG_PATH, imgPath);
+        intent.putExtra(ConstantsUI.AlbumPreviewUI.KSELECT_IMG_PATH, imgPath);
         setResult(Activity.RESULT_OK, intent);
         finish();
     }

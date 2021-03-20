@@ -53,6 +53,9 @@ public abstract class NetSceneBase {
         if ((errCode & ConstantsProtocol.ERR_ILLEGAL_RESP) > 0) {
             toast.append("返回数据包不合法 ");
         }
+        if ((errCode & ConstantsProtocol.ERR_FILE_BROKEN) > 0) {
+            toast.append("后台文件损坏 ");
+        }
         if (toast.length() > 0) {
             toast.append(errmsg);
             Log.e(getTag(), "[checkErrCodeAndShowToast] errCode: %s", errCode);

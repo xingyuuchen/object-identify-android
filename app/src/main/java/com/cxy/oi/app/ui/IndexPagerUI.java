@@ -91,7 +91,7 @@ public class IndexPagerUI extends Fragment {
                     Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, data == null");
                     return;
                 }
-                String imgPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KQUERY_IMG_PATH);
+                String imgPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KSELECT_IMG_PATH);
                 if (imgPath == null) {
                     Log.e(TAG, "[onActivityResult] ACTIVITY_REQUEST_QUERY_IMG, imgPath == null");
                     return;

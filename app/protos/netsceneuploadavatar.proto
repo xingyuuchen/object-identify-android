@@ -1,0 +1,23 @@
+syntax = "proto2";
+
+package netsceneuploadavatar;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "NetSceneUploadAvatarProto";
+
+option java_multiple_files = true;
+
+
+message NetSceneUploadAvatarReq {
+  optional uint32 usr_id = 1;
+  optional bytes avatar_img_bytes = 2;
+
+}
+
+message NetSceneUploadAvatarResp {
+  optional bool nop = 1;    // padding
+
+}
+
+
