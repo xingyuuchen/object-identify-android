@@ -1,16 +1,12 @@
 package com.cxy.oi.app.ui;
 
 import android.Manifest;
-import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
-import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.Toast;
 
@@ -27,19 +23,13 @@ import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.crash.OICrashReporter;
 import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.network.CoreService;
 import com.cxy.oi.kernel.network.CoreServiceConnection;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
-import com.cxy.oi.plugin_gallery.netscene.NetSceneGetTrainProgress;
-import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
-import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
-import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -92,6 +82,27 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
             @Override
             public int getCount() {
                 return fragments.size();
+            }
+        });
+        viewPager.addOnPageChangeListener(new ViewPager.OnPageChangeListener() {
+            @Override
+            public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
+//                Log.i(TAG, "[onPageScrolled] %d, %f, %d", position, positionOffset, positionOffsetPixels);
+            }
+
+            @Override
+            public void onPageSelected(int position) {
+                Log.i(TAG, "[onPageSelected] %d", position);
+                if (tabbar != null) {
+                    tabbar.switchToTab(position);
+                    return;
+                }
+                Log.e(TAG, "[onPageSelected] tabbar is null!");
+            }
+
+            @Override
+            public void onPageScrollStateChanged(int state) {
+//                Log.i(TAG, "[onPageScrollStateChanged] %d", state);
             }
         });
     }

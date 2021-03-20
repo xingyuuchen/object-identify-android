@@ -18,7 +18,7 @@ public class BottomTabUI extends LinearLayout {
     private static final String TAG = "BottomTabUI";
 
     private Context mContext;
-    private int lastClickIdx;
+    private int lastClickIdx = -1;
     private IOnTabClickListener onTabClickedListener;
 
     private TabItem findMoreTab;
@@ -98,7 +98,10 @@ public class BottomTabUI extends LinearLayout {
         }
     };
 
-    private void switchToTab(int idx) {
+    public void switchToTab(int idx) {
+        if (lastClickIdx == idx) {
+            return;
+        }
         lastClickIdx = idx;
         switch (idx) {
             case ConstantsUI.LauncherUI.INDEX_FINDMORE: {
