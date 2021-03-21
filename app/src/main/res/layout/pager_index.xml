@@ -65,16 +65,15 @@
 
         <TextView
             style="@style/MainTextTheme"
-            android:id="@+id/search_history_tv"
-            android:text="@string/search_history"
+            android:id="@+id/hot_search_tv"
+            android:text="@string/hot_search"
             />
-        <ListView
-            android:id="@+id/history_items"
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/hot_search_items_recyclerView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/search_history_tv"
+            android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            />
+            android:layout_below="@+id/hot_search_tv" />
     </RelativeLayout>
 
 </RelativeLayout>

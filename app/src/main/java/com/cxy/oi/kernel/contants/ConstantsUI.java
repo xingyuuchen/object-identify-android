@@ -35,6 +35,12 @@ public final class ConstantsUI {
 
     }
 
+    public static final class HotSearchUI {
+        private HotSearchUI() {
+        }
+        public static final int SPAN_COUNT = 3;
+    }
+
     public static final class ObjectItem {
         private ObjectItem() {
         }

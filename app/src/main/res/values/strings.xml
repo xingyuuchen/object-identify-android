@@ -4,6 +4,7 @@
     <string name="mine">我的</string>
     <string name="find_more">发现</string>
     <string name="search_history">搜索历史</string>
+    <string name="hot_search">识物小热搜</string>
     <string name="quick_search">快速查询</string>
     <string name="train_detail">后台训练详情</string>
     <string name="no_hit_rates">后台无hitRates</string>
@@ -20,5 +21,7 @@
     <string name="copyright_zh">陈星宇 版权所有</string>
     <string name="copyright_en">Copyright ©️2020–2021 xingyuuchen. All Rights Reserved.</string>
     <string name="goto_change_nickname">>></string>
+    <string name="loading">加载中…</string>
+    <string name="hot_search_heat">热度: %d</string>
 
 </resources>

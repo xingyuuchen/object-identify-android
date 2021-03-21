@@ -1,14 +1,12 @@
 package com.cxy.oi.kernel.event;
 
-public abstract class IEvent {
+public class IEvent {
 
-    public abstract void callback();
-
-    private int eventID;
+    private int eventID = 0;
 
     public int getEventID() {
         if (eventID == 0) {
-            eventID = getClass().hashCode();
+            eventID = getClass().getName().hashCode();
         }
         return eventID;
     }

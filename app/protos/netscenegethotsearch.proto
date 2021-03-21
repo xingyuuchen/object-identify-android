@@ -1,0 +1,31 @@
+syntax = "proto2";
+
+package netscenegethotsearch;
+
+option java_package = "com.cxy.oi.autogen";
+
+option java_outer_classname = "NetSceneGetHotSearchProto";
+
+option java_multiple_files = true;
+
+
+message NetSceneGetHotSearchReq {
+  optional uint32 usr_id = 1;
+
+}
+
+
+message NetSceneGetHotSearchResp {
+  message HotSearchItem {
+    enum ItemType {
+      PLANT     = 0;
+      ANIMAL    = 1;
+      LANDMARK  = 2;
+    }
+    optional string item_name = 1;
+    optional ItemType item_type = 2 [default = PLANT];
+    optional uint32 heat = 3;
+  }
+
+  repeated HotSearchItem hot_search_items = 1;
+}

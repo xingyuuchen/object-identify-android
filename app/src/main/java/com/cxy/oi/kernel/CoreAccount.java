@@ -21,6 +21,7 @@ public final class CoreAccount {
             usrId = id;
         }
         nickName = sp.getString(ConstantsStorage.ACCOUNT_KNICKNAME, "");
+        avatarPath = sp.getString(ConstantsStorage.ACCOUNT_KAVATAR_PATH, "");
     }
 
     public boolean accountReady() {
@@ -59,4 +60,7 @@ public final class CoreAccount {
         return nickName;
     }
 
+    public String getAvatarPath() {
+        return avatarPath;
+    }
 }

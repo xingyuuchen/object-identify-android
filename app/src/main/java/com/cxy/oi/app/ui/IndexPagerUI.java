@@ -13,6 +13,7 @@ import android.widget.RelativeLayout;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
@@ -26,10 +27,12 @@ import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
 import java.io.File;
 
+
 public class IndexPagerUI extends Fragment {
     private static final String TAG = "IndexPagerUI";
 
     private RelativeLayout ui;
+    private RecyclerView hotSearchRecyclerView;
 
     @Nullable
     @Override
@@ -42,8 +45,9 @@ public class IndexPagerUI extends Fragment {
     private void initView(View root) {
         ui = root.findViewById(R.id.tab1wrapper);
         ImageView bgImage = root.findViewById(R.id.bg_image);
-        ListView historyItemListView = root.findViewById(R.id.history_items);
-        SearchHistoryUI searchHistoryUI = new SearchHistoryUI(historyItemListView, OIApplicationContext.getContext());
+
+        hotSearchRecyclerView = root.findViewById(R.id.hot_search_items_recyclerView);
+        HotSearchUI hotSearchUI = new HotSearchUI(hotSearchRecyclerView, getActivity());
 
         ImageView goToGalleryPreviewIv = root.findViewById(R.id.btn_gallery);
         goToGalleryPreviewIv.setOnClickListener(new View.OnClickListener() {

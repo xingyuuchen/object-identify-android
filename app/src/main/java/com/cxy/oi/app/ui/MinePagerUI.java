@@ -7,6 +7,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -27,7 +28,7 @@ import com.cxy.oi.plugin_gallery.IPluginGallery;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
 
 
-public class SettingsPagerUI extends Fragment {
+public class MinePagerUI extends Fragment {
     private static final String TAG = "SettingsUI";
 
     private RelativeLayout ui;
@@ -57,6 +58,10 @@ public class SettingsPagerUI extends Fragment {
     private void initView(View root) {
         Log.i(TAG, "[initView]");
         ui = root.findViewById(R.id.tab2wrapper);
+
+        ListView searchHistoryListView = root.findViewById(R.id.history_items);
+        SearchHistoryUI searchHistoryUI = new SearchHistoryUI(searchHistoryListView, OIApplicationContext.getContext());
+
         avatarIv = root.findViewById(R.id.avatar_iv);
         avatarIv.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -66,12 +71,16 @@ public class SettingsPagerUI extends Fragment {
                 startActivityForResult(intent, ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_SELECT_AVATAR);
             }
         });
+        if (!Util.isNullOrNil(OIKernel.account().getAvatarPath())) {
+            OIKernel.plugin(IPluginGallery.class).AttachThumbDrawable(avatarIv, OIKernel.account().getAvatarPath());
+        }
 
         usrIdTv = root.findViewById(R.id.usrid_tv);
         gotoChangeNicknameBtn = root.findViewById(R.id.goto_change_nickname_btn);
         gotoChangeNicknameBtn.setOnClickListener(gotoChangeNicknameUIListener);
         nicknameTv = root.findViewById(R.id.nickname_tv);
         nicknameTv.setOnClickListener(gotoChangeNicknameUIListener);
+
     }
 
     @Override
@@ -114,7 +123,7 @@ public class SettingsPagerUI extends Fragment {
         Log.i(TAG, "requestCode: %d, resultCode: %d", requestCode, resultCode);
         switch (requestCode) {
             case ConstantsUI.SetNicknameUI.ACTIVITY_REQUEST_SET_NICKNAME: {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     String nickname = data.getStringExtra(ConstantsUI.SetNicknameUI.KNICKNAME);
                     if (!Util.isNullOrNil(nickname)) {
                         nicknameTv.setText(nickname);
@@ -131,7 +140,7 @@ public class SettingsPagerUI extends Fragment {
                 break;
             }
             case ConstantsUI.AlbumPreviewUI.ACTIVITY_REQUEST_SELECT_AVATAR: {
-                if (resultCode == Activity.RESULT_OK) {
+                if (resultCode == Activity.RESULT_OK && data != null) {
                     String avatarPath = data.getStringExtra(ConstantsUI.AlbumPreviewUI.KSELECT_IMG_PATH);
                     if (avatarPath == null) {
                         Log.e(TAG, "[onActivityResult avatarPath == null");
@@ -148,7 +157,7 @@ public class SettingsPagerUI extends Fragment {
                                 @Override
                                 public void onAvatarUploaded(String avatarPath, boolean isSuccess) {
                                     String toast = isSuccess ? "头像上传成功" : "头像上传失败";
-                                    Toast.makeText(OIApplicationContext.getContext(), "头像上传成功",
+                                    Toast.makeText(OIApplicationContext.getContext(), toast,
                                             Toast.LENGTH_SHORT).show();
                                     if (isSuccess) {
                                         OIKernel.plugin(IPluginGallery.class).

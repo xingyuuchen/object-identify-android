@@ -6,9 +6,10 @@
     android:layout_height="match_parent">
 
     <RelativeLayout
+        android:id="@+id/profile"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="50dp"
+        android:layout_marginTop="15dp"
         >
 
         <com.cxy.oi.app.ui.RoundCornerImageView
@@ -22,19 +23,21 @@
             android:id="@+id/nickname_tv"
             android:layout_toEndOf="@id/avatar_iv"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="8dp"
-            android:textSize="25sp"
+            android:layout_marginTop="12dp"
+            android:textSize="28sp"
+            android:textColor="@color/black"
             android:text="@string/default_nickname"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
             android:id="@+id/goto_change_nickname_btn"
-            android:textSize="25sp"
+            android:textSize="28sp"
             android:text="@string/goto_change_nickname"
             android:layout_alignBottom="@id/nickname_tv"
             android:layout_alignParentEnd="true"
             android:layout_marginEnd="5dp"
-            android:padding="5dp"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <TextView
@@ -42,7 +45,7 @@
             android:layout_below="@id/nickname_tv"
             android:layout_toEndOf="@id/avatar_iv"
             android:layout_marginStart="10dp"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="20dp"
             android:text="@string/usrid"
             android:textSize="20sp"
             android:layout_width="wrap_content"
@@ -50,6 +53,24 @@
     </RelativeLayout>
 
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/profile">
+
+        <TextView
+            style="@style/MainTextTheme"
+            android:id="@+id/search_history_tv"
+            android:text="@string/search_history"
+            />
+        <ListView
+            android:id="@+id/history_items"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_history_tv"
+            android:layout_marginTop="10dp"
+            />
+    </RelativeLayout>
 
     <RelativeLayout
         android:id="@+id/copyright"
@@ -58,6 +79,7 @@
         android:layout_alignParentBottom="true"
         android:layout_marginBottom="@dimen/copyright_margin_below"
         android:layout_centerHorizontal="true"
+        android:background="@drawable/copyright_bg"
         >
         <TextView
             android:id="@+id/copyright_zh_tv"
@@ -65,6 +87,8 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="13sp"
+            android:paddingTop="3dp"
+            android:textColor="@color/white"
             android:text="@string/copyright_zh" />
         <TextView
             android:id="@+id/copyright_en_tv"
@@ -73,6 +97,10 @@
             android:layout_height="wrap_content"
             android:layout_centerHorizontal="true"
             android:textSize="13sp"
+            android:paddingLeft="7dp"
+            android:paddingRight="7dp"
+            android:paddingBottom="3dp"
+            android:textColor="@color/white"
             android:text="@string/copyright_en" />
     </RelativeLayout>
 

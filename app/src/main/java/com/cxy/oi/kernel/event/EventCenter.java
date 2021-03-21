@@ -15,7 +15,7 @@ public class EventCenter {
     private EventCenter() {
     }
 
-    private Map<Integer, Set<IListener<?>>> listenerMap = new HashMap<>();
+    private final Map<Integer, Set<IListener<?>>> listenerMap = new HashMap<>();
 
 
     public void publish(IEvent event) {
@@ -23,7 +23,7 @@ public class EventCenter {
         Set<IListener<?>> listeners = listenerMap.get(eventId);
         if (listeners != null) {
             for (IListener<?> listener : listeners) {
-                listener.callback();
+                listener.callback(event);
             }
         }
     }

@@ -8,7 +8,7 @@ import java.util.HashSet;
 import java.util.Set;
 
 
-public class SearchItemFactory {
+public final class SearchItemFactory {
     private static final String TAG = "SearchItemFactory";
 
     private static final Set<SearchItem> allSearchItems;

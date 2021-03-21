@@ -3,6 +3,8 @@
 
     <dimen name="tabbar_height">55dp</dimen>
     <dimen name="btn_corner">5dp</dimen>
+    <dimen name="copyright_corner">6dp</dimen>
+    <dimen name="hotsearch_item_corner">20dp</dimen>
     <dimen name="shadow_width">10dp</dimen>
     <dimen name="progressbar_size">150dp</dimen>
     <dimen name="copyright_margin_below">65dp</dimen>

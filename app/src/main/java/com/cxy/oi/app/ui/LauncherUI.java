@@ -18,7 +18,6 @@ import androidx.fragment.app.FragmentStatePagerAdapter;
 import androidx.viewpager.widget.ViewPager;
 
 import com.cxy.oi.R;
-import com.cxy.oi.app.TestEvent;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
@@ -55,7 +54,6 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
         initView();
         AppForegroundDelegate.INSTANCE.registerListener(this);
 
-        EventCenter.INSTANCE.publish(new TestEvent());
         Util.checkPermissionsAndRequest(this, this,
                 new String[]{Manifest.permission.CAMERA}, REQUEST_PERMISSION_DEFAULT);
 
@@ -70,7 +68,7 @@ public class LauncherUI extends AppCompatActivity implements IAppForegroundListe
     private void initViewPager() {
         fragments = new ArrayList<>();
         fragments.add(new IndexPagerUI());
-        fragments.add(new SettingsPagerUI());
+        fragments.add(new MinePagerUI());
 
         viewPager.setAdapter(new FragmentStatePagerAdapter(getSupportFragmentManager()) {
             @NonNull
