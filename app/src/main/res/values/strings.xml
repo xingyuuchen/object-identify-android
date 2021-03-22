@@ -3,7 +3,7 @@
     <string name="app_name">拍照识植物</string>
     <string name="mine">我的</string>
     <string name="find_more">发现</string>
-    <string name="search_history">搜索历史</string>
+    <string name="search_history">我都搜过…</string>
     <string name="hot_search">识物小热搜</string>
     <string name="quick_search">快速查询</string>
     <string name="train_detail">后台训练详情</string>

@@ -6,8 +6,9 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.ListView;
 import android.widget.RelativeLayout;
 
 import androidx.annotation.NonNull;
@@ -17,7 +18,6 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneGetTrainProgress;
@@ -33,6 +33,7 @@ public class IndexPagerUI extends Fragment {
 
     private RelativeLayout ui;
     private RecyclerView hotSearchRecyclerView;
+    private HotSearchUI hotSearchUI;
 
     @Nullable
     @Override
@@ -46,8 +47,24 @@ public class IndexPagerUI extends Fragment {
         ui = root.findViewById(R.id.tab1wrapper);
         ImageView bgImage = root.findViewById(R.id.bg_image);
 
+        final ImageView refreshHotSearchIv = root.findViewById(R.id.refresh_hot_search_iv);
+        refreshHotSearchIv.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                if (hotSearchUI != null) {
+                    hotSearchUI.refreshHotSearch(new HotSearchUI.IRefreshHotSearchDoneListener() {
+                        @Override
+                        public void onRefreshDone() {
+                            refreshHotSearchIv.clearAnimation();
+                        }
+                    });
+                    Animation rotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);
+                    refreshHotSearchIv.startAnimation(rotateAnim);
+                }
+            }
+        });
         hotSearchRecyclerView = root.findViewById(R.id.hot_search_items_recyclerView);
-        HotSearchUI hotSearchUI = new HotSearchUI(hotSearchRecyclerView, getActivity());
+        hotSearchUI = new HotSearchUI(hotSearchRecyclerView, getActivity());
 
         ImageView goToGalleryPreviewIv = root.findViewById(R.id.btn_gallery);
         goToGalleryPreviewIv.setOnClickListener(new View.OnClickListener() {

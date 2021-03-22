@@ -30,15 +30,6 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
     private LayoutInflater inflater;
     private List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems;
 
-    private final NetSceneGetHotSearch.IOnHotSearchItemsLoadedListener onHotSearchItemsLoadedListener
-            = new NetSceneGetHotSearch.IOnHotSearchItemsLoadedListener() {
-        @Override
-        public void onHotSearchItemsLoaded(List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems) {
-            Log.i(TAG, "[onHotSearchItemsLoaded] loaded cnt: %d", hotSearchItems.size());
-            HotSearchDataAdapter.this.hotSearchItems = hotSearchItems;
-            notifyDataSetChanged();
-        }
-    };
 
     private final IListener<NetDispatcherReadyEvent> listener = new IListener<NetDispatcherReadyEvent>() {
         @Override
@@ -59,13 +50,30 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
 
     }
 
-
-    public void updateHotSearchItems() {
-        Log.i(TAG, "[updateHotSearchItems]");
-        NetSceneGetHotSearch netScene = new NetSceneGetHotSearch(onHotSearchItemsLoadedListener);
-        OIKernel.getNetSceneQueue().doScene(netScene);
+    public interface IUpdateHotSearchItemListener {
+        void onUpdateHotSearchItemDone();
     }
 
+
+    public void updateHotSearchItems() {
+        updateHotSearchItems(null);
+    }
+
+    public void updateHotSearchItems(final IUpdateHotSearchItemListener callback) {
+        Log.i(TAG, "[updateHotSearchItems]");
+        NetSceneGetHotSearch netScene = new NetSceneGetHotSearch(new NetSceneGetHotSearch.IOnHotSearchItemsLoadedListener() {
+            @Override
+            public void onHotSearchItemsLoaded(List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems) {
+                Log.i(TAG, "[onHotSearchItemsLoaded] loaded cnt: %d", hotSearchItems.size());
+                HotSearchDataAdapter.this.hotSearchItems = hotSearchItems;
+                notifyDataSetChanged();
+                if (callback != null) {
+                    callback.onUpdateHotSearchItemDone();
+                }
+            }
+        });
+        OIKernel.getNetSceneQueue().doScene(netScene);
+    }
 
     @NonNull
     @Override

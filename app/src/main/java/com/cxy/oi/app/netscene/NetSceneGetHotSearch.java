@@ -52,12 +52,15 @@ public class NetSceneGetHotSearch extends NetSceneBase implements IOnNetEnd {
             return;
         }
 
-        List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems = hardCodeResp();
-//        List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems = resp.getHotSearchItemsList();
+//        List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems = hardCodeResp();
+        List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems = resp.getHotSearchItemsList();
 
         int hotSearchItemCnt = resp.getHotSearchItemsCount();
 
-        Log.i(TAG, "[onNetEnd hotSearchItemCnt: %d", hotSearchItemCnt);
+        Log.i(TAG, "[onNetEnd] hotSearchItemCnt: %d", hotSearchItemCnt);
+        for (NetSceneGetHotSearchResp.HotSearchItem item : hotSearchItems) {
+            Log.i(TAG, "[onNetEnd] name: %s, heat: %d", item.getItemName(), item.getHeat());
+        }
 
         if (callback != null) {
             callback.onHotSearchItemsLoaded(hotSearchItems);

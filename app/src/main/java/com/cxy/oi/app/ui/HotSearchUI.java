@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.app.adapter.HotSearchDataAdapter;
 import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.util.Log;
 
 
 public class HotSearchUI {
@@ -31,6 +32,28 @@ public class HotSearchUI {
         adapter = new HotSearchDataAdapter(inflater, context);
         hotSearchListView.setAdapter(adapter);
 
+    }
+
+    public void refreshHotSearch() {
+        refreshHotSearch(null);
+    }
+
+    public void refreshHotSearch(final IRefreshHotSearchDoneListener callback) {
+        if (adapter != null) {
+            Log.i(TAG, "[refreshHotSearch]");
+            adapter.updateHotSearchItems(new HotSearchDataAdapter.IUpdateHotSearchItemListener() {
+                @Override
+                public void onUpdateHotSearchItemDone() {
+                    if (callback != null) {
+                        callback.onRefreshDone();
+                    }
+                }
+            });
+        }
+    }
+
+    public interface IRefreshHotSearchDoneListener {
+        void onRefreshDone();
     }
 
     public Context getContext() {

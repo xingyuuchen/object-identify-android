@@ -63,17 +63,38 @@
         android:layout_height="wrap_content"
         android:layout_below="@+id/fast_search">
 
-        <TextView
-            style="@style/MainTextTheme"
-            android:id="@+id/hot_search_tv"
-            android:text="@string/hot_search"
-            />
+        <RelativeLayout
+            android:id="@+id/hot_search_rl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            >
+            <TextView
+                android:id="@+id/hot_search_tv"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="10dp"
+                android:textSize="20sp"
+                android:text="@string/hot_search"
+                android:layout_centerVertical="true"
+                />
+            <ImageView
+                android:id="@+id/refresh_hot_search_iv"
+                android:layout_width="25dp"
+                android:layout_height="25dp"
+                android:src="@drawable/refresh"
+                android:layout_toEndOf="@id/hot_search_tv"
+                android:layout_marginStart="10dp"
+                android:layout_centerVertical="true"
+                />
+        </RelativeLayout>
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/hot_search_items_recyclerView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="10dp"
-            android:layout_below="@+id/hot_search_tv" />
+            android:layout_below="@+id/hot_search_rl" />
     </RelativeLayout>
 
 </RelativeLayout>
