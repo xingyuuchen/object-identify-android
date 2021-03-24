@@ -30,6 +30,8 @@
         <TextView
             style="@style/SmallTextTheme"
             android:id="@+id/item_description"
+            android:maxLines="2"
+            android:ellipsize="end"
             />
 
     </LinearLayout>

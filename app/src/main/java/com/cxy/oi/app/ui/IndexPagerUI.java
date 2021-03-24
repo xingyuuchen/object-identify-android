@@ -10,6 +10,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
@@ -18,6 +19,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.contants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneGetTrainProgress;
@@ -56,6 +58,8 @@ public class IndexPagerUI extends Fragment {
                         @Override
                         public void onRefreshDone() {
                             refreshHotSearchIv.clearAnimation();
+                            Toast.makeText(OIApplicationContext.getContext(), "已刷新",
+                                    Toast.LENGTH_SHORT).show();
                         }
                     });
                     Animation rotateAnim = AnimationUtils.loadAnimation(getActivity(), R.anim.rotate);

@@ -133,6 +133,9 @@ public class MinePagerUI extends Fragment {
                     nickname = OIKernel.account().getNickName();
                     if (!Util.isNullOrNil(nickname)) {
                         nicknameTv.setText(nickname);
+                        String toast = "昵称上传成功";
+                        Toast.makeText(OIApplicationContext.getContext(), toast,
+                                Toast.LENGTH_SHORT).show();
                         return;
                     }
                     Log.w(TAG, "[onActivityResult] OIKernel.account().getNickName() == null");
