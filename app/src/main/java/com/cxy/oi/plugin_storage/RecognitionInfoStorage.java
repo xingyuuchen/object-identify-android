@@ -41,7 +41,7 @@ public class RecognitionInfoStorage {
             Log.i(TAG, "[insert] failed, res: %s", res);
             return res;
         }
-        doNotify();
+        doNotifyInserted(info);
         return res;
     }
 
@@ -51,7 +51,7 @@ public class RecognitionInfoStorage {
         }
         String where = RecognitionInfo.COL_ID + "=?";
         int res = db.delete(RecognitionInfo.RECOGNITION_INFO_TABLE, where, new String[] {info.getId() + ""});
-        doNotify();
+        doNotifyDelete();
         return res;
     }
 
@@ -77,10 +77,17 @@ public class RecognitionInfoStorage {
         return count;
     }
 
-    private void doNotify() {
+    private void doNotifyInserted(RecognitionInfo info) {
         Set<IOnRecognitionInfoChangeListener> set = new HashSet<>(listeners);
         for (IOnRecognitionInfoChangeListener listener : set) {
-            listener.onNewRecognitionInfoInserted();
+            listener.onNewRecognitionInfoInserted(info);
+        }
+    }
+
+    private void doNotifyDelete() {
+        Set<IOnRecognitionInfoChangeListener> set = new HashSet<>(listeners);
+        for (IOnRecognitionInfoChangeListener listener : set) {
+            listener.onRecognitionInfoDeleted();
         }
     }
 
@@ -94,6 +101,7 @@ public class RecognitionInfoStorage {
 
     private final Set<IOnRecognitionInfoChangeListener> listeners;
     public interface IOnRecognitionInfoChangeListener {
-        void onNewRecognitionInfoInserted();
+        void onNewRecognitionInfoInserted(RecognitionInfo info);
+        void onRecognitionInfoDeleted();
     }
 }

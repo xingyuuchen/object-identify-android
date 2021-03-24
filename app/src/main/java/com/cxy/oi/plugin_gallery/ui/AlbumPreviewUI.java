@@ -16,12 +16,12 @@ import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.model.MediaItem;
 
-import static com.cxy.oi.kernel.contants.ConstantsUI.AlbumPreviewUI.REQUEST_PERMISSION;
+import static com.cxy.oi.kernel.constants.ConstantsUI.AlbumPreviewUI.REQUEST_PERMISSION;
 
 public class AlbumPreviewUI extends Activity {
     private static final String TAG = "OI.AlbumPreviewUI";

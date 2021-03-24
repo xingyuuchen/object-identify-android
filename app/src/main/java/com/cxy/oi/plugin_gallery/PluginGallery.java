@@ -12,8 +12,18 @@ public class PluginGallery implements IPluginGallery {
     }
 
     @Override
+    public void AttachThumbDrawable(ImageView iv, String path, boolean isBlur) {
+        ThumbDrawable.attach(iv, path, isBlur);
+    }
+
+    @Override
     public void AttachThumbDrawable(ImageView iv, long origId, String path) {
         ThumbDrawable.attach(iv, origId, path);
+    }
+
+    @Override
+    public void AttachThumbDrawable(ImageView iv, long origId, String path, boolean isBlur) {
+        ThumbDrawable.attach(iv, origId, path, isBlur);
     }
 
     @Override

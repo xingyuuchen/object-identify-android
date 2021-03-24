@@ -6,7 +6,7 @@ import android.database.Cursor;
 
 import com.cxy.oi.app.model.ObjectType;
 import com.cxy.oi.kernel.modelbase.IDBItem;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Util;
 
 /**

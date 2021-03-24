@@ -23,7 +23,6 @@ import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.crash.OICrashReporter;
-import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.network.CoreService;
 import com.cxy.oi.kernel.network.CoreServiceConnection;
 import com.cxy.oi.kernel.util.Log;
@@ -32,8 +31,8 @@ import com.cxy.oi.kernel.util.Util;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
-import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
+import static com.cxy.oi.kernel.constants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
+import static com.cxy.oi.kernel.constants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_DEFAULT;
 
 
 public class LauncherUI extends AppCompatActivity implements IAppForegroundListener {

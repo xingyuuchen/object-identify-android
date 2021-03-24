@@ -1,12 +1,10 @@
 package com.cxy.oi.app.netscene;
 
 import android.content.Context;
-import android.widget.Toast;
 
 import com.cxy.oi.autogen.NetSceneUploadAvatarReq;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.CommonReqResp;
 import com.cxy.oi.kernel.network.IDispatcher;

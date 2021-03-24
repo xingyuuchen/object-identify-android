@@ -1,7 +1,7 @@
 package com.cxy.oi.kernel.network;
 
 import com.cxy.oi.autogen.BaseNetSceneReq;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.google.protobuf.ByteString;
 import com.google.protobuf.GeneratedMessageV3;
 

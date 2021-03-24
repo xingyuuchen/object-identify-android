@@ -136,6 +136,23 @@ private static final long serialVersionUID = 0L;
      * @return The heat.
      */
     int getHeat();
+
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return Whether the itemDesc field is set.
+     */
+    boolean hasItemDesc();
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return The itemDesc.
+     */
+    java.lang.String getItemDesc();
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return The bytes for itemDesc.
+     */
+    com.google.protobuf.ByteString
+        getItemDescBytes();
   }
   /**
    * Protobuf type {@code netscenegethotsearch.NetSceneGetHotSearchResp.HotSearchItem}
@@ -152,6 +169,7 @@ private static final long serialVersionUID = 0L;
     private HotSearchItem() {
       itemName_ = "";
       itemType_ = 0;
+      itemDesc_ = "";
     }
 
     @java.lang.Override
@@ -206,6 +224,12 @@ private static final long serialVersionUID = 0L;
             case 24: {
               bitField0_ |= 0x00000004;
               heat_ = input.readUInt32();
+              break;
+            }
+            case 34: {
+              com.google.protobuf.ByteString bs = input.readBytes();
+              bitField0_ |= 0x00000008;
+              itemDesc_ = bs;
               break;
             }
             default: {
@@ -432,6 +456,54 @@ private static final long serialVersionUID = 0L;
       return heat_;
     }
 
+    public static final int ITEM_DESC_FIELD_NUMBER = 4;
+    private volatile java.lang.Object itemDesc_;
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return Whether the itemDesc field is set.
+     */
+    @java.lang.Override
+    public boolean hasItemDesc() {
+      return ((bitField0_ & 0x00000008) != 0);
+    }
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return The itemDesc.
+     */
+    @java.lang.Override
+    public java.lang.String getItemDesc() {
+      java.lang.Object ref = itemDesc_;
+      if (ref instanceof java.lang.String) {
+        return (java.lang.String) ref;
+      } else {
+        com.google.protobuf.ByteString bs = 
+            (com.google.protobuf.ByteString) ref;
+        java.lang.String s = bs.toStringUtf8();
+        if (bs.isValidUtf8()) {
+          itemDesc_ = s;
+        }
+        return s;
+      }
+    }
+    /**
+     * <code>optional string item_desc = 4;</code>
+     * @return The bytes for itemDesc.
+     */
+    @java.lang.Override
+    public com.google.protobuf.ByteString
+        getItemDescBytes() {
+      java.lang.Object ref = itemDesc_;
+      if (ref instanceof java.lang.String) {
+        com.google.protobuf.ByteString b = 
+            com.google.protobuf.ByteString.copyFromUtf8(
+                (java.lang.String) ref);
+        itemDesc_ = b;
+        return b;
+      } else {
+        return (com.google.protobuf.ByteString) ref;
+      }
+    }
+
     private byte memoizedIsInitialized = -1;
     @java.lang.Override
     public final boolean isInitialized() {
@@ -455,6 +527,9 @@ private static final long serialVersionUID = 0L;
       if (((bitField0_ & 0x00000004) != 0)) {
         output.writeUInt32(3, heat_);
       }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        com.google.protobuf.GeneratedMessageV3.writeString(output, 4, itemDesc_);
+      }
       unknownFields.writeTo(output);
     }
 
@@ -474,6 +549,9 @@ private static final long serialVersionUID = 0L;
       if (((bitField0_ & 0x00000004) != 0)) {
         size += com.google.protobuf.CodedOutputStream
           .computeUInt32Size(3, heat_);
+      }
+      if (((bitField0_ & 0x00000008) != 0)) {
+        size += com.google.protobuf.GeneratedMessageV3.computeStringSize(4, itemDesc_);
       }
       size += unknownFields.getSerializedSize();
       memoizedSize = size;
@@ -504,6 +582,11 @@ private static final long serialVersionUID = 0L;
         if (getHeat()
             != other.getHeat()) return false;
       }
+      if (hasItemDesc() != other.hasItemDesc()) return false;
+      if (hasItemDesc()) {
+        if (!getItemDesc()
+            .equals(other.getItemDesc())) return false;
+      }
       if (!unknownFields.equals(other.unknownFields)) return false;
       return true;
     }
@@ -526,6 +609,10 @@ private static final long serialVersionUID = 0L;
       if (hasHeat()) {
         hash = (37 * hash) + HEAT_FIELD_NUMBER;
         hash = (53 * hash) + getHeat();
+      }
+      if (hasItemDesc()) {
+        hash = (37 * hash) + ITEM_DESC_FIELD_NUMBER;
+        hash = (53 * hash) + getItemDesc().hashCode();
       }
       hash = (29 * hash) + unknownFields.hashCode();
       memoizedHashCode = hash;
@@ -666,6 +753,8 @@ private static final long serialVersionUID = 0L;
         bitField0_ = (bitField0_ & ~0x00000002);
         heat_ = 0;
         bitField0_ = (bitField0_ & ~0x00000004);
+        itemDesc_ = "";
+        bitField0_ = (bitField0_ & ~0x00000008);
         return this;
       }
 
@@ -706,6 +795,10 @@ private static final long serialVersionUID = 0L;
           result.heat_ = heat_;
           to_bitField0_ |= 0x00000004;
         }
+        if (((from_bitField0_ & 0x00000008) != 0)) {
+          to_bitField0_ |= 0x00000008;
+        }
+        result.itemDesc_ = itemDesc_;
         result.bitField0_ = to_bitField0_;
         onBuilt();
         return result;
@@ -765,6 +858,11 @@ private static final long serialVersionUID = 0L;
         }
         if (other.hasHeat()) {
           setHeat(other.getHeat());
+        }
+        if (other.hasItemDesc()) {
+          bitField0_ |= 0x00000008;
+          itemDesc_ = other.itemDesc_;
+          onChanged();
         }
         this.mergeUnknownFields(other.unknownFields);
         onChanged();
@@ -958,6 +1056,90 @@ private static final long serialVersionUID = 0L;
       public Builder clearHeat() {
         bitField0_ = (bitField0_ & ~0x00000004);
         heat_ = 0;
+        onChanged();
+        return this;
+      }
+
+      private java.lang.Object itemDesc_ = "";
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @return Whether the itemDesc field is set.
+       */
+      public boolean hasItemDesc() {
+        return ((bitField0_ & 0x00000008) != 0);
+      }
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @return The itemDesc.
+       */
+      public java.lang.String getItemDesc() {
+        java.lang.Object ref = itemDesc_;
+        if (!(ref instanceof java.lang.String)) {
+          com.google.protobuf.ByteString bs =
+              (com.google.protobuf.ByteString) ref;
+          java.lang.String s = bs.toStringUtf8();
+          if (bs.isValidUtf8()) {
+            itemDesc_ = s;
+          }
+          return s;
+        } else {
+          return (java.lang.String) ref;
+        }
+      }
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @return The bytes for itemDesc.
+       */
+      public com.google.protobuf.ByteString
+          getItemDescBytes() {
+        java.lang.Object ref = itemDesc_;
+        if (ref instanceof String) {
+          com.google.protobuf.ByteString b = 
+              com.google.protobuf.ByteString.copyFromUtf8(
+                  (java.lang.String) ref);
+          itemDesc_ = b;
+          return b;
+        } else {
+          return (com.google.protobuf.ByteString) ref;
+        }
+      }
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @param value The itemDesc to set.
+       * @return This builder for chaining.
+       */
+      public Builder setItemDesc(
+          java.lang.String value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        itemDesc_ = value;
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @return This builder for chaining.
+       */
+      public Builder clearItemDesc() {
+        bitField0_ = (bitField0_ & ~0x00000008);
+        itemDesc_ = getDefaultInstance().getItemDesc();
+        onChanged();
+        return this;
+      }
+      /**
+       * <code>optional string item_desc = 4;</code>
+       * @param value The bytes for itemDesc to set.
+       * @return This builder for chaining.
+       */
+      public Builder setItemDescBytes(
+          com.google.protobuf.ByteString value) {
+        if (value == null) {
+    throw new NullPointerException();
+  }
+  bitField0_ |= 0x00000008;
+        itemDesc_ = value;
         onChanged();
         return this;
       }

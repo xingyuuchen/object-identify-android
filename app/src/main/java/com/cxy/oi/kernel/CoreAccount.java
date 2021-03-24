@@ -3,7 +3,7 @@ package com.cxy.oi.kernel;
 import android.content.SharedPreferences;
 
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsStorage;
+import com.cxy.oi.kernel.constants.ConstantsStorage;
 import com.cxy.oi.kernel.util.Log;
 
 

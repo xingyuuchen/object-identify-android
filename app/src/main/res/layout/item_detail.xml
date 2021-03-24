@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent" >
+
+        <ImageView
+            android:id="@+id/detail_img_bg"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@drawable/bg"
+            android:alpha="0.4"
+            android:contentDescription="@string/bg_img" />
+        <ImageView
+            android:id="@+id/detail_img_bg_mask"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/alpha_0_3"
+            android:contentDescription="@string/bg_mask" />
+    </RelativeLayout>
+
+
+    <ImageView
+        android:id="@+id/detail_item_iv"
+        android:layout_width="80dp"
+        android:layout_height="80dp"
+        android:src="@drawable/icon_default"
+        android:contentDescription="@string/detail_item_iv" />
+
+    <TextView
+        android:id="@+id/detail_item_name_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_name"
+        android:layout_below="@+id/detail_item_iv"
+        />
+    <TextView
+        android:id="@+id/detail_item_desc_tv"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/item_desc"
+        android:layout_below="@+id/detail_item_name_tv"
+
+        />
+
+</RelativeLayout>

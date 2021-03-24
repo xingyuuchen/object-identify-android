@@ -1,6 +1,7 @@
 package com.cxy.oi.app.adapter;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,9 +14,11 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cxy.oi.R;
 import com.cxy.oi.app.events.NetDispatcherReadyEvent;
 import com.cxy.oi.app.netscene.NetSceneGetHotSearch;
+import com.cxy.oi.app.ui.ItemDetailUI;
 import com.cxy.oi.autogen.NetSceneGetHotSearchResp;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.OIApplicationContext;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.event.EventCenter;
 import com.cxy.oi.kernel.event.IEvent;
 import com.cxy.oi.kernel.event.IListener;
@@ -26,7 +29,7 @@ import java.util.List;
 public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static final String TAG = "HotSearchDataAdapter";
 
-    private Context context;
+    private Activity activity;
     private LayoutInflater inflater;
     private List<NetSceneGetHotSearchResp.HotSearchItem> hotSearchItems;
 
@@ -42,8 +45,29 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
         }
     };
 
-    public HotSearchDataAdapter(LayoutInflater inflater, Context context) {
-        this.context = context;
+    private final View.OnClickListener onItemClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+            Object tag = v.getTag();
+            if (tag instanceof Integer) {
+                int position = (int) tag;
+                NetSceneGetHotSearchResp.HotSearchItem item = getItem(position);
+                if (item == null) {
+                    return;
+                }
+                Intent intent = new Intent();
+                intent.setClass(activity, ItemDetailUI.class);
+                intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_NAME, item.getItemName());
+                intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_DESC, item.getItemDesc());
+                intent.putExtra(ConstantsUI.ItemDetailUI.KFROM_HOTSEARCH, true);
+
+                activity.startActivity(intent);
+            }
+        }
+    };
+
+    public HotSearchDataAdapter(LayoutInflater inflater, Activity activity) {
+        this.activity = activity;
         this.inflater = inflater;
 
         EventCenter.INSTANCE.addListener(listener);
@@ -80,6 +104,7 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
     public RecyclerView.ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         RecyclerView.ViewHolder viewHolder;
         View v = inflater.inflate(R.layout.hotsearch_item, null);
+        v.setOnClickListener(onItemClickListener);
 
         viewHolder = new HotSearchItemViewHolder(v);
         return viewHolder;
@@ -91,41 +116,23 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
             Log.e(TAG, "[onBindViewHolder] wtf? holder not instanceof HotSearchItemViewHolder");
             return;
         }
-        if (hotSearchItems == null) {
-            Log.i(TAG, "[onBindViewHolder] hotSearchItems is not ready");
-            return;
-        }
-        if (position < 0 || position >= hotSearchItems.size()) {
-            Log.e(TAG, "[onBindViewHolder] position(%d) illegal", position);
-            return;
-        }
 
+        NetSceneGetHotSearchResp.HotSearchItem item = getItem(position);
+        if (item == null) {
+            Log.i(TAG, "[onBindViewHolder] item == null");
+            return;
+        }
         HotSearchItemViewHolder viewHolder = (HotSearchItemViewHolder) holder;
-        NetSceneGetHotSearchResp.HotSearchItem item = hotSearchItems.get(position);
 
         viewHolder.itemType = item.getItemType();
         viewHolder.itemNameTv.setText(item.getItemName());
         int hotSearchHeatHeat = item.getHeat();
         viewHolder.itemHeatTv.setText(OIApplicationContext.getContext().
                 getString(R.string.hot_search_heat, hotSearchHeatHeat));
+        viewHolder.fillBackGround();
 
+        viewHolder.root.setTag(position);
 
-        Resources resources = OIApplicationContext.getContext().getResources();
-        switch (viewHolder.itemType) {
-            case PLANT: {
-                viewHolder.root.setBackgroundColor(resources.getColor(R.color.green_alpha1));
-                break;
-            }
-            case ANIMAL: {
-                viewHolder.root.setBackgroundColor(resources.getColor(R.color.red_alpha1));
-                break;
-            }
-            default:
-            case LANDMARK: {
-                viewHolder.root.setBackgroundColor(resources.getColor(R.color.yellow_alpha1));
-                break;
-            }
-        }
     }
 
     @Override
@@ -142,6 +149,16 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
         return 0;
     }
 
+    public NetSceneGetHotSearchResp.HotSearchItem getItem(int position) {
+        if (hotSearchItems == null) {
+            return null;
+        }
+        if (position < 0 || position > hotSearchItems.size()) {
+            return null;
+        }
+        return hotSearchItems.get(position);
+    }
+
 
     private static class HotSearchItemViewHolder extends RecyclerView.ViewHolder {
         public View root;
@@ -154,6 +171,25 @@ public class HotSearchDataAdapter extends RecyclerView.Adapter<RecyclerView.View
             itemNameTv = itemView.findViewById(R.id.item_name_tv);
             itemHeatTv = itemView.findViewById(R.id.item_heat_tv);
             itemType = NetSceneGetHotSearchResp.HotSearchItem.ItemType.PLANT;
+        }
+
+        public void fillBackGround() {
+            Resources resources = OIApplicationContext.getContext().getResources();
+            switch (itemType) {
+                case PLANT: {
+                    root.setBackgroundColor(resources.getColor(R.color.green_alpha1));
+                    break;
+                }
+                case ANIMAL: {
+                    root.setBackgroundColor(resources.getColor(R.color.red_alpha1));
+                    break;
+                }
+                default:
+                case LANDMARK: {
+                    root.setBackgroundColor(resources.getColor(R.color.yellow_alpha1));
+                    break;
+                }
+            }
         }
     }
 }

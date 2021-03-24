@@ -3,7 +3,7 @@ package com.cxy.oi.kernel.modelbase;
 import android.widget.Toast;
 
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.cxy.oi.kernel.network.CommonReqResp;
 import com.cxy.oi.kernel.network.IDispatcher;
 import com.cxy.oi.kernel.util.Log;

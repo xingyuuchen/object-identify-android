@@ -1,11 +1,15 @@
 package com.cxy.oi.app.model;
 
-import android.content.Context;
+import android.app.Activity;
+import android.content.Intent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.cxy.oi.R;
+import com.cxy.oi.app.ui.ItemDetailUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
+import com.cxy.oi.plugin_storage.RecognitionInfo;
 
 
 /**
@@ -17,7 +21,10 @@ import com.cxy.oi.R;
 public abstract class SearchItem {
     private static final String TAG = "SearchItem";
 
-    protected Context context;
+    protected Activity activity;
+    protected String itemName;
+    protected String itemDesc;
+    protected String imgPath;
 
     public abstract int getType();
 
@@ -33,6 +40,14 @@ public abstract class SearchItem {
         @Override
         public void onClick(View v) {
             onItemClick(v);
+
+            Intent intent = new Intent();
+            intent.setClass(activity, ItemDetailUI.class);
+            intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_NAME, itemName);
+            intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_TYPE, getType());
+            intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_DESC, itemDesc);
+            intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_IMG_PATH, imgPath);
+            activity.startActivity(intent);
         }
     };
 
@@ -43,8 +58,14 @@ public abstract class SearchItem {
         }
     };
 
-    public void setContext(Context context) {
-        this.context = context;
+    public void setActivity(Activity activity) {
+        this.activity = activity;
+    }
+
+    public void fillingData(RecognitionInfo info) {
+        itemName = info.getItemName();
+        itemDesc = info.getContent();
+        imgPath = info.getImgPath();
     }
 
     public static class BaseViewHolder {

@@ -4,7 +4,7 @@ import android.os.Binder;
 
 import com.cxy.oi.autogen.BaseNetSceneResp;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.cxy.oi.kernel.util.Log;
 import com.google.protobuf.InvalidProtocolBufferException;
 

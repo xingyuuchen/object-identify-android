@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.contants;
+package com.cxy.oi.kernel.constants;
 
 public final class ConstantsUI {
     private ConstantsUI() {
@@ -57,5 +57,14 @@ public final class ConstantsUI {
         public static final String KNICKNAME = "nickname";
     }
 
+    public static final class ItemDetailUI {
+        private ItemDetailUI() {
+        }
+        public static final String KITEM_NAME = "item_name";
+        public static final String KITEM_TYPE = "item_type";
+        public static final String KITEM_DESC = "item_desc";
+        public static final String KITEM_IMG_PATH = "item_img_path";
+        public static final String KFROM_HOTSEARCH = "from_hotSearch";
+    }
 }
 

@@ -1,7 +1,5 @@
 package com.cxy.oi.plugin_takephoto;
 
-import android.Manifest;
-import android.app.Activity;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
@@ -10,14 +8,11 @@ import android.provider.MediaStore;
 import androidx.fragment.app.Fragment;
 
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsStorage;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsStorage;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
-import com.cxy.oi.kernel.util.Util;
 
 import java.io.File;
-
-import static com.cxy.oi.kernel.contants.ConstantsUI.LauncherUI.REQUEST_PERMISSION_CAMERA_FORCE;
 
 
 public class TakePhotoUtil {

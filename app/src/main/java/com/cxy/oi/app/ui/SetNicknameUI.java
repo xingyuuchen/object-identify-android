@@ -14,7 +14,7 @@ import androidx.annotation.Nullable;
 import com.cxy.oi.R;
 import com.cxy.oi.app.netscene.NetSceneChangeNickname;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 
 

@@ -1,7 +1,5 @@
 package com.cxy.oi.app.model;
 
-import android.content.Context;
-
 import com.cxy.oi.kernel.util.Log;
 
 import java.util.HashSet;
@@ -14,13 +12,11 @@ public final class SearchItemFactory {
     private static final Set<SearchItem> allSearchItems;
 
 
-    public static SearchItem create(int type, Context context) {
+    public static SearchItem create(int type) {
         for (SearchItem item : allSearchItems) {
             if (item.getType() == type) {
                 try {
-                    SearchItem newItem = item.getClass().newInstance();
-                    newItem.setContext(context);
-                    return newItem;
+                    return item.getClass().newInstance();
                 } catch (IllegalAccessException | InstantiationException e) {
                     Log.printErrStackTrace(TAG, e, "[create]");
                 }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 import androidx.annotation.Nullable;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 
 public class BottomTabUI extends LinearLayout {
     private static final String TAG = "BottomTabUI";

@@ -7,7 +7,7 @@ import android.os.Message;
 import com.cxy.oi.kernel.app.AppForegroundDelegate;
 import com.cxy.oi.kernel.app.IAppForegroundListener;
 import com.cxy.oi.kernel.app.OIHandler;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 
 import java.util.ArrayList;

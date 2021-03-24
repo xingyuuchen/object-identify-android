@@ -2,7 +2,7 @@ package com.cxy.oi.kernel;
 
 import android.database.sqlite.SQLiteDatabase;
 
-import com.cxy.oi.kernel.contants.ConstantsStorage;
+import com.cxy.oi.kernel.constants.ConstantsStorage;
 import com.cxy.oi.kernel.util.Log;
 
 import java.io.File;

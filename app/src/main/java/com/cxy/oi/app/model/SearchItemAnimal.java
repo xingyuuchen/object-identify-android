@@ -1,10 +1,9 @@
 package com.cxy.oi.app.model;
 
-import android.content.Context;
 import android.view.View;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 
 
@@ -25,13 +24,13 @@ public class SearchItemAnimal extends SearchItem {
     @Override
     public boolean onLongClick(View view) {
         Log.i(TAG, "动物被长按辣");
-        return false;
+        return true;
     }
 
     @Override
     public void customView(View convertView) {
-        if (context != null && convertView != null) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.red_alpha));
+        if (activity != null && convertView != null) {
+            convertView.setBackgroundColor(activity.getResources().getColor(R.color.red_alpha));
         }
     }
 

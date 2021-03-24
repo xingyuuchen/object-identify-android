@@ -1,10 +1,9 @@
 package com.cxy.oi.app.model;
 
 import android.view.View;
-import android.widget.PopupMenu;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 
 public class SearchItemPlant extends SearchItem {
@@ -27,14 +26,14 @@ public class SearchItemPlant extends SearchItem {
     public boolean onLongClick(View view) {
 //        PopupMenu menu = new PopupMenu();
         Log.i(TAG, "植物被长按辣");
-        return false;
+        return true;
     }
 
 
     @Override
     public void customView(View convertView) {
-        if (context != null && convertView != null) {
-            convertView.setBackgroundColor(context.getResources().getColor(R.color.green_alpha));
+        if (activity != null && convertView != null) {
+            convertView.setBackgroundColor(activity.getResources().getColor(R.color.green_alpha));
         }
 
     }

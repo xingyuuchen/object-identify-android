@@ -12,6 +12,7 @@ import android.widget.ImageView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 
+import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.Utils;
@@ -32,16 +33,31 @@ public class ThumbDrawable extends Drawable {
     private Rect srcRect = new Rect();
     private long origId;
     private String path;
+    private boolean isBlur;
+
 
     public ThumbDrawable(ImageView iv) {
+        this(iv, false);
+    }
+
+    public ThumbDrawable(ImageView iv, boolean isBlur) {
         this.iv = iv;
+        this.isBlur = isBlur;
     }
 
     public static void attach(ImageView iv, String path) {
-        attach(iv, -1, path);
+        attach(iv, -1, path, false);
+    }
+
+    public static void attach(ImageView iv, String path, boolean isBlur) {
+        attach(iv, -1, path, isBlur);
     }
 
     public static void attach(final ImageView iv, final long origId, String path) {
+        attach(iv, origId, path, false);
+    }
+
+    public static void attach(final ImageView iv, final long origId, String path, boolean isBlur) {
         if (origId <= 0 && Util.isNullOrNil(path)) {
             return;
         }
@@ -53,7 +69,7 @@ public class ThumbDrawable extends Drawable {
             thumb.bitmap = null;
             isNew = false;
         } else {
-            thumb = new ThumbDrawable(iv);
+            thumb = new ThumbDrawable(iv, isBlur);
             isNew = true;
         }
 
@@ -77,6 +93,9 @@ public class ThumbDrawable extends Drawable {
                         @Override
                         public void onBitmapGet(Bitmap bitmap) {
                             if (bitmap != null) {
+                                if (thumb.isBlur) {
+                                    bitmap = Utils.blurBitmap(OIApplicationContext.getContext(), bitmap, 20f);
+                                }
                                 thumb.bitmap = bitmap;
                                 if (isNew) {
                                     iv.setImageDrawable(thumb);

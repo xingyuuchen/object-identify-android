@@ -1,6 +1,6 @@
 package com.cxy.oi.app.model;
 
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

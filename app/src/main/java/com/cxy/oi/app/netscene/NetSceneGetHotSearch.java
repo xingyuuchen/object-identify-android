@@ -3,7 +3,7 @@ package com.cxy.oi.app.netscene;
 import com.cxy.oi.autogen.NetSceneGetHotSearchReq;
 import com.cxy.oi.autogen.NetSceneGetHotSearchResp;
 import com.cxy.oi.kernel.OIKernel;
-import com.cxy.oi.kernel.contants.ConstantsProtocol;
+import com.cxy.oi.kernel.constants.ConstantsProtocol;
 import com.cxy.oi.kernel.modelbase.NetSceneBase;
 import com.cxy.oi.kernel.network.CommonReqResp;
 import com.cxy.oi.kernel.network.IDispatcher;
@@ -59,7 +59,8 @@ public class NetSceneGetHotSearch extends NetSceneBase implements IOnNetEnd {
 
         Log.i(TAG, "[onNetEnd] hotSearchItemCnt: %d", hotSearchItemCnt);
         for (NetSceneGetHotSearchResp.HotSearchItem item : hotSearchItems) {
-            Log.i(TAG, "[onNetEnd] name: %s, heat: %d", item.getItemName(), item.getHeat());
+            Log.i(TAG, "[onNetEnd] name: %s, type: %d heat: %d, %s",
+                    item.getItemName(), getType(item.getItemType()), item.getHeat(), item.getItemDesc());
         }
 
         if (callback != null) {
@@ -96,6 +97,18 @@ public class NetSceneGetHotSearch extends NetSceneBase implements IOnNetEnd {
         ret.add(item2);
         ret.add(item1);
         return ret;
+    }
+
+    private static int getType(NetSceneGetHotSearchResp.HotSearchItem.ItemType type) {
+        switch (type) {
+        case PLANT:
+            return 0;
+        case ANIMAL:
+            return 1;
+        case LANDMARK:
+            return 2;
+        }
+        return -1;
     }
 
     @Override

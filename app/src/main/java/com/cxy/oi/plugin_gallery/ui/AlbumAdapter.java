@@ -1,9 +1,7 @@
 package com.cxy.oi.plugin_gallery.ui;
 
 import android.content.Context;
-import android.graphics.Rect;
 import android.view.LayoutInflater;
-import android.view.TouchDelegate;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.CheckBox;
@@ -13,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.cxy.oi.R;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.model.GalleryCore;
 import com.cxy.oi.plugin_gallery.model.IMediaQuery;

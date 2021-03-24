@@ -10,6 +10,8 @@
     <string name="no_hit_rates">后台无hitRates</string>
     <string name="i_know">我知道了</string>
     <string name="item_name">搜索物品</string>
+    <string name="item_type">物品类别</string>
+    <string name="item_desc">暂无 %s 的详细资料</string>
     <string name="search_time">时间: %s</string>
     <string name="preview">预览</string>
     <string name="confirm">确定</string>
@@ -23,5 +25,10 @@
     <string name="goto_change_nickname">>></string>
     <string name="loading">加载中…</string>
     <string name="hot_search_heat">热度: %d</string>
+
+
+    <string name="bg_img">bg_img</string>
+    <string name="bg_mask">bg_mask</string>
+    <string name="detail_item_iv">detail_item_iv</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.contants;
+package com.cxy.oi.kernel.constants;
 
 public final class ConstantsProtocol {
     private ConstantsProtocol() {

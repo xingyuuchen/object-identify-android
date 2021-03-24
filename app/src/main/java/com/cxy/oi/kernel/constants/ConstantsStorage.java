@@ -1,4 +1,4 @@
-package com.cxy.oi.kernel.contants;
+package com.cxy.oi.kernel.constants;
 
 import android.content.Context;
 import android.os.Environment;

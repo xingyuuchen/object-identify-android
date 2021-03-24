@@ -44,6 +44,7 @@
 
         <activity android:name=".plugin_gallery.ui.AlbumPreviewUI" />
         <activity android:name=".app.ui.SetNicknameUI" />
+        <activity android:name=".app.ui.ItemDetailUI" />
 
 <!--        <service android:name=".kernel.network.CoreService" android:process=":push" />-->
         <service android:name=".kernel.network.CoreService" />

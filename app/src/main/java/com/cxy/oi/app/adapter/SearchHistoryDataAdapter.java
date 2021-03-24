@@ -1,5 +1,6 @@
 package com.cxy.oi.app.adapter;
 
+import android.app.Activity;
 import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,11 +28,11 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
     private static final String TAG = "SearchHistoryDataAdapter";
     private final ArrayList<RecognitionInfo> historySearchItems;
     private final LayoutInflater inflater;
-    private final Context context;
+    private final Activity activity;
     private final SearchHistoryDataLoader dataLoader;
 
-    public SearchHistoryDataAdapter(LayoutInflater inflater, Context context) {
-        this.context = context;
+    public SearchHistoryDataAdapter(LayoutInflater inflater, Activity activity) {
+        this.activity = activity;
         this.inflater = inflater;
         this.historySearchItems = new ArrayList<>();
         this.dataLoader = new SearchHistoryDataLoader();
@@ -68,7 +69,9 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
                 position, convertView == null, recognitionInfo.getItemType());
 
         // FIXME: 此处不知如何复用, 暂时每次新建。
-        SearchItem item = SearchItemFactory.create(recognitionInfo.getItemType(), context);
+        SearchItem item = SearchItemFactory.create(recognitionInfo.getItemType());
+        item.setActivity(activity);
+        item.fillingData(recognitionInfo);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.search_history_item, null);
             viewHolder = new SearchItem.BaseViewHolder(convertView, item);  // TODO：扩展为每个SearchItem定制
@@ -102,8 +105,7 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         return 0;
     }
 
-    @Override
-    public void onNewRecognitionInfoInserted() {
+    private void refreshAllItems() {
         historySearchItems.clear();
         dataLoader.load(new SearchHistoryDataLoader.IDataLoadCallBack() {
             @Override
@@ -115,4 +117,13 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         notifyDataSetChanged();
     }
 
+    @Override
+    public void onNewRecognitionInfoInserted(RecognitionInfo info) {
+        refreshAllItems();
+    }
+
+    @Override
+    public void onRecognitionInfoDeleted() {
+        refreshAllItems();
+    }
 }

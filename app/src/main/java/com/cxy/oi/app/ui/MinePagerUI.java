@@ -21,7 +21,7 @@ import com.cxy.oi.app.netscene.NetSceneRegister;
 import com.cxy.oi.app.netscene.NetSceneUploadAvatar;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
 import com.cxy.oi.plugin_gallery.IPluginGallery;
@@ -60,7 +60,7 @@ public class MinePagerUI extends Fragment {
         ui = root.findViewById(R.id.tab2wrapper);
 
         ListView searchHistoryListView = root.findViewById(R.id.history_items);
-        SearchHistoryUI searchHistoryUI = new SearchHistoryUI(searchHistoryListView, OIApplicationContext.getContext());
+        SearchHistoryUI searchHistoryUI = new SearchHistoryUI(searchHistoryListView, getActivity());
 
         avatarIv = root.findViewById(R.id.avatar_iv);
         avatarIv.setOnClickListener(new View.OnClickListener() {

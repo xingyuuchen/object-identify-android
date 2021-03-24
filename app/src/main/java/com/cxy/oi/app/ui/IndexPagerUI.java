@@ -20,17 +20,20 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
 import com.cxy.oi.kernel.app.OIApplicationContext;
-import com.cxy.oi.kernel.contants.ConstantsUI;
+import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneGetTrainProgress;
 import com.cxy.oi.plugin_gallery.netscene.NetSceneQueryImg;
 import com.cxy.oi.plugin_gallery.ui.AlbumPreviewUI;
+import com.cxy.oi.plugin_storage.IPluginStorage;
+import com.cxy.oi.plugin_storage.RecognitionInfo;
+import com.cxy.oi.plugin_storage.RecognitionInfoStorage;
 import com.cxy.oi.plugin_takephoto.TakePhotoUtil;
 
 import java.io.File;
 
 
-public class IndexPagerUI extends Fragment {
+public class IndexPagerUI extends Fragment implements RecognitionInfoStorage.IOnRecognitionInfoChangeListener {
     private static final String TAG = "IndexPagerUI";
 
     private RelativeLayout ui;
@@ -42,6 +45,7 @@ public class IndexPagerUI extends Fragment {
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.pager_index, null);
         initView(view);
+        OIKernel.plugin(IPluginStorage.class).getRecognitionInfoStorage().registerListener(this);
         return view;
     }
 
@@ -125,5 +129,20 @@ public class IndexPagerUI extends Fragment {
                 OIKernel.getNetSceneQueue().doScene(netScene);
                 break;
         }
+    }
+
+    @Override
+    public void onNewRecognitionInfoInserted(RecognitionInfo info) {
+        Intent intent = new Intent();
+        intent.setClass(getActivity(), ItemDetailUI.class);
+        intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_NAME, info.getItemName());
+        intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_TYPE, info.getItemType());
+        intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_DESC, info.getContent());
+        intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_IMG_PATH, info.getImgPath());
+        startActivity(intent);
+    }
+
+    @Override
+    public void onRecognitionInfoDeleted() {
     }
 }
