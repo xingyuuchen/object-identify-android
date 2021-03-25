@@ -23,28 +23,52 @@
             android:contentDescription="@string/bg_mask" />
     </RelativeLayout>
 
+    <LinearLayout
+        android:id="@+id/detail_iv_ll"
+        android:layout_width="match_parent"
+        android:layout_height="120dp"
+        android:orientation="horizontal"
+        android:layout_marginTop="20dp"
+        android:gravity="center"
+        >
+        <ImageView
+            android:id="@+id/detail_iv"
+            android:layout_width="120dp"
+            android:layout_height="120dp"
+            android:src="@drawable/icon_default"
+            android:layout_marginEnd="20dp"
+            android:contentDescription="@string/bg_img" />
 
-    <ImageView
-        android:id="@+id/detail_item_iv"
-        android:layout_width="80dp"
-        android:layout_height="80dp"
-        android:src="@drawable/icon_default"
-        android:contentDescription="@string/detail_item_iv" />
+        <TextView
+            android:id="@+id/detail_item_name_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/item_name"
+            android:layout_marginStart="20dp"
+            android:textSize="30sp"
+            />
+    </LinearLayout>
 
     <TextView
-        android:id="@+id/detail_item_name_tv"
+        android:id="@+id/item_desc_tag"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="@string/item_name"
-        android:layout_below="@+id/detail_item_iv"
+        android:text="@string/detail_desc"
+        android:textSize="30sp"
+        android:layout_marginStart="15dp"
+        android:layout_marginTop="20dp"
+        android:layout_below="@+id/detail_iv_ll"
         />
     <TextView
         android:id="@+id/detail_item_desc_tv"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/item_desc"
-        android:layout_below="@+id/detail_item_name_tv"
-
+        android:textSize="20sp"
+        android:layout_below="@+id/item_desc_tag"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="30dp"
+        android:layout_marginEnd="30dp"
         />
 
 </RelativeLayout>

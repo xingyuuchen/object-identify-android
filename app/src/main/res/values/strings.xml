@@ -9,7 +9,8 @@
     <string name="train_detail">后台训练详情</string>
     <string name="no_hit_rates">后台无hitRates</string>
     <string name="i_know">我知道了</string>
-    <string name="item_name">搜索物品</string>
+    <string name="item_name">物体名称</string>
+    <string name="detail_desc">详细资料</string>
     <string name="item_type">物品类别</string>
     <string name="item_desc">暂无 %s 的详细资料</string>
     <string name="search_time">时间: %s</string>

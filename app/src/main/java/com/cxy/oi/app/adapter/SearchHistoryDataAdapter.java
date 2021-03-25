@@ -1,7 +1,6 @@
 package com.cxy.oi.app.adapter;
 
 import android.app.Activity;
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -74,10 +73,10 @@ public class SearchHistoryDataAdapter extends BaseAdapter implements Recognition
         item.fillingData(recognitionInfo);
         if (convertView == null) {
             convertView = inflater.inflate(R.layout.search_history_item, null);
-            viewHolder = new SearchItem.BaseViewHolder(convertView, item);  // TODO：扩展为每个SearchItem定制
+            viewHolder = new SearchItem.BaseViewHolder(convertView, item);
         } else {
             viewHolder = (SearchItem.BaseViewHolder) convertView.getTag();
-            viewHolder.searchItem = item;
+            viewHolder.setItem(item);
         }
         convertView.setTag(viewHolder);
 

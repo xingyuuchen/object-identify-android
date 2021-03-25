@@ -94,7 +94,7 @@ public class ThumbDrawable extends Drawable {
                         public void onBitmapGet(Bitmap bitmap) {
                             if (bitmap != null) {
                                 if (thumb.isBlur) {
-                                    bitmap = Utils.blurBitmap(OIApplicationContext.getContext(), bitmap, 20f);
+                                    bitmap = Utils.blurBitmap(OIApplicationContext.getContext(), bitmap, 25f);
                                 }
                                 thumb.bitmap = bitmap;
                                 if (isNew) {

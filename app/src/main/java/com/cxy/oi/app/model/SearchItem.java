@@ -88,6 +88,11 @@ public abstract class SearchItem {
             convertView.setOnLongClickListener(searchItem.onLongClickListener);
         }
 
+        public void setItem(SearchItem searchItem) {
+            this.searchItem = searchItem;
+            convertView.setOnClickListener(searchItem.onClickListener);
+        }
+
     }
 
 

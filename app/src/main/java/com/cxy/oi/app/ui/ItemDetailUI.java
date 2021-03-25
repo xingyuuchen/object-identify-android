@@ -2,6 +2,7 @@ package com.cxy.oi.app.ui;
 
 import android.app.Activity;
 import android.os.Bundle;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -9,6 +10,7 @@ import androidx.annotation.Nullable;
 
 import com.cxy.oi.R;
 import com.cxy.oi.kernel.OIKernel;
+import com.cxy.oi.kernel.app.OIApplicationContext;
 import com.cxy.oi.kernel.constants.ConstantsUI;
 import com.cxy.oi.kernel.util.Log;
 import com.cxy.oi.kernel.util.Util;
@@ -21,7 +23,6 @@ public class ItemDetailUI extends Activity {
     private TextView itemNameTv;
     private TextView itemDescTv;
     private ImageView itemIv;
-    private ImageView bg;
 
 
     @Override
@@ -37,19 +38,22 @@ public class ItemDetailUI extends Activity {
         String imgPath = getIntent().getStringExtra(ConstantsUI.ItemDetailUI.KITEM_IMG_PATH);
 
         if (!fromHotSearch && !Util.isNullOrNil(imgPath)) {
-            OIKernel.plugin(IPluginGallery.class).AttachThumbDrawable(itemIv, imgPath);
-            OIKernel.plugin(IPluginGallery.class).AttachThumbDrawable(bg, imgPath, true);
+            OIKernel.plugin(IPluginGallery.class).attachThumbDrawable(itemIv, imgPath);
+        } else {
+            itemIv.setVisibility(View.GONE);
         }
         itemNameTv.setText(itemName);
-        itemDescTv.setText(itemDesc);
-
+        if (Util.isNullOrNil(itemDesc)) {
+            itemDescTv.setText(OIApplicationContext.getContext().getString(R.string.item_desc, itemName));
+        } else {
+            itemDescTv.setText(itemDesc);
+        }
 
     }
 
     private void initView() {
-        itemIv = findViewById(R.id.detail_item_iv);
+        itemIv = findViewById(R.id.detail_iv);
         itemNameTv = findViewById(R.id.detail_item_name_tv);
         itemDescTv = findViewById(R.id.detail_item_desc_tv);
-        bg = findViewById(R.id.detail_img_bg);
     }
 }

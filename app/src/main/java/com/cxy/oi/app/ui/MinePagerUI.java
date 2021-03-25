@@ -72,7 +72,7 @@ public class MinePagerUI extends Fragment {
             }
         });
         if (!Util.isNullOrNil(OIKernel.account().getAvatarPath())) {
-            OIKernel.plugin(IPluginGallery.class).AttachThumbDrawable(avatarIv, OIKernel.account().getAvatarPath());
+            OIKernel.plugin(IPluginGallery.class).attachThumbDrawable(avatarIv, OIKernel.account().getAvatarPath());
         }
 
         usrIdTv = root.findViewById(R.id.usrid_tv);
@@ -164,7 +164,7 @@ public class MinePagerUI extends Fragment {
                                             Toast.LENGTH_SHORT).show();
                                     if (isSuccess) {
                                         OIKernel.plugin(IPluginGallery.class).
-                                                AttachThumbDrawable(avatarIv, avatarPath);
+                                                attachThumbDrawable(avatarIv, avatarPath);
                                     }
                                 }
                     });
