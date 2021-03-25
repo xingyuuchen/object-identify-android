@@ -73,7 +73,7 @@ public class ThumbDrawable extends Drawable {
             isNew = true;
         }
 
-        final String cacheKey = Utils.getCacheKey(origId, path);
+        final String cacheKey = Utils.getCacheKey(origId, path, thumb.isBlur);
         thumb.origId = origId;
         thumb.path = path;
         Bitmap bm = GalleryCore.getMediaCacheService().getBitMapFromCache(cacheKey);
@@ -108,6 +108,9 @@ public class ThumbDrawable extends Drawable {
                         @Override
                         public void doInBackground(Bitmap bitmap) {
                             if (bitmap != null && !Util.isNullOrNil(cacheKey)) {
+                                if (thumb.isBlur) {
+                                    bitmap = Utils.blurBitmap(OIApplicationContext.getContext(), bitmap, 25f);
+                                }
                                 GalleryCore.getMediaCacheService().saveBitmapToMemCache(cacheKey, bitmap);
                             }
                         }

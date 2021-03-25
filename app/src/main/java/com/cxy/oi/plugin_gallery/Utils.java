@@ -9,8 +9,8 @@ import android.renderscript.ScriptIntrinsicBlur;
 
 public final class Utils {
 
-    public static String getCacheKey(long origId, String path) {
-        return path;    // 暂时不需要扩展
+    public static String getCacheKey(long origId, String path, boolean isBlur) {
+        return path + (isBlur ? "1" : "0");    // 暂时不需要扩展
     }
 
     public static Bitmap blurBitmap(Context context, Bitmap image, float blurRadius) {
