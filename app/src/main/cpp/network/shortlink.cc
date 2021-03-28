@@ -14,7 +14,7 @@
 
 
 const char *const ShortLink::TAG = "ShortLink";
-const uint64_t ShortLink::kTimeoutMillis = 10000;
+const uint64_t ShortLink::kTimeoutMillis = 20000;
 const size_t ShortLink::kRecvBuffSize = 1024;
 const size_t ShortLink::kSendBuffSize = 20480;
 
