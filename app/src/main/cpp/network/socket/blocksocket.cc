@@ -60,14 +60,15 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
     }
     
     ssize_t nrecv = 0;
-    uint64_t cost_time = 0;
+    int cost_time = 0;
     
     
     while (true) {
         
-        int poll_timeout = _timeout_mills > cost_time ? _timeout_mills - (int) cost_time : 0;
+        int poll_timeout = _timeout_mills > cost_time ? _timeout_mills - cost_time : 0;
+        // FIXME: 有别的socket处于ready状态时, 此处不会等待这么多时间
         int ret = _socket_poll.Poll(poll_timeout);
-        
+
         if (ret < 0) {
             int errno_ = _socket_poll.GetErrno();
             LogE(__FILE__, "[BlockSocketReceive] poll errno: %d", errno_)
@@ -89,13 +90,8 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                     if (nrecv >= _buff_size) { return nrecv; }
                     
                 } else if (n == 0) {
-                    /*  If no messages are available to be
-                        received and the peer has performed an
-                        orderly shutdown, the value 0 is
-                        returned.
-                     */
-                    LogI(__FILE__, "[BlockSocketReceive] n = 0, nrecv:%zd", nrecv)
-                    return 0;
+                    LogI(__FILE__, "[BlockSocketReceive] conn closed by peer, n = 0, nrecv:%zd", nrecv)
+                    return -1;
                 } else {
                     LogI(__FILE__, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
                     return nrecv;
@@ -104,8 +100,11 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                 LogI(__FILE__, "[BlockSocketReceive] POLLERR, nrecv:%zd", nrecv)
                 return nrecv;
             }
+            if (poll_timeout == 0) {
+                return 0;
+            }
         }
-        cost_time = ::gettickcount() - start_time;
+        cost_time = (int) (::gettickcount() - start_time);
     }
     
 }

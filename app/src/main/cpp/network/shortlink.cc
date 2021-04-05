@@ -14,7 +14,7 @@
 
 
 const char *const ShortLink::TAG = "ShortLink";
-const uint64_t ShortLink::kTimeoutMillis = 20000;
+const uint64_t ShortLink::kTimeoutMillis = 60 * 1000;
 const size_t ShortLink::kRecvBuffSize = 1024;
 const size_t ShortLink::kSendBuffSize = 20480;
 
@@ -60,7 +60,7 @@ void ShortLink::DoConnect() {
     socket_ = socket(AF_INET, SOCK_STREAM, 0);
     if (socket_ <= 0) {
         status_ = kError;
-        err_code_ |= INVALID_SOCKET;
+        err_code_ |= (uint32_t) INVALID_SOCKET;
         return;
     }
 
@@ -73,7 +73,7 @@ void ShortLink::DoConnect() {
     if (int ret = connect(socket_, (struct sockaddr *) &sockaddr, sizeof(sockaddr)) < 0) {
         LogE(TAG, "Connect FAILED, errCode: %d", ret);
         CLOSE_SOCKET(socket_);
-        err_code_ |= CONNECT_FAILED;
+        err_code_ |= (uint32_t) CONNECT_FAILED;
         status_ = kError;
         return;
     }
@@ -102,7 +102,7 @@ void ShortLink::__ReadWrite() {
         if (n < 0) {
             LogE(TAG, "[__ReadWrite] send, errno（%d）: %s", errno, strerror(errno));
             status_ = kError;
-            err_code_ |= SEND_FAILED;
+            err_code_ |= (uint32_t) SEND_FAILED;
             CLOSE_SOCKET(socket_);
             return;
         }
@@ -111,7 +111,7 @@ void ShortLink::__ReadWrite() {
         if (task_.care_about_progress_) {
             C2Java_OnUploadProgress(env, GetNetId(), nsend, ntotal);
         }
-        if (ntotal <= nsend) {
+        if (nsend >= ntotal) {
             break;
         }
     }
@@ -125,16 +125,16 @@ void ShortLink::__ReadWrite() {
     while (true) {
         ssize_t nsize = BlockSocketReceive(socket_, recv_buff,
                 ShotLinkManager::Instance().GetSocketPoll(), kRecvBuffSize);
-        if (nsize <= 0) {
+        if (nsize < 0) {
             LogE(TAG, "[__ReadWrite] BlockSocketReceive ret: %zd", nsize)
             status_ = kError;
-            err_code_ |= RECV_FAILED;
+            err_code_ |= (uint32_t) RECV_FAILED;
             break;
         }
 
         if (::gettickcount() - start_ > kTimeoutMillis) {
             status_ = kTimeout;
-            err_code_ |= OPERATION_TIMEOUT;
+            err_code_ |= (uint32_t) OPERATION_TIMEOUT;
             break;
         }
 
@@ -145,7 +145,7 @@ void ShortLink::__ReadWrite() {
         } else if (parser.IsErr()) {
             LogE(TAG, "[__ReadWrite] parser.IsErr()")
             status_ = kError;
-            err_code_ |= RECV_FAILED;
+            err_code_ |= (uint32_t) RECV_FAILED;
             break;
         }
     }
