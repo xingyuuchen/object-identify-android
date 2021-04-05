@@ -37,6 +37,8 @@ public class ItemDetailUI extends Activity {
         boolean fromHotSearch = getIntent().getBooleanExtra(ConstantsUI.ItemDetailUI.KFROM_HOTSEARCH, false);
         String imgPath = getIntent().getStringExtra(ConstantsUI.ItemDetailUI.KITEM_IMG_PATH);
 
+        Log.i(TAG, "itemName: %s, itemDesc: %s, imgPath: %s", itemName, itemDesc, imgPath);
+
         if (!fromHotSearch && !Util.isNullOrNil(imgPath)) {
             OIKernel.plugin(IPluginGallery.class).attachThumbDrawable(itemIv, imgPath);
         } else {

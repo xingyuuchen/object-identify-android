@@ -12,7 +12,7 @@ import com.cxy.oi.kernel.util.Log;
 public class MediaCacheService {
     private static final String TAG = "MediaCacheService";
 
-    final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  // in KBytes
+    private final int maxMemory = (int) (Runtime.getRuntime().maxMemory() / 1024);  // in KBytes
     private static final int MAX_MEM_CACHE_SIZE = 300;
     private final LRUCache<String, Bitmap> galleryMemCache;
 
@@ -42,12 +42,12 @@ public class MediaCacheService {
     public Bitmap getBitMapFromCache(String cacheKey) {
         Bitmap bitmap = getBitmapFromMemCache(cacheKey);
         if (bitmap != null) {
-            Log.i(TAG, "[getBitMap] HIT the galleryMemCache, key: %s", cacheKey);
+            Log.i(TAG, "[getBitMapFromCache] HIT the galleryMemCache, key: %s", cacheKey);
             return bitmap;
         }
         bitmap = getBitmapFromDiskCache(cacheKey);
         if (bitmap != null) {
-            Log.i(TAG, "[getBitMap] HIT bitmap(key: %s) from disk cache", cacheKey);
+            Log.i(TAG, "[getBitMapFromCache] HIT bitmap(key: %s) from disk cache", cacheKey);
             saveBitmapToMemCache(cacheKey, bitmap);
         }
 

@@ -139,7 +139,7 @@ public class IndexPagerUI extends Fragment implements RecognitionInfoStorage.IOn
         intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_TYPE, info.getItemType());
         intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_DESC, info.getContent());
         intent.putExtra(ConstantsUI.ItemDetailUI.KITEM_IMG_PATH, info.getImgPath());
-        startActivity(intent);
+        getActivity().startActivity(intent);
     }
 
     @Override
