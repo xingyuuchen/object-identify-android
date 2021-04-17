@@ -93,7 +93,7 @@ ssize_t BlockSocketReceive(SOCKET _socket, AutoBuffer &_recv_buff,
                     LogI(__FILE__, "[BlockSocketReceive] conn closed by peer, n = 0, nrecv:%zd", nrecv)
                     return -1;
                 } else {
-                    LogI(__FILE__, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
+                    LogE(__FILE__, "[BlockSocketReceive] n:%zd, nrecv:%zd", n, nrecv)
                     return nrecv;
                 }
             } else if (_socket_poll.IsErrSet(_socket)) {
